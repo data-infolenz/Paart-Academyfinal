@@ -1,0 +1,463 @@
+{
+  "admissions": [],
+  "enquiries": [
+    {
+      "id": "enq-msol5v1z-1ep1n4",
+      "name": "Data Infolenz Technolgies Pvt Ltd",
+      "phone": "6369090536",
+      "courseInterested": "TNPSC Group II",
+      "message": "",
+      "status": "Contacted",
+      "createdAt": "2026-08-11T11:37:29.207Z",
+      "updatedAt": "2026-08-12T05:11:40.845Z"
+    }
+  ],
+  "courses": [
+    {
+      "id": "group-1",
+      "slug": "tnpsc-group-1",
+      "title": "TNPSC Group I",
+      "category": "TNPSC",
+      "shortDescription": "A structured path for aspirants targeting Tamil Nadu’s premier civil services examination.",
+      "duration": "Flexible weekday and weekend batches",
+      "eligibility": "Students preparing for government and competitive examinations",
+      "image": "https://images.pexels.com/photos/7092542/pexels-photo-7092542.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "features": [
+        "General Studies",
+        "Current Affairs",
+        "Answer writing"
+      ],
+      "examStages": [
+        "Preliminary",
+        "Mains",
+        "Interview"
+      ],
+      "enabled": true,
+      "updatedAt": "2026-08-11T09:58:51.678Z"
+    },
+    {
+      "id": "group-2",
+      "slug": "tnpsc-group-2",
+      "title": "TNPSC Group II",
+      "category": "TNPSC",
+      "shortDescription": "Build confidence across the common and main examination stages with guided practice.",
+      "duration": "Flexible weekday and weekend batches",
+      "eligibility": "Students preparing for government and competitive examinations",
+      "image": "https://images.pexels.com/photos/7092542/pexels-photo-7092542.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "features": [
+        "Tamil eligibility",
+        "Aptitude",
+        "Mock tests"
+      ],
+      "examStages": [
+        "Preliminary",
+        "Mains"
+      ],
+      "enabled": true,
+      "updatedAt": "2026-08-11T09:58:51.678Z"
+    },
+    {
+      "id": "group-2a",
+      "slug": "tnpsc-group-2a",
+      "title": "TNPSC Group IIA",
+      "category": "TNPSC",
+      "shortDescription": "Focused preparation for non-interview posts with a clear, repeatable study rhythm.",
+      "duration": "Flexible weekday and weekend batches",
+      "eligibility": "Students preparing for government and competitive examinations",
+      "image": "https://images.pexels.com/photos/7092542/pexels-photo-7092542.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "features": [
+        "Subject coverage",
+        "Revision plans",
+        "Performance review"
+      ],
+      "examStages": [
+        "Preliminary",
+        "Mains"
+      ],
+      "enabled": true,
+      "updatedAt": "2026-08-11T09:58:51.678Z"
+    },
+    {
+      "id": "group-4",
+      "slug": "tnpsc-group-4",
+      "title": "TNPSC Group IV",
+      "category": "TNPSC",
+      "shortDescription": "Practical preparation for the Group IV examination, from basics to full-length tests.",
+      "duration": "Flexible weekday and weekend batches",
+      "eligibility": "Students preparing for government and competitive examinations",
+      "image": "https://images.pexels.com/photos/7092542/pexels-photo-7092542.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "features": [
+        "Tamil",
+        "General Studies",
+        "Daily practice"
+      ],
+      "examStages": [
+        "Written exam"
+      ],
+      "enabled": true,
+      "updatedAt": "2026-08-11T09:58:51.678Z"
+    },
+    {
+      "id": "vao",
+      "slug": "vao",
+      "title": "VAO",
+      "category": "TNPSC",
+      "shortDescription": "An accessible foundation for village administrative officer exam preparation.",
+      "duration": "Flexible weekday and weekend batches",
+      "eligibility": "Students preparing for government and competitive examinations",
+      "image": "https://images.pexels.com/photos/7092542/pexels-photo-7092542.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "features": [
+        "State focus",
+        "Previous papers",
+        "Revision support"
+      ],
+      "examStages": [
+        "Written exam"
+      ],
+      "enabled": true,
+      "updatedAt": "2026-08-11T09:58:51.678Z"
+    },
+    {
+      "id": "tnusrb-si",
+      "slug": "tnusrb-si",
+      "title": "TNUSRB Sub Inspector",
+      "category": "TNUSRB",
+      "shortDescription": "Prepare with discipline for the written examination and the stages that follow.",
+      "duration": "Flexible weekday and weekend batches",
+      "eligibility": "Students preparing for government and competitive examinations",
+      "image": "https://images.pexels.com/photos/7092542/pexels-photo-7092542.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "features": [
+        "Aptitude",
+        "Tamil Nadu GK",
+        "Practice sets"
+      ],
+      "examStages": [
+        "Written exam",
+        "Physical stages"
+      ],
+      "enabled": true,
+      "updatedAt": "2026-08-11T09:58:51.678Z"
+    },
+    {
+      "id": "police-constable",
+      "slug": "police-constable",
+      "title": "Police Constable",
+      "category": "TNUSRB",
+      "shortDescription": "Build exam readiness through consistent practice, revision and test analysis.",
+      "duration": "Flexible weekday and weekend batches",
+      "eligibility": "Students preparing for government and competitive examinations",
+      "image": "https://images.pexels.com/photos/7092542/pexels-photo-7092542.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "features": [
+        "General Knowledge",
+        "Tamil",
+        "Mock tests"
+      ],
+      "examStages": [
+        "Written exam",
+        "Physical stages"
+      ],
+      "enabled": true,
+      "updatedAt": "2026-08-11T09:58:51.678Z"
+    },
+    {
+      "id": "tet",
+      "slug": "tet",
+      "title": "TET",
+      "category": "TET / TRB",
+      "shortDescription": "Strengthen core concepts and examination confidence for teaching eligibility tests.",
+      "duration": "Flexible weekday and weekend batches",
+      "eligibility": "Students preparing for government and competitive examinations",
+      "image": "https://images.pexels.com/photos/7092542/pexels-photo-7092542.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "features": [
+        "Child development",
+        "Subject pedagogy",
+        "Practice tests"
+      ],
+      "examStages": [
+        "Paper I",
+        "Paper II"
+      ],
+      "enabled": true,
+      "updatedAt": "2026-08-11T09:58:51.678Z"
+    },
+    {
+      "id": "ssc",
+      "slug": "ssc",
+      "title": "SSC Preparation",
+      "category": "SSC",
+      "shortDescription": "A flexible foundation for central government competitive examination preparation.",
+      "duration": "Flexible weekday and weekend batches",
+      "eligibility": "Students preparing for government and competitive examinations",
+      "image": "https://images.pexels.com/photos/7092542/pexels-photo-7092542.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "features": [
+        "Quantitative aptitude",
+        "Reasoning",
+        "English"
+      ],
+      "examStages": [
+        "Tier I",
+        "Tier II"
+      ],
+      "enabled": true,
+      "updatedAt": "2026-08-11T09:58:51.678Z"
+    },
+    {
+      "id": "banking",
+      "slug": "banking",
+      "title": "Banking Preparation",
+      "category": "BANKING",
+      "shortDescription": "Build speed and accuracy across the core sections of banking examinations.",
+      "duration": "Flexible weekday and weekend batches",
+      "eligibility": "Students preparing for government and competitive examinations",
+      "image": "https://images.pexels.com/photos/7092542/pexels-photo-7092542.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "features": [
+        "Reasoning",
+        "Quantitative aptitude",
+        "Current affairs"
+      ],
+      "examStages": [
+        "Preliminary",
+        "Mains"
+      ],
+      "enabled": true,
+      "updatedAt": "2026-08-11T09:58:51.678Z"
+    },
+    {
+      "id": "railway",
+      "slug": "railway",
+      "title": "Railway Preparation",
+      "category": "RAILWAY",
+      "shortDescription": "A guided study framework for students preparing for railway examinations.",
+      "duration": "Flexible weekday and weekend batches",
+      "eligibility": "Students preparing for government and competitive examinations",
+      "image": "https://images.pexels.com/photos/7092542/pexels-photo-7092542.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "features": [
+        "General Science",
+        "Maths",
+        "Mock tests"
+      ],
+      "examStages": [
+        "Computer-based test",
+        "Further stages"
+      ],
+      "enabled": true,
+      "updatedAt": "2026-08-11T09:58:51.678Z"
+    }
+  ],
+  "materials": [
+    {
+      "id": "material-1",
+      "title": "General Studies",
+      "category": "Study Material",
+      "description": "Download General Studies resources prepared for structured competitive exam revision.",
+      "thumbnail": "",
+      "fileUrl": "/study-materials/general-studies.pdf",
+      "externalUrl": "",
+      "published": true,
+      "displayOrder": 1,
+      "createdAt": "2026-08-11T10:47:44.830Z",
+      "updatedAt": "2026-08-11T10:47:44.830Z"
+    },
+    {
+      "id": "material-2",
+      "title": "Tamil",
+      "category": "Study Material",
+      "description": "Download Tamil resources prepared for structured competitive exam revision.",
+      "thumbnail": "",
+      "fileUrl": "/study-materials/tamil.pdf",
+      "externalUrl": "",
+      "published": true,
+      "displayOrder": 2,
+      "createdAt": "2026-08-11T10:47:44.830Z",
+      "updatedAt": "2026-08-11T10:47:44.830Z"
+    },
+    {
+      "id": "material-3",
+      "title": "Aptitude",
+      "category": "Study Material",
+      "description": "Download Aptitude resources prepared for structured competitive exam revision.",
+      "thumbnail": "",
+      "fileUrl": "/study-materials/aptitude.pdf",
+      "externalUrl": "",
+      "published": true,
+      "displayOrder": 3,
+      "createdAt": "2026-08-11T10:47:44.830Z",
+      "updatedAt": "2026-08-11T10:47:44.830Z"
+    },
+    {
+      "id": "material-4",
+      "title": "History",
+      "category": "Notes",
+      "description": "Download History resources prepared for structured competitive exam revision.",
+      "thumbnail": "",
+      "fileUrl": "/study-materials/history.pdf",
+      "externalUrl": "",
+      "published": true,
+      "displayOrder": 4,
+      "createdAt": "2026-08-11T10:47:44.830Z",
+      "updatedAt": "2026-08-11T10:47:44.830Z"
+    },
+    {
+      "id": "material-5",
+      "title": "Geography",
+      "category": "Notes",
+      "description": "Download Geography resources prepared for structured competitive exam revision.",
+      "thumbnail": "",
+      "fileUrl": "/study-materials/geography.pdf",
+      "externalUrl": "",
+      "published": true,
+      "displayOrder": 5,
+      "createdAt": "2026-08-11T10:47:44.830Z",
+      "updatedAt": "2026-08-11T10:47:44.830Z"
+    },
+    {
+      "id": "material-6",
+      "title": "Indian Polity",
+      "category": "Notes",
+      "description": "Download Indian Polity resources prepared for structured competitive exam revision.",
+      "thumbnail": "",
+      "fileUrl": "/study-materials/indian-polity.pdf",
+      "externalUrl": "",
+      "published": true,
+      "displayOrder": 6,
+      "createdAt": "2026-08-11T10:47:44.830Z",
+      "updatedAt": "2026-08-11T10:47:44.830Z"
+    },
+    {
+      "id": "material-7",
+      "title": "Economy",
+      "category": "Notes",
+      "description": "Download Economy resources prepared for structured competitive exam revision.",
+      "thumbnail": "",
+      "fileUrl": "/study-materials/economy.pdf",
+      "externalUrl": "",
+      "published": true,
+      "displayOrder": 7,
+      "createdAt": "2026-08-11T10:47:44.830Z",
+      "updatedAt": "2026-08-11T10:47:44.830Z"
+    },
+    {
+      "id": "material-8",
+      "title": "Science",
+      "category": "Resources",
+      "description": "Download Science resources prepared for structured competitive exam revision.",
+      "thumbnail": "",
+      "fileUrl": "/study-materials/science.pdf",
+      "externalUrl": "",
+      "published": true,
+      "displayOrder": 8,
+      "createdAt": "2026-08-11T10:47:44.830Z",
+      "updatedAt": "2026-08-11T10:47:44.830Z"
+    },
+    {
+      "id": "material-9",
+      "title": "Current Affairs",
+      "category": "Resources",
+      "description": "Download Current Affairs resources prepared for structured competitive exam revision.",
+      "thumbnail": "",
+      "fileUrl": "/study-materials/current-affairs.pdf",
+      "externalUrl": "",
+      "published": true,
+      "displayOrder": 9,
+      "createdAt": "2026-08-11T10:47:44.830Z",
+      "updatedAt": "2026-08-11T10:47:44.830Z"
+    },
+    {
+      "id": "material-10",
+      "title": "Previous Year Questions",
+      "category": "Resources",
+      "description": "Download Previous Year Questions resources prepared for structured competitive exam revision.",
+      "thumbnail": "",
+      "fileUrl": "/study-materials/previous-year-questions.pdf",
+      "externalUrl": "",
+      "published": true,
+      "displayOrder": 10,
+      "createdAt": "2026-08-11T10:47:44.830Z",
+      "updatedAt": "2026-08-11T10:47:44.830Z"
+    }
+  ],
+  "blogs": [
+    {
+      "id": "blog-tnpsc-group-4",
+      "slug": "how-to-prepare-for-tnpsc-group-4",
+      "title": "How to Prepare for TNPSC Group 4 with a Clear Study Plan",
+      "shortDescription": "A practical preparation rhythm for Group 4 aspirants: syllabus, revision, tests and current affairs.",
+      "content": "TNPSC Group 4 preparation becomes easier when students follow a weekly structure. Start with the syllabus, revise Tamil and General Studies regularly, practise aptitude every day and review mock-test mistakes. PAART Academy keeps the process focused with study materials, current affairs support and guided tests.",
+      "author": "PAART Academic Team",
+      "publishedDate": "2026-08-01",
+      "category": "TNPSC",
+      "featuredImage": "https://images.pexels.com/photos/6683492/pexels-photo-6683492.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "seoTitle": "TNPSC Group 4 Preparation Guide | PAART Academy",
+      "metaDescription": "Learn how to prepare for TNPSC Group 4 with a simple study plan from PAART Academy.",
+      "keywords": "TNPSC Group 4, TNPSC coaching, PAART Academy",
+      "published": true,
+      "updatedAt": "2026-08-11T09:58:51.678Z"
+    },
+    {
+      "id": "blog-current-affairs",
+      "slug": "daily-current-affairs-for-tnpsc",
+      "title": "Why Daily Current Affairs Matter for TNPSC Exams",
+      "shortDescription": "A daily reading habit helps students connect events with exam-relevant facts and concepts.",
+      "content": "Current affairs preparation works best when it is consistent. Read short daily notes, connect them with static subjects and revise monthly. This habit improves recall and makes mock tests more meaningful.",
+      "author": "PAART Academic Team",
+      "publishedDate": "2026-08-05",
+      "category": "Current Affairs",
+      "featuredImage": "https://images.pexels.com/photos/6683887/pexels-photo-6683887.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "seoTitle": "Daily Current Affairs for TNPSC | PAART Academy",
+      "metaDescription": "Understand how daily current affairs preparation supports TNPSC exam readiness.",
+      "keywords": "TNPSC current affairs, daily current affairs, competitive exams",
+      "published": true,
+      "updatedAt": "2026-08-11T09:58:51.678Z"
+    }
+  ],
+  "gallery": [
+    {
+      "id": "gallery-1",
+      "title": "Focused preparation",
+      "description": "Students taking an exam in a classroom",
+      "category": "Classroom",
+      "image": "https://images.pexels.com/photos/6683492/pexels-photo-6683492.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "order": 1,
+      "createdAt": "2026-08-11T09:58:51.678Z"
+    },
+    {
+      "id": "gallery-2",
+      "title": "Guided learning",
+      "description": "Teacher discussing with students in a classroom",
+      "category": "Events",
+      "image": "https://images.pexels.com/photos/7092542/pexels-photo-7092542.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "order": 2,
+      "createdAt": "2026-08-11T09:58:51.678Z"
+    },
+    {
+      "id": "gallery-3",
+      "title": "Test readiness",
+      "description": "Students focused on a classroom exam",
+      "category": "Students",
+      "image": "https://images.pexels.com/photos/6683887/pexels-photo-6683887.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "order": 3,
+      "createdAt": "2026-08-11T09:58:51.678Z"
+    },
+    {
+      "id": "gallery-4",
+      "title": "Learning together",
+      "description": "Students studying together in a classroom",
+      "category": "Activities",
+      "image": "https://images.pexels.com/photos/37811241/pexels-photo-37811241.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+      "order": 4,
+      "createdAt": "2026-08-11T09:58:51.678Z"
+    }
+  ],
+  "media": [],
+  "settings": {
+    "siteName": "PAART Academy",
+    "phone": "+91 63824 50070",
+    "whatsapp": "916382450070",
+    "email": "hello@paartacademy.in",
+    "address": "85 Lebbaisaburam Street, Puliyangudi, Tamil Nadu 627855",
+    "hours": "Monday – Saturday, 9:00 AM – 7:00 PM",
+    "seoTitle": "PAART Academy | TNPSC & Competitive Exam Preparation",
+    "seoDescription": "PAART Academy provides premium TNPSC and competitive exam coaching with admissions, test series, study materials, current affairs and student support.",
+    "canonicalUrl": "https://paartacademy.in"
+  }
+}
