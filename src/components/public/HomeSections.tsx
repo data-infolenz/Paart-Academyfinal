@@ -24,7 +24,7 @@ export async function HomeSections() {
           <div className="hero-trust"><span><ShieldCheck size={18} /> Exam-focused learning</span><span><Users size={18} /> Tamil + English support</span></div>
         </div>
         <div className="hero-media">
-          <Image src="https://images.pexels.com/photos/7092542/pexels-photo-7092542.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="Teacher guiding students in a classroom" width={940} height={650} priority />
+          <Image src="/images/1.JPG" alt="PAART Academy classroom practice session" width={940} height={650} priority />
           <div><Sparkles size={20} /> Premium learning environment</div>
         </div>
       </section>

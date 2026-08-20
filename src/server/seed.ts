@@ -4,8 +4,15 @@ import { contact } from '@/config/contact';
 import type { Blog, CmsData, GalleryItem, ManagedCourse, Material } from '@/types/cms';
 
 const now = new Date().toISOString();
+const courseImages = [
+  '/images/exam (1).jpeg',
+  '/images/exam (2).jpeg',
+  '/images/exam (3).jpeg',
+  '/images/exam (4).jpeg',
+  '/images/exam (5).jpeg',
+];
 
-export const seededCourses: ManagedCourse[] = courses.map((course) => ({
+export const seededCourses: ManagedCourse[] = courses.map((course, index) => ({
   id: course.id,
   slug: course.slug,
   title: course.title,
@@ -13,7 +20,7 @@ export const seededCourses: ManagedCourse[] = courses.map((course) => ({
   shortDescription: course.shortDescription,
   duration: 'Flexible weekday and weekend batches',
   eligibility: 'Students preparing for government and competitive examinations',
-  image: 'https://images.pexels.com/photos/7092542/pexels-photo-7092542.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  image: courseImages[index % courseImages.length],
   features: course.highlights,
   examStages: course.examStages,
   enabled: course.enabled,
@@ -31,7 +38,7 @@ export const seededBlogs: Blog[] = [
     author: 'PAART Academic Team',
     publishedDate: '2026-08-01',
     category: 'TNPSC',
-    featuredImage: 'https://images.pexels.com/photos/6683492/pexels-photo-6683492.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    featuredImage: '/images/2.JPG',
     seoTitle: 'TNPSC Group 4 Preparation Guide | PAART Academy',
     metaDescription: 'Learn how to prepare for TNPSC Group 4 with a simple study plan from PAART Academy.',
     keywords: 'TNPSC Group 4, TNPSC coaching, PAART Academy',
@@ -48,7 +55,7 @@ export const seededBlogs: Blog[] = [
     author: 'PAART Academic Team',
     publishedDate: '2026-08-05',
     category: 'Current Affairs',
-    featuredImage: 'https://images.pexels.com/photos/6683887/pexels-photo-6683887.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    featuredImage: '/images/3.JPG',
     seoTitle: 'Daily Current Affairs for TNPSC | PAART Academy',
     metaDescription: 'Understand how daily current affairs preparation supports TNPSC exam readiness.',
     keywords: 'TNPSC current affairs, daily current affairs, competitive exams',
@@ -61,7 +68,7 @@ export const seededGallery: GalleryItem[] = gallery.map((item, index) => ({
   id: `gallery-${index + 1}`,
   title: item.title,
   description: item.alt,
-  category: ['Classroom', 'Events', 'Students', 'Activities'][index] ?? 'Classroom',
+  category: ['Classroom', 'Events', 'Students', 'Activities', 'Classroom', 'Students', 'Activities', 'Classroom', 'Events', 'Achievements', 'Celebrations', 'Students'][index] ?? 'Classroom',
   image: item.image,
   order: index + 1,
   createdAt: now,

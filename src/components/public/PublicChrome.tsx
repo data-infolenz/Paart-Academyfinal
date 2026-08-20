@@ -60,7 +60,7 @@ export async function PublicFooter() {
         <span>{settings.hours}</span>
       </div>
       <div className="footer-bottom-bar">
-        <span>Copyright 2026 PAART Academy. All rights reserved.</span>
+        <span>Copyright 2026 Datainfolenz. All rights reserved.</span>
         <span>Privacy Policy · Terms · Student Support</span>
       </div>
     </footer>

@@ -91,7 +91,7 @@ export async function HomeSectionsMaster() {
 
       <section className="section-wrap soft-band" id="gallery">
         <div className="section-title"><span className="eyebrow">Gallery</span><h2>Learning moments, <em>captured beautifully.</em></h2></div>
-        <div className="masonry-grid">{gallery.map((item) => <figure key={item.id}><Image src={item.image} alt={item.description || item.title} width={620} height={420} /><figcaption>{item.title}</figcaption></figure>)}</div>
+        <div className="masonry-grid home-gallery-grid">{gallery.map((item) => <figure key={item.id}><Image src={item.image} alt={item.description || item.title} width={620} height={420} /><figcaption>{item.title}</figcaption></figure>)}</div>
         <Link className="premium-button section-action" href="/gallery">Open full gallery <ArrowRight size={16} /></Link>
       </section>
 

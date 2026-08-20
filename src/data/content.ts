@@ -1,4 +1,4 @@
-export const currentAffairsCategories = ['Tamil Nadu', 'India', 'World', 'Economy', 'Science & Technology', 'Environment', 'Sports', 'Awards', 'Appointments', 'Important Days'];
+﻿export const currentAffairsCategories = ['Tamil Nadu', 'India', 'World', 'Economy', 'Science & Technology', 'Environment', 'Sports', 'Awards', 'Appointments', 'Important Days'];
 
 export const currentAffairs = [
   { date: 'Daily', category: 'Tamil Nadu', headline: 'Daily capsule ready for your revision routine', summary: 'A focused space for verified Tamil Nadu updates, explained for exam preparation.', language: 'English' },
@@ -29,15 +29,24 @@ export const materials = [
 export const features = ['Experienced Faculty', 'Structured Syllabus', 'Updated Study Materials', 'Daily Current Affairs', 'Regular Test Series', 'Previous Year Question Analysis', 'Doubt Clearing', 'Performance Tracking', 'Personal Mentoring', 'Tamil & English Support', 'Exam Strategy Guidance', 'Student Support'];
 
 export const gallery = [
-  { title: 'Focused preparation', image: 'https://images.pexels.com/photos/6683492/pexels-photo-6683492.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', alt: 'Students taking an exam in a classroom' },
-  { title: 'Guided learning', image: 'https://images.pexels.com/photos/7092542/pexels-photo-7092542.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', alt: 'Teacher discussing with students in a classroom' },
-  { title: 'Test readiness', image: 'https://images.pexels.com/photos/6683887/pexels-photo-6683887.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', alt: 'Students focused on a classroom exam' },
-  { title: 'Learning together', image: 'https://images.pexels.com/photos/37811241/pexels-photo-37811241.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', alt: 'Students studying together in a classroom' },
+  { title: 'Focused classroom practice', image: '/images/1.JPG', alt: 'PAART Academy classroom practice session' },
+  { title: 'Guided study session', image: '/images/2.JPG', alt: 'PAART Academy guided classroom session' },
+  { title: 'Student learning moment', image: '/images/3.JPG', alt: 'Students learning at PAART Academy' },
+  { title: 'Exam preparation desk', image: '/images/4.JPG', alt: 'Students preparing in a PAART Academy classroom' },
+  { title: 'Classroom discussion', image: '/images/clss room des.jpg', alt: 'Classroom discussion at PAART Academy' },
+  { title: 'Focused revision', image: '/images/7.JPG', alt: 'Students revising at PAART Academy' },
+  { title: 'Practice support', image: '/images/8.JPG', alt: 'Practice support session at PAART Academy' },
+  { title: 'Learning with guidance', image: '/images/9.JPG', alt: 'Guided learning at PAART Academy' },
+  { title: 'Academy activity', image: '/images/10.JPG', alt: 'PAART Academy student activity' },
+  { title: 'Student achievement', image: '/images/11 (5).jpeg', alt: 'PAART Academy student achievement moment' },
+  { title: 'Classroom milestone', image: '/images/11 (6).jpeg', alt: 'PAART Academy classroom milestone' },
+  { title: 'Academy moment', image: '/images/11 (7).jpeg', alt: 'PAART Academy learning moment' },
 ];
 
 export const heroSlides = [
-  { image: 'https://images.pexels.com/photos/7092542/pexels-photo-7092542.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', alt: 'Teacher discussing with students in a classroom' },
-  { image: 'https://images.pexels.com/photos/6683492/pexels-photo-6683492.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', alt: 'Students taking a focused classroom exam' },
-  { image: 'https://images.pexels.com/photos/6683887/pexels-photo-6683887.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', alt: 'Students preparing for an examination' },
-  { image: 'https://images.pexels.com/photos/37811241/pexels-photo-37811241.jpeg?auto=compress&cs=tinysrgb&h=650&w=940', alt: 'Students learning together in a classroom' },
+  { image: '/images/1.JPG', alt: 'PAART Academy classroom practice session' },
+  { image: '/images/2.JPG', alt: 'PAART Academy guided classroom session' },
+  { image: '/images/3.JPG', alt: 'Students learning at PAART Academy' },
+  { image: '/images/4.JPG', alt: 'Students preparing in a PAART Academy classroom' },
 ];
+
