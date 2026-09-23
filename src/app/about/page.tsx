@@ -1,53 +1,26 @@
-import {
-  PublicFooter,
-  PublicNavbar,
-} from "@/components/public/PublicChrome";
+import { PublicFooter, PublicNavbar } from '@/components/public/PublicChrome';
+import { TrustAchievements, TrustActivities, TrustFuturePlans, TrustPurpose, TrustCommunity } from '@/components/public/TrustSections';
 
-export const metadata = {
-  title: "About PAART Academy | Professional Competitive Exam Coaching",
-};
+
+export const metadata = { title: 'About PAART | Puliyangudi Academic & Achievements Resource Trust' };
 
 export default function AboutPage() {
-  return (
-    <>
-      <PublicNavbar />
-
-      <main className="page-shell">
-        <section className="page-hero">
-          <span className="eyebrow">About us</span>
-
-          <h1>
-            Premium guidance for <em>serious aspirants.</em>
-          </h1>
-
-          <p>
-            PAART Academy helps students prepare for TNPSC and competitive
-            examinations with structure, mentoring, current affairs and regular
-            test practice.
-          </p>
-        </section>
-
-        <section className="section-wrap">
-          <div className="feature-grid">
-            {[
-              "Exam-first content",
-              "Readable study rhythm",
-              "Performance review",
-              "Student support",
-            ].map((item) => (
-              <article key={item}>
-                <h3>{item}</h3>
-                <p>
-                  Our teaching and support systems are built to help students
-                  stay consistent from foundation to final revision.
-                </p>
-              </article>
-            ))}
-          </div>
-        </section>
-      </main>
-
-      <PublicFooter />
-    </>
-  );
+  return <>
+    <PublicNavbar />
+    <main className="page-shell">
+      <section className="page-hero">
+        <span className="eyebrow">About Us</span>
+        <h1>Education, opportunity <em>and community.</em></h1>
+        <p><strong>PAART – Puliyangudi Academic &amp; Achievements Resource Trust</strong> is a non-profit public welfare trust established on <strong>22 December 2018</strong> with the aim of supporting students, job aspirants, and the community through education, training, guidance, and social welfare initiatives.</p>
+        <p>Based in <strong>Puliyangudi, Tenkasi District</strong>, PAART works to create opportunities for students from different educational and economic backgrounds. The trust provides guidance for higher education, competitive examinations, skill development, personality development, scholarships, and other student-support activities.</p>
+        <p>Our focus is not only on examination success, but also on helping students develop the knowledge, confidence, skills, and direction required to build a better future.</p>
+      </section>
+      <TrustPurpose />
+      <TrustActivities />
+      <TrustAchievements />
+      <TrustFuturePlans />
+      <TrustCommunity />
+    </main>
+    <PublicFooter />
+  </>;
 }

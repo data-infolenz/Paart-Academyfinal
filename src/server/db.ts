@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import type { CmsData } from '@/types/cms';
 import { defaultCmsData } from './seed';
+import { courseDetails, courseProvision } from '@/data/course-details';
 
 const dataDir = path.join(process.cwd(), '.data');
 const dataFile = path.join(dataDir, 'cms.json');
@@ -23,7 +24,11 @@ export async function readCms(): Promise<CmsData> {
     ...defaultCmsData,
     ...parsed,
     settings: { ...defaultCmsData.settings, ...parsed.settings },
-    courses: parsed.courses?.length ? parsed.courses : defaultCmsData.courses,
+    courses: (parsed.courses ?? defaultCmsData.courses).map((course) => ({
+      ...course,
+      details: course.details ?? courseDetails[course.id],
+      provision: course.provision ?? courseProvision,
+    })),
     materials: parsed.materials?.length ? parsed.materials : defaultCmsData.materials,
     blogs: parsed.blogs?.length ? parsed.blogs : defaultCmsData.blogs,
     gallery: parsed.gallery?.length ? parsed.gallery : defaultCmsData.gallery,

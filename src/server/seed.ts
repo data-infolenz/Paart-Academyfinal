@@ -102,6 +102,7 @@ export const defaultCmsData: CmsData = {
     whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? process.env.WHATSAPP_NUMBER ?? contact.whatsapp.replace('+', ''),
     email: contact.email,
     address: contact.address,
+    additionalAddress: contact.additionalAddress,
     hours: contact.hours,
     seoTitle: 'PAART Academy | TNPSC & Competitive Exam Preparation',
     seoDescription:

@@ -523,13 +523,14 @@
   "media": [],
   "settings": {
     "siteName": "PAART Academy",
-    "phone": "+91 63824 50070",
+    "phone": "+91 6382450070",
     "whatsapp": "916382450070",
-    "email": "hello@paartacademy.in",
+    "email": "paart.com@gmail.com",
     "address": "85 Lebbaisaburam Street, Puliyangudi, Tamil Nadu 627855",
     "hours": "Monday – Saturday, 9:00 AM – 7:00 PM",
     "seoTitle": "PAART Academy | TNPSC & Competitive Exam Preparation",
     "seoDescription": "PAART Academy provides premium TNPSC and competitive exam coaching with admissions, test series, study materials, current affairs and student support.",
-    "canonicalUrl": "https://paartacademy.in"
+    "canonicalUrl": "https://paartacademy.in",
+    "additionalAddress": "Jamalia Jumma Pallivasal Complex, Jinnah Nagar 3rd Street, Puliyangudi."
   }
 }

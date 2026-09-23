@@ -1,5 +1,14 @@
 import type { Metadata } from 'next';
+import { Merriweather } from 'next/font/google';
 import './globals.css';
+import './neumorphism.css';
+
+const merriweather = Merriweather({
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+  variable: '--font-merriweather',
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://paartacademy.in'),
@@ -16,7 +25,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={merriweather.variable}>
       <body>{children}</body>
     </html>
   );

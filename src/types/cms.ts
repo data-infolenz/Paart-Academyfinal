@@ -1,3 +1,5 @@
+import type { CourseDetails } from '@/data/course-details';
+
 export type AdmissionStatus = 'New' | 'Contacted' | 'Pending' | 'Approved' | 'Rejected' | 'Joined';
 
 export type UploadedFile = {
@@ -47,6 +49,8 @@ export type Enquiry = {
 };
 
 export type ManagedCourse = {
+  details?: CourseDetails;
+  provision?: string;
   id: string;
   slug: string;
   title: string;
@@ -113,6 +117,7 @@ export type Material = {
 };
 
 export type Settings = {
+  additionalAddress?: string;
   siteName: string;
   phone: string;
   whatsapp: string;

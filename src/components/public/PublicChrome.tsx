@@ -1,11 +1,15 @@
 import Image from 'next/image';
+import { trustProfile } from '@/data/trust';
 import Link from 'next/link';
 import { readCms } from '@/server/db';
 import { PublicNavClient } from './PublicNavClient';
 
 const navItems = [
   ['Home', '/'],
-  ['About', '/#about'],
+  ['About', '/about'],
+  ['Activities', '/#activities'],
+  ['Achievements', '/#achievements'],
+  ['Future plans', '/#future-plans'],
   ['Courses', '/#courses'],
   ['Materials', '/#materials'],
   ['Gallery', '/#gallery'],
@@ -31,7 +35,7 @@ export async function PublicFooter() {
             <span>TNPSC & Competitive Exam Preparation</span>
           </div>
         </div>
-        <p>{settings.seoDescription}</p>
+        <p>{trustProfile.name}</p><p>{trustProfile.description}</p>
         <Link className="footer-admin-link" href="/admin">Admin Panel</Link>
       </div>
       <div className="footer-column">
@@ -54,8 +58,9 @@ export async function PublicFooter() {
       </div>
       <div className="footer-column footer-contact">
         <b>Contact</b>
-        <span>{settings.address}</span>
-        <a href={`tel:${settings.phone}`}>{settings.phone}</a>
+        <span>{trustProfile.address}</span>
+        <span>{trustProfile.additionalAddress}</span>
+        {trustProfile.phones.map((phone) => <a key={phone} href={`tel:${phone.replace(/\s/g, '')}`}>{phone}</a>)}
         <a href={`mailto:${settings.email}`}>{settings.email}</a>
         <span>{settings.hours}</span>
       </div>

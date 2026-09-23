@@ -3,7 +3,9 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { BookOpen, FileImage, LayoutDashboard, Loader2, LogOut, Newspaper, Save, Search, Settings, Trash2, Upload, Users } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import type { Admission, Blog, CmsData, Enquiry, GalleryItem, ManagedCourse, Material, MediaItem } from '@/types/cms';
+import type { Admission, Blog, CmsData, Enquiry, GalleryItem, Material, MediaItem } from '@/types/cms';
+
+import { CourseManager } from './CourseManager';
 
 const nav = ['Dashboard', 'Admissions', 'Enquiries', 'Courses', 'Materials', 'Blogs', 'Gallery', 'Media', 'Settings'] as const;
 type View = (typeof nav)[number];
@@ -144,7 +146,7 @@ export function AdminPanel() {
         {view === 'Dashboard' && <Dashboard data={data} />}
         {view === 'Admissions' && <AdmissionsTable items={filteredAdmissions} busy={busy} patch={patch} remove={remove} />}
         {view === 'Enquiries' && <EnquiriesTable items={filteredEnquiries} busy={busy} patch={patch} remove={remove} />}
-        {view === 'Courses' && <CourseManager items={data.courses} draft={draft} setDraft={setDraft} create={create} patch={patch} remove={remove} />}
+        {view === 'Courses' && <CourseManager items={data.courses} query={query} onSaved={load} />}
         {view === 'Materials' && <MaterialManager items={data.materials} draft={draft} setDraft={setDraft} create={create} patch={patch} remove={remove} />}
         {view === 'Blogs' && <BlogManager items={data.blogs} draft={draft} setDraft={setDraft} create={create} patch={patch} remove={remove} />}
         {view === 'Gallery' && <GalleryManager items={data.gallery} draft={draft} setDraft={setDraft} create={create} remove={remove} />}
@@ -181,7 +183,7 @@ function Dashboard({ data }: { data: CmsData }) {
     ['Total Blogs', data.blogs.length],
     ['Gallery Images', data.gallery.length],
   ];
-  return <><div className="metric-grid">{cards.map(([label, value]) => <article key={label}><span>{label}</span><b>{value}</b></article>)}</div><div className="admin-columns"><Recent title="Recent Admissions" items={data.admissions.slice(0, 6).map((item) => `${item.applicationId} · ${item.studentName} · ${item.status}`)} /><Recent title="Recent Enquiries" items={data.enquiries.slice(0, 6).map((item) => `${item.name} · ${item.phone} · ${item.status}`)} /></div></>;
+  return <><div className="metric-grid">{cards.map(([label, value]) => <article key={label}><span>{label}</span><b>{value}</b></article>)}</div><div className="admin-columns"><Recent title="Recent Admissions" items={data.admissions.slice(0, 6).map((item) => `${item.applicationId} Â· ${item.studentName} Â· ${item.status}`)} /><Recent title="Recent Enquiries" items={data.enquiries.slice(0, 6).map((item) => `${item.name} Â· ${item.phone} Â· ${item.status}`)} /></div></>;
 }
 
 function DownloadIcon() {
@@ -198,10 +200,6 @@ function AdmissionsTable({ items, busy, patch, remove }: { items: Admission[]; b
 
 function EnquiriesTable({ items, busy, patch, remove }: { items: Enquiry[]; busy: string; patch: (c: string, id: string, body: Draft) => Promise<void>; remove: (c: string, id: string) => Promise<void> }) {
   return <div className="admin-table">{items.map((item) => <article key={item.id}><b>{item.name}</b><span>{item.phone}</span><span>{item.courseInterested}</span><span>{item.message}</span><select value={item.status} onChange={(event) => patch('enquiries', item.id, { status: event.target.value })}>{['New', 'Contacted', 'Closed'].map((status) => <option key={status}>{status}</option>)}</select><button onClick={() => remove('enquiries', item.id)} disabled={busy === item.id}><Trash2 size={16} /></button></article>)}</div>;
-}
-
-function CourseManager({ items, draft, setDraft, create, patch, remove }: { items: ManagedCourse[]; draft: Draft; setDraft: (d: Draft) => void; create: (c: string) => Promise<void>; patch: (c: string, id: string, body: Draft) => Promise<void>; remove: (c: string, id: string) => Promise<void> }) {
-  return <><ManagerForm fields={['title', 'category', 'shortDescription', 'duration', 'eligibility', 'image', 'features', 'examStages']} draft={draft} setDraft={setDraft} onCreate={() => create('courses')} /><div className="content-list">{items.map((item) => <article key={item.id}><h3>{item.title}</h3><p>{item.shortDescription}</p><button onClick={() => patch('courses', item.id, { enabled: !item.enabled })}>{item.enabled ? 'Disable' : 'Enable'}</button><button onClick={() => remove('courses', item.id)}><Trash2 size={16} /></button></article>)}</div></>;
 }
 
 function BlogManager({ items, draft, setDraft, create, patch, remove }: { items: Blog[]; draft: Draft; setDraft: (d: Draft) => void; create: (c: string) => Promise<void>; patch: (c: string, id: string, body: Draft) => Promise<void>; remove: (c: string, id: string) => Promise<void> }) {

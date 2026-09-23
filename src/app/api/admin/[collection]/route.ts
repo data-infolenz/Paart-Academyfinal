@@ -2,16 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import type { Blog, GalleryItem, ManagedCourse, Material, MediaItem } from '@/types/cms';
 import { makeId, readCms, slugify, updateCms } from '@/server/db';
 import { requireAdmin, unauthorized } from '@/server/auth';
+import { parseCourseInput } from '@/server/course-input';
 
 const collections = ['admissions', 'enquiries', 'courses', 'materials', 'blogs', 'gallery', 'media'] as const;
 type Collection = (typeof collections)[number];
 
 function isCollection(value: string): value is Collection {
   return collections.includes(value as Collection);
-}
-
-function lines(value: unknown) {
-  return String(value ?? '').split('\n').map((item) => item.trim()).filter(Boolean);
 }
 
 export async function GET(_: NextRequest, context: { params: Promise<{ collection: string }> }) {
@@ -26,7 +23,11 @@ export async function POST(request: NextRequest, context: { params: Promise<{ co
   if (!(await requireAdmin())) return unauthorized();
   const { collection } = await context.params;
   if (!isCollection(collection)) return NextResponse.json({ error: 'Unknown collection' }, { status: 404 });
-  const body = await request.json();
+  let body = await request.json();
+  if (collection === 'courses') {
+    try { body = parseCourseInput(body, true); }
+    catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : 'Invalid course data.' }, { status: 400 }); }
+  }
   const item = await updateCms((data) => {
     const now = new Date().toISOString();
     if (collection === 'courses') {
@@ -39,8 +40,10 @@ export async function POST(request: NextRequest, context: { params: Promise<{ co
         duration: body.duration ?? '',
         eligibility: body.eligibility ?? '',
         image: body.image ?? '',
-        features: lines(body.features),
-        examStages: lines(body.examStages),
+        features: body.features ?? [],
+        examStages: body.examStages ?? [],
+        details: body.details,
+        provision: body.provision,
         enabled: body.enabled ?? true,
         updatedAt: now,
       };
