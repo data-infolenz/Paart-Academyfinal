@@ -70,13 +70,13 @@ export function PublicNavClient({ whatsapp }: { whatsapp: string }) {
 
   return (
     <header className={`premium-nav ${scrolled ? 'nav-scrolled' : ''}`}>
-      <Link className="premium-brand" href="/" onClick={() => setOpen(false)}>
+      <Link className="premium-brand nav-logo-reveal" href="/" onClick={() => setOpen(false)}>
         <Image src="/images/paart_logo.png" alt="PAART Academy logo" width={62} height={70} priority />
         <span>PAART <small>ACADEMY</small></span>
       </Link>
       <button className="nav-menu-button" onClick={() => setOpen(!open)} aria-label={open ? 'Close menu' : 'Open menu'}>{open ? <X size={23} /> : <Menu size={23} />}</button>
       <nav className={open ? 'premium-links open' : 'premium-links'}>
-        {navItems.map(([label, href]) => {
+        {navItems.map(([label, href], i) => {
           const sectionId = href.startsWith('/#') ? href.slice(2) : href === '/' ? 'home' : '';
           const active = sectionId
             ? pathname === '/' && activeSection === sectionId
@@ -84,7 +84,8 @@ export function PublicNavClient({ whatsapp }: { whatsapp: string }) {
 
           return (
             <Link
-              className={active ? 'active' : ''}
+              className={`${active ? 'active' : ''} nav-item-reveal`}
+              style={{ '--nav-d': `${i * 50}ms` } as React.CSSProperties}
               key={href}
               href={href}
               onClick={() => {

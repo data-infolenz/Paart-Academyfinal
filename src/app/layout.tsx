@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import { Merriweather } from 'next/font/google';
 import './globals.css';
 import './neumorphism.css';
+import './reveal-animations.css';
+import RevealObserver from '@/components/animation/RevealObserver';
+import ReadingProgressBar from '@/components/animation/ReadingProgressBar';
 
 const merriweather = Merriweather({
   subsets: ['latin'],
@@ -26,7 +29,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={merriweather.variable}>
-      <body>{children}</body>
+      <body>
+        <ReadingProgressBar />
+        <RevealObserver />
+        {children}
+      </body>
     </html>
   );
 }
