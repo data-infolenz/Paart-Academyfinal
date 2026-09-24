@@ -28,3 +28,4 @@ dist-ssr
 .vercel
 .bolt
 .edge-screenshot-profile*
+public/images_backup_original/

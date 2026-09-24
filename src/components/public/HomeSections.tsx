@@ -24,7 +24,7 @@ export async function HomeSections() {
           <div className="hero-trust"><span><ShieldCheck size={18} /> Exam-focused learning</span><span><Users size={18} /> Tamil + English support</span></div>
         </div>
         <div className="hero-media">
-          <Image src="/images/1.JPG" alt="PAART Academy classroom practice session" width={940} height={650} priority />
+          <Image src="/images/1.JPG" alt="PAART Academy classroom practice session" width={940} height={650} sizes="(max-width: 1024px) 100vw, 600px" priority quality={85} />
           <div><Sparkles size={20} /> Premium learning environment</div>
         </div>
       </section>
@@ -41,12 +41,12 @@ export async function HomeSections() {
 
       <section className="section-wrap">
         <div className="section-title"><span className="eyebrow">Blogs</span><h2>Exam preparation insights <em>from PAART.</em></h2></div>
-        <div className="blog-grid">{blogs.map((blog) => <Link className="blog-card" href={`/blogs/${blog.slug}`} key={blog.id}><Image src={blog.featuredImage} alt={blog.title} width={620} height={390} /><span>{blog.category} · {blog.publishedDate}</span><h3>{blog.title}</h3><p>{blog.shortDescription}</p></Link>)}</div>
+        <div className="blog-grid">{blogs.map((blog) => <Link className="blog-card" href={`/blogs/${blog.slug}`} key={blog.id}><Image src={blog.featuredImage} alt={blog.title} width={620} height={390} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px" quality={80} /><span>{blog.category} · {blog.publishedDate}</span><h3>{blog.title}</h3><p>{blog.shortDescription}</p></Link>)}</div>
       </section>
 
       <section className="section-wrap soft-band">
         <div className="section-title"><span className="eyebrow">Gallery</span><h2>Learning moments, <em>captured beautifully.</em></h2></div>
-        <div className="masonry-grid">{gallery.map((item) => <figure key={item.id}><Image src={item.image} alt={item.description || item.title} width={620} height={420} /><figcaption>{item.title}</figcaption></figure>)}</div>
+        <div className="masonry-grid">{gallery.map((item) => <figure key={item.id}><Image src={item.image} alt={item.description || item.title} width={620} height={420} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px" quality={80} /><figcaption>{item.title}</figcaption></figure>)}</div>
       </section>
 
       <section className="section-wrap enquiry-band">

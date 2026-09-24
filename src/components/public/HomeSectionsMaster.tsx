@@ -18,6 +18,8 @@ import { trustProfile, presentationEvents } from '@/data/trust';
 import { presentationGallery } from '@/data/presentation-gallery';
 import { TrustAchievements, TrustActivities, TrustFuturePlans, TrustPurpose, TrustCommunity } from './TrustSections';
 import { readCms } from '@/server/db';
+import { ScrollJourney } from './ScrollJourney';
+import { GalleryCardSwap } from './GalleryCardSwap';
 import { EnquiryForm } from '@/components/forms/EnquiryForm';
 
 export async function HomeSectionsMaster() {
@@ -26,11 +28,12 @@ export async function HomeSectionsMaster() {
   const materials = data.materials.filter((material) => material.published).sort((a, b) => a.displayOrder - b.displayOrder);
   const blogs = data.blogs.filter((blog) => blog.published).slice(0, 3);
   const gallery = [...data.gallery].sort((a, b) => a.order - b.order).slice(0, 6);
-  const galleryLoop = [...data.gallery, ...data.gallery, ...data.gallery].sort((a, b) => a.order - b.order);
+  const showcaseGallery = [...data.gallery].sort((a, b) => a.order - b.order);
   const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(trustProfile.address)}&output=embed`;
 
   return (
     <main>
+      <ScrollJourney />
       <section className="premium-hero campus-hero" id="home">
         <div className="hero-copy">
           <span className="eyebrow">Admissions open 2026</span>
@@ -47,8 +50,9 @@ export async function HomeSectionsMaster() {
             src="/images/paart-training-hall-front.png"
             alt="Front-view design of PAART Academy’s planned new training hall"
             fill
-            sizes="100vw"
+            sizes="(max-width: 1024px) 100vw, 1200px"
             priority
+            quality={85}
           />
           <figcaption>
             <Building2 size={24} aria-hidden="true" />
@@ -74,7 +78,7 @@ export async function HomeSectionsMaster() {
 
       <section className="section-wrap" id="courses">
         <div className="section-title"><span className="eyebrow">Our courses</span><h2>Choose your exam. <em>Build your preparation.</em></h2><p>Our current programmes include TNPSC Groups, Police Department exams, NMMS coaching and typing training. Contact us for programme and batch details.</p></div>
-        <div className="course-grid-pro">{courses.map((course) => <Link className="premium-card course-card-pro" href={`/courses/${course.slug}`} key={course.id}>{course.image && <Image src={course.image} alt={course.title} width={480} height={260} />}<GraduationCap size={26} /><span>{course.category}</span><h3>{course.title}</h3><p>{course.shortDescription}</p><small>{course.duration}</small><b>View details <ArrowRight size={16} /></b></Link>)}</div>
+        <div className="course-grid-pro">{courses.map((course) => <Link className="premium-card course-card-pro" href={`/courses/${course.slug}`} key={course.id}>{course.image && <Image src={course.image} alt={course.title} width={480} height={260} sizes="(max-width: 768px) 100vw, 360px" quality={80} />}<GraduationCap size={26} /><span>{course.category}</span><h3>{course.title}</h3><p>{course.shortDescription}</p><small>{course.duration}</small><b>View details <ArrowRight size={16} /></b></Link>)}</div>
       </section>
 
       <section className="section-wrap soft-band" id="materials">
@@ -84,14 +88,11 @@ export async function HomeSectionsMaster() {
 
       <TrustCommunity />
 
-      <section className="gallery-marquee-section" id="scrolling-gallery" aria-label="Scrolling academy gallery">
-        <div className="marquee-row">{galleryLoop.map((item, index) => <Image key={`${item.id}-a-${index}`} src={item.image} alt={item.title} width={320} height={210} />)}</div>
-        <div className="marquee-row reverse">{galleryLoop.map((item, index) => <Image key={`${item.id}-b-${index}`} src={item.image} alt={item.title} width={320} height={210} />)}</div>
-      </section>
+      <GalleryCardSwap items={showcaseGallery} />
 
       <section className="section-wrap soft-band" id="gallery">
         <div className="section-title"><span className="eyebrow">Gallery</span><h2>Learning moments, <em>captured beautifully.</em></h2></div>
-        <div className="masonry-grid home-gallery-grid">{gallery.map((item) => <figure key={item.id}><Image src={item.image} alt={item.description || item.title} width={620} height={420} /><figcaption>{item.title}</figcaption></figure>)}</div>
+        <div className="masonry-grid home-gallery-grid">{gallery.map((item) => <figure key={item.id}><Image src={item.image} alt={item.description || item.title} width={620} height={420} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px" quality={80} /><figcaption>{item.title}</figcaption></figure>)}</div>
         <Link className="premium-button section-action" href="/gallery">Open full gallery <ArrowRight size={16} /></Link>
       </section>
 
@@ -99,7 +100,7 @@ export async function HomeSectionsMaster() {
         <div className="section-title"><span className="eyebrow">Events and community</span><h2>PAART <em>in action.</em></h2></div>
         <div className="blog-grid">{presentationEvents.map((event) => {
           const photo = presentationGallery.find((item) => item.title === event.title);
-          return <article className="blog-card" key={event.slide}>{photo && <Image src={photo.image} alt={event.title} width={620} height={420} />}<h3>{event.title}</h3><p>{event.description}</p></article>;
+          return <article className="blog-card" key={event.slide}>{photo && <Image src={photo.image} alt={event.title} width={620} height={420} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px" quality={80} />}<h3>{event.title}</h3><p>{event.description}</p></article>;
         })}</div>
         <Link className="premium-button section-action" href="/gallery">See all activity photos <ArrowRight size={16} /></Link>
       </section>
@@ -107,7 +108,7 @@ export async function HomeSectionsMaster() {
 
       <section className="section-wrap soft-band" id="blogs">
         <div className="section-title"><span className="eyebrow">Blogs</span><h2>Exam preparation insights <em>from PAART.</em></h2></div>
-        <div className="blog-grid">{blogs.map((blog) => <Link className="blog-card" href={`/blogs/${blog.slug}`} key={blog.id}><Image src={blog.featuredImage} alt={blog.title} width={620} height={390} /><span>{blog.category} - {blog.publishedDate}</span><h3>{blog.title}</h3><p>{blog.shortDescription}</p></Link>)}</div>
+        <div className="blog-grid">{blogs.map((blog) => <Link className="blog-card" href={`/blogs/${blog.slug}`} key={blog.id}><Image src={blog.featuredImage} alt={blog.title} width={620} height={390} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px" quality={80} /><span>{blog.category} - {blog.publishedDate}</span><h3>{blog.title}</h3><p>{blog.shortDescription}</p></Link>)}</div>
       </section>
 
       <section className="section-wrap admission-home" id="admission">

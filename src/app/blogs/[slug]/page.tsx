@@ -25,7 +25,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           <span className="eyebrow">{blog.category} · {blog.publishedDate}</span>
           <h1>{blog.title}</h1>
           <p>{blog.shortDescription}</p>
-          <Image src={blog.featuredImage} alt={blog.title} width={1180} height={620} priority />
+          <Image src={blog.featuredImage} alt={blog.title} width={1180} height={620} sizes="(max-width: 1024px) 100vw, 1180px" priority quality={85} />
           <div>{blog.content.split('\n').map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>
         </article>
       </main>
