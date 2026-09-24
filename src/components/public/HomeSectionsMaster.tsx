@@ -18,7 +18,6 @@ import { trustProfile, presentationEvents } from '@/data/trust';
 import { presentationGallery } from '@/data/presentation-gallery';
 import { TrustAchievements, TrustActivities, TrustFuturePlans, TrustPurpose, TrustCommunity } from './TrustSections';
 import { readCms } from '@/server/db';
-import { ScrollJourney } from './ScrollJourney';
 import { GalleryCardSwap } from './GalleryCardSwap';
 import { EnquiryForm } from '@/components/forms/EnquiryForm';
 
@@ -33,7 +32,6 @@ export async function HomeSectionsMaster() {
 
   return (
     <main>
-      <ScrollJourney />
       <section className="premium-hero campus-hero" id="home">
         <div className="hero-copy">
           <span className="eyebrow">Admissions open 2026</span>

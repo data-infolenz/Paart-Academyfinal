@@ -163,21 +163,6 @@ body, .page-shell { background: var(--neo-surface); }
 .course-provision .hero-actions { margin-top: 24px; }
 @media (max-width: 680px) { .course-information-grid { grid-template-columns: 1fr; } }
 
-/* Decorative journey rail: SVG dash offset follows document scroll progress. */
-.scroll-journey { position: fixed; z-index: 20; left: 8px; top: 50%; transform: translateY(-40%); width: clamp(18px, 2.2vw, 34px); height: min(56vh, 480px); pointer-events: none; user-select: none; }
-.scroll-journey svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(1px 2px 2px rgba(10,45,29,.16)); }
-.scroll-journey-track { stroke: #b6c9bd; stroke-width: 3; stroke-linecap: round; }
-.scroll-journey-progress { stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
-.scroll-journey-endpoint { fill: #e8efeb; stroke: #6c927b; stroke-width: 1.5; }
-.scroll-journey-tip { fill: #145237; stroke: #edf6ef; stroke-width: 2; }
-@media (max-width: 760px) {
-  .scroll-journey { left: 1px; width: 12px; height: min(44vh, 300px); }
-  .scroll-journey-track, .scroll-journey-progress { stroke-width: 4; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .scroll-journey-progress { stroke-dashoffset: 0 !important; }
-  .scroll-journey-tip { display: none; }
-}
 /* Perspective photo stack adapted from the supplied CardSwap showcase. */
 .gallery-swap-section { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(30px, 5vw, 80px); padding: 70px clamp(24px, 5vw, 76px); overflow: hidden; background: #153e2e; color: #fff; }
 .gallery-swap-copy { max-width: 540px; }
