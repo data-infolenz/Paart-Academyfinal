@@ -1,0 +1,71 @@
+/*
+ * PAART Academy Clean & Standard Design System
+ * Powered by @sdxc/ui & OKLCH Semantic Tokens (Zero Neumorphism)
+ */
+
+@import "@sdxc/ui/reset.css";
+@import "@sdxc/ui/theme.css";
+
+:root {
+  /* Crisp, high-legibility academic neutral scale */
+  --ui-color-neutral-50: oklch(98.8% 0.003 210);
+  --ui-color-neutral-100: oklch(96.8% 0.005 210);
+  --ui-color-neutral-200: oklch(92.2% 0.007 210);
+  --ui-color-neutral-300: oklch(85% 0.01 210);
+  --ui-color-neutral-400: oklch(73% 0.012 210);
+  --ui-color-neutral-500: oklch(61% 0.014 210);
+  --ui-color-neutral-600: oklch(50% 0.014 210);
+  --ui-color-neutral-700: oklch(40% 0.012 210);
+  --ui-color-neutral-800: oklch(30% 0.01 210);
+  --ui-color-neutral-900: oklch(21.5% 0.008 210);
+  --ui-color-neutral-950: oklch(14.5% 0.006 210);
+
+  /* PAART Academic Forest Emerald Brand Palette */
+  --ui-color-brand-50: oklch(98% 0.016 160);
+  --ui-color-brand-100: oklch(95% 0.038 160);
+  --ui-color-brand-200: oklch(89.5% 0.072 160);
+  --ui-color-brand-300: oklch(81% 0.115 160);
+  --ui-color-brand-400: oklch(71% 0.148 160);
+  --ui-color-brand-500: oklch(59% 0.155 160);
+  --ui-color-brand-600: oklch(49.5% 0.142 160);
+  --ui-color-brand-700: oklch(41.5% 0.122 160);
+  --ui-color-brand-800: oklch(33% 0.095 160);
+  --ui-color-brand-900: oklch(25% 0.07 160);
+  --ui-color-brand-950: oklch(17% 0.048 160);
+
+  --ui-font-sans:
+    "Inter Variable", "Inter", "Noto Sans Tamil", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    ui-sans-serif, system-ui, sans-serif;
+  --ui-font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;
+  --ui-landing-measure: 78rem;
+  --ui-landing-cta-radius: 0.5rem;
+}
+
+.light,
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+.dark,
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+.system {
+  color-scheme: light dark;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--ui-bg);
+  color: var(--ui-fg);
+  font-family: var(--ui-font-sans);
+  -webkit-font-smoothing: antialiased;
+}

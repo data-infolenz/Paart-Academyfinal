@@ -1,0 +1,7 @@
+export * from "./courses"
+export * from "./materials"
+export * from "./blogs"
+export * from "./gallery"
+export * from "./enquiries"
+export * from "./admissions"
+export * from "./settings"

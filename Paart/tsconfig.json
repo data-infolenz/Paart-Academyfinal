@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "types": ["node", "remix/assets/types/hmr", "vite/client"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ESNext",
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "remix/component",
+    "noEmit": true,
+    "paths": {
+      "~/app/*": ["./app/*"],
+      "~/config/*": ["./config/*"],
+      "~/routes": ["./routes/index.ts"],
+      "~/routes/*": ["./routes/*"],
+      "~/resources/*": ["./resources/*"],
+      "~/database/*": ["./database/*"]
+    }
+  },
+  "include": [
+    "app/**/*",
+    "bootstrap/**/*",
+    "config/**/*",
+    "routes/**/*",
+    "resources/**/*",
+    "database/**/*",
+    "vite.config.ts"
+  ],
+  "exclude": ["dist", "node_modules"]
+}

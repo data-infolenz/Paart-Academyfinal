@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admissions/success
+
+Sitemap: https://paart.in/sitemap.xml
