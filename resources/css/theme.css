@@ -30,9 +30,9 @@
 
   /* Font scales consumed directly by `u.font("sans" | "serif" | "mono")` */
   --ui-font-sans:
-    "Plus Jakarta Sans", "Noto Sans Tamil", -apple-system, BlinkMacSystemFont, ui-sans-serif,
-    system-ui, sans-serif;
-  --ui-font-serif: "Fraunces", "Noto Sans Tamil", "Georgia", serif;
+    "Outfit", "Noto Sans Tamil", -apple-system, BlinkMacSystemFont, ui-sans-serif, system-ui,
+    sans-serif;
+  --ui-font-serif: "Cormorant Garamond", "Noto Sans Tamil", "Georgia", serif;
   --ui-font-mono: "JetBrains Mono", "Consolas", ui-monospace, monospace;
 
   /* Academic Institutional Tokens */

@@ -180,7 +180,7 @@ export function HomePage(handle: Handle<HomePageProps>) {
               <h1
                 mix={[
                   acadSerif(),
-                  u.raw({ fontSize: "clamp(1.9rem, 3.3vw, 2.85rem)", lineHeight: "1.2" }),
+                  u.raw({ fontSize: "clamp(2.2rem, 3.8vw, 3.25rem)", lineHeight: "1.12" }),
                   u.weight("bold"),
                   u.fg("var(--acad-ink)"),
                   u.m(0)

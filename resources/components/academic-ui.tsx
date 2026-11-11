@@ -21,10 +21,7 @@ export function acadContainer() {
 }
 
 export function acadSerif() {
-  return u.combine([
-    u.font("serif"),
-    u.raw({ letterSpacing: "-0.02em", fontOpticalSizing: "auto" })
-  ])
+  return u.combine([u.font("serif"), u.raw({ letterSpacing: "-0.01em" })])
 }
 
 export function acadCard(accent: "none" | "primary" | "gold" = "none") {
@@ -93,7 +90,7 @@ export function acadRubric() {
 export function acadSectionTitle() {
   return u.combine([
     acadSerif(),
-    u.raw({ fontSize: "clamp(1.5rem, 2.4vw, 2.05rem)", lineHeight: "1.24" }),
+    u.raw({ fontSize: "clamp(1.7rem, 2.7vw, 2.35rem)", lineHeight: "1.18" }),
     u.weight("bold"),
     u.fg("var(--acad-ink)"),
     u.m(0)
@@ -131,7 +128,7 @@ export function acadStatBox() {
 export function acadStatNumber() {
   return u.combine([
     acadSerif(),
-    u.raw({ fontSize: "clamp(1.75rem, 2.8vw, 2.35rem)", lineHeight: "1.1" }),
+    u.raw({ fontSize: "clamp(2rem, 3.1vw, 2.65rem)", lineHeight: "1.08" }),
     u.weight("bold"),
     u.fg("var(--acad-honour-gold)"),
     u.tabularNums(),
@@ -238,7 +235,7 @@ export function AcademicPageBanner(handle: Handle<AcademicPageBannerProps>) {
               <h1
                 mix={[
                   acadSerif(),
-                  u.raw({ fontSize: "clamp(1.75rem, 3vw, 2.45rem)", lineHeight: "1.2" }),
+                  u.raw({ fontSize: "clamp(2rem, 3.3vw, 2.8rem)", lineHeight: "1.15" }),
                   u.weight("bold"),
                   u.fg("var(--acad-ink)"),
                   u.m(0)

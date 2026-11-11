@@ -70,7 +70,7 @@ export function Document(handle: Handle<Document.Props>) {
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link
             rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..700&family=Noto+Sans+Tamil:wght@400..700&family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500..700;1,500..700&family=Noto+Sans+Tamil:wght@400..700&family=Outfit:wght@300..800&display=swap"
           />
           <Seo
             site={seo.site}
