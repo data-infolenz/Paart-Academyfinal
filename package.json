@@ -1,35 +1,51 @@
 {
-  "name": "paart-academy-next",
+  "name": "paart-academy",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "lint": "eslint .",
-    "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "dev": "vp dev",
+    "build": "vp build",
+    "start": "node --env-file-if-exists=.env --import ./bootstrap/register-paths.mjs --import remix/node-tsx bootstrap/server.ts",
+    "db:migrate": "node --env-file-if-exists=.env --import ./bootstrap/register-paths.mjs --import remix/node-tsx database/migrate.ts",
+    "db:seed": "node --env-file-if-exists=.env --import ./bootstrap/register-paths.mjs --import remix/node-tsx database/seed.ts",
+    "check": "vp check",
+    "lint": "vp lint",
+    "format": "vp fmt",
+    "typecheck": "tsc --noEmit",
+    "test": "vp test"
   },
   "dependencies": {
-    "gsap": "^3.15.0",
-    "lucide-react": "^0.446.0",
-    "next": "^16.3.0",
-    "react": "latest",
-    "react-dom": "latest"
+    "@pitlane/assets": "^0.2.1",
+    "@pitlane/vite-plugin-remix": "^0.9.1",
+    "@sdxc/assets-middleware": "^2026.11.10",
+    "@sdxc/catch-response-middleware": "^2026.11.10",
+    "@sdxc/health": "^2026.11.10",
+    "@sdxc/honeypot": "^2026.11.10",
+    "@sdxc/icons": "^2026.11.10",
+    "@sdxc/lazy-route": "^2026.11.10",
+    "@sdxc/logger": "^2026.11.10",
+    "@sdxc/rate-limit": "^2026.11.10",
+    "@sdxc/response": "^2026.10.13",
+    "@sdxc/security-headers": "^2026.11.10",
+    "@sdxc/seo": "^2026.11.10",
+    "@sdxc/sitemap": "^2026.11.10",
+    "@sdxc/u": "^2026.11.10",
+    "@sdxc/ui": "^2026.11.11",
+    "pg": "^8.23.1",
+    "remix": "^3.2.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.9.1",
-    "@types/node": "26.2.0",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "autoprefixer": "^10.4.18",
-    "eslint": "^9.9.1",
-    "eslint-config-next": "^16.3.0",
-    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
-    "globals": "^15.9.0",
-    "postcss": "^8.4.35",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5.5.3",
-    "typescript-eslint": "^8.3.0"
+    "@types/node": "^24.6.0",
+    "@types/pg": "^8.16.0",
+    "typescript": "^5.9.3",
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.6.0",
+    "vite-plus": "1.6.0"
+  },
+  "overrides": {
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.6.0"
+  },
+  "engines": {
+    "node": ">=24.11.0"
   }
 }
