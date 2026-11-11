@@ -66,6 +66,12 @@ export function Document(handle: Handle<Document.Props>) {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta name="color-scheme" content="light dark" />
           <link rel="icon" type="image/png" href="/favicon.png" />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..700&family=Noto+Sans+Tamil:wght@400..700&family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..700&display=swap"
+          />
           <Seo
             site={seo.site}
             title={title}

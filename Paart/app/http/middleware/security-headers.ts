@@ -5,9 +5,9 @@ import { stringify, type CSP } from "@sdxc/security-headers/csp"
 const DEFAULT_CSP_DIRECTIVES: CSP.Directives = {
   defaultSrc: ["self"],
   scriptSrc: ["self", "unsafe-inline", "unsafe-eval", "blob:"],
-  styleSrc: ["self", "unsafe-inline"],
+  styleSrc: ["self", "unsafe-inline", "https://fonts.googleapis.com"],
   imgSrc: ["self", "data:", "blob:", "https:"],
-  fontSrc: ["self", "data:", "https:"],
+  fontSrc: ["self", "data:", "https://fonts.gstatic.com", "https:"],
   mediaSrc: ["self", "blob:"],
   frameSrc: ["self", "https://www.google.com", "https://maps.google.com"],
   connectSrc: ["self", "ws:", "wss:"],

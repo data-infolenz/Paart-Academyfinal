@@ -1,8 +1,9 @@
 import type { Handle } from "remix/component"
 import { CircleCheckIcon, SendIcon } from "@sdxc/icons"
 import * as u from "@sdxc/u"
-import { Button, Heading, Input, Select, Text, TextArea } from "@sdxc/ui"
+import { Button, Input, Select, Text, TextArea } from "@sdxc/ui"
 import type { CourseItem } from "~/app/models/courses"
+import { acadCard, acadSerif } from "~/resources/components/academic-ui"
 import { routes } from "~/routes"
 
 export interface EnquiryFormCardProps {
@@ -24,20 +25,12 @@ export function EnquiryFormCard(handle: Handle<EnquiryFormCardProps>) {
     } = handle.props
 
     return (
-      <div
-        mix={[
-          u.vstack({ gap: 4 }),
-          u.p(6),
-          u.rounded("xl"),
-          u.border({ width: 1, color: "neutral" }),
-          u.bg("var(--ui-surface, var(--ui-bg))")
-        ]}
-      >
+      <div mix={[acadCard("gold"), u.vstack({ gap: 4 }), u.p(6)]}>
         <div mix={[u.vstack({ gap: 1 })]}>
-          <Heading level={3} mix={[u.fontSize("xl"), u.weight("semibold"), u.m(0)]}>
-            Request Course & Batch Guidance
-          </Heading>
-          <Text mix={[u.fontSize("sm"), u.fg("neutral.muted"), u.m(0)]}>
+          <h2 mix={[acadSerif(), u.fontSize("xl"), u.weight("bold"), u.m(0)]}>
+            Request Course &amp; Batch Guidance
+          </h2>
+          <Text mix={[u.fontSize("sm"), u.leading("normal"), u.fg("var(--acad-muted)"), u.m(0)]}>
             Share your exam goal and our academic coordinators in Puliyangudi will reach out.
           </Text>
         </div>
