@@ -1,0 +1,8 @@
+.agents/
+public/images/
+public/videos/
+public/favicon.png
+public/robots.txt
+dist/
+uploads/
+node_modules/

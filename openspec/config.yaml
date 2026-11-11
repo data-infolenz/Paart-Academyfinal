@@ -1,0 +1,7 @@
+schema: spec-driven
+
+context: |
+  PAART Academy (Puliyangudi Academic & Achievements Resource Trust) is a local educational trust and competitive exam coaching academy built with Remix 3, @sdxc/ui, @sdxc/u, Vite+ (vp), and PostgreSQL.
+  - Public UI must look like an academic institution / public educational trust (Fraunces + Plus Jakarta Sans + Noto Sans Tamil), never SaaS product landing chrome or neumorphism.
+  - Style components directly in .tsx using @sdxc/u (mix={[...]}) and @sdxc/ui primitives; keep resources/css/theme.css restricted to :root/.dark tokens and base resets.
+  - Validate changes with `npx vp check --deny-warnings`, `npm run typecheck`, `npm run build`, and `npm test`, and keep `graphify-out/` updated via `graphify update .`.

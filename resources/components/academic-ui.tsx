@@ -429,7 +429,7 @@ export function AcademicCalloutBand(handle: Handle<AcademicCalloutBandProps>) {
                     variant="outline"
                   >
                     <PhoneIcon size={15} aria-hidden="true" />
-                    <span>Call Campus: {phone}</span>
+                    <span>{phone}</span>
                   </LinkButton>
                 </>
               )}

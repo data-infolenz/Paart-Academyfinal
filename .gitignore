@@ -4,4 +4,8 @@ uploads/
 .env
 *.log
 tsconfig.tsbuildinfo
+.vercel
 
+graphify-out/*
+!graphify-out/GRAPH_REPORT.md
+!graphify-out/graph.json

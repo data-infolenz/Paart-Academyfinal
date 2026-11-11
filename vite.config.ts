@@ -59,14 +59,14 @@ export default defineConfig({
     noExternal: ["@sdxc/ui", "@sdxc/u", "@sdxc/icons", "@sdxc/seo", "@sdxc/sitemap"]
   },
   lint: {
-    ignorePatterns: ["dist/**"],
+    ignorePatterns: ["dist/**", "graphify-out/**", ".agents/**"],
     options: {
       typeAware: true,
       typeCheck: true
     }
   },
   fmt: {
-    ignorePatterns: ["dist/**", "package-lock.json"],
+    ignorePatterns: ["dist/**", "package-lock.json", "graphify-out/**", ".agents/**"],
     singleQuote: false,
     semi: false,
     trailingComma: "none"

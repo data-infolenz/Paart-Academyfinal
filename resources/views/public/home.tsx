@@ -9,7 +9,6 @@ import {
   FileTextIcon,
   GraduationCapIcon,
   MapPinIcon,
-  PhoneIcon,
   ShieldCheckIcon
 } from "@sdxc/icons"
 import * as u from "@sdxc/u"
@@ -67,7 +66,6 @@ export function HomePage(handle: Handle<HomePageProps>) {
     const featuredCourses = courses.slice(0, 6)
     const featuredMaterials = materials.slice(0, 4)
     const recentBlogs = blogs.slice(0, 3)
-    const phoneHref = `tel:${settings.phone.replace(/\s+/g, "")}`
 
     return (
       <LandingLayout user={user} settings={settings}>
@@ -251,11 +249,6 @@ export function HomePage(handle: Handle<HomePageProps>) {
                 >
                   <BookOpenIcon size={16} aria-hidden="true" />
                   <span>View Courses &amp; Syllabus</span>
-                </LinkButton>
-
-                <LinkButton href={phoneHref} color="neutral" variant="ghost" size="lg">
-                  <PhoneIcon size={15} aria-hidden="true" />
-                  <span>{settings.phone}</span>
                 </LinkButton>
               </div>
             </div>
