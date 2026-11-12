@@ -6,6 +6,7 @@ import { asyncContext } from "remix/middleware/async-context"
 import { compression } from "remix/middleware/compression"
 import { formData } from "remix/middleware/form-data"
 import { render } from "remix/middleware/render"
+import { staticFiles } from "remix/middleware/static"
 import { createRouter, type RouterContext } from "remix/router"
 import publicController from "~/app/http/controllers/public/controller"
 import { enforcePasswordChange, loadSessionUser, requireRole } from "~/app/http/middleware/auth"
@@ -26,6 +27,8 @@ declare module "remix/router" {
 
 export const router = createRouter({
   middleware: [
+    staticFiles("./public"),
+    staticFiles("./dist/client"),
     asyncContext(),
     log(paartLogger),
     databaseMiddleware(),

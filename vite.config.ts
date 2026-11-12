@@ -14,7 +14,13 @@ export default defineConfig({
     }),
     isVercel
       ? nitro({
-          compatibilityDate: "2026-11-12"
+          compatibilityDate: "2026-11-12",
+          publicAssets: [
+            {
+              dir: "dist/client",
+              baseURL: "/"
+            }
+          ]
         })
       : null
   ].filter(Boolean),
