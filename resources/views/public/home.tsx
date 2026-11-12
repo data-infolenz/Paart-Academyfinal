@@ -680,8 +680,8 @@ export function HomePage(handle: Handle<HomePageProps>) {
                       >
                         <FileTextIcon size={18} />
                       </div>
-                      <div mix={[u.vstack({ gap: 1 }), u.minWidth(0)]}>
-                        <Badge color="neutral" variant="outline">
+                      <div mix={[u.vstack({ gap: 1, align: "start" }), u.minWidth(0)]}>
+                        <Badge color="neutral" variant="outline" mix={[u.self("start")]}>
                           {mat.category}
                         </Badge>
                         <p

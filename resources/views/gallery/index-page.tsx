@@ -92,8 +92,8 @@ export function GalleryIndexPage(handle: Handle<GalleryIndexPageProps>) {
                   decoding="async"
                   mix={[u.width("full"), u.height(52), u.fit("cover"), u.block()]}
                 />
-                <figcaption mix={[u.vstack({ gap: 1.5 }), u.p(4)]}>
-                  <Badge color="neutral" variant="outline">
+                <figcaption mix={[u.vstack({ gap: 1.5, align: "start" }), u.p(4)]}>
+                  <Badge color="neutral" variant="outline" mix={[u.self("start")]}>
                     {item.category}
                   </Badge>
                   <h2 mix={[acadSerif(), u.fontSize("sm"), u.weight("bold"), u.m(0)]}>

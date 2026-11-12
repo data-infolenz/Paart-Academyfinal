@@ -81,7 +81,7 @@ export function AboutPage(handle: Handle<AboutPageProps>) {
             ]}
           >
             <div mix={[acadCard("primary"), u.vstack({ gap: 3 }), u.p(6)]}>
-              <Badge color="brand" variant="outline">
+              <Badge color="brand" variant="outline" mix={[u.self("start")]}>
                 Our Vision
               </Badge>
               <h3 mix={[acadSerif(), u.fontSize("xl"), u.weight("bold"), u.m(0)]}>
@@ -98,7 +98,7 @@ export function AboutPage(handle: Handle<AboutPageProps>) {
             </div>
 
             <div mix={[acadCard("gold"), u.vstack({ gap: 3 }), u.p(6)]}>
-              <Badge color="brand" variant="outline">
+              <Badge color="brand" variant="outline" mix={[u.self("start")]}>
                 Our Mission
               </Badge>
               <h3 mix={[acadSerif(), u.fontSize("xl"), u.weight("bold"), u.m(0)]}>

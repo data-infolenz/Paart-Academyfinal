@@ -1,35 +1,41 @@
-# Graph Report - Paart-Academyfinal  (2026-11-11)
+# Graph Report - Paart-Academyfinal  (2026-11-12)
 
 ## Corpus Check
-- 85 files · ~29,556 words
+- 92 files · ~35,280 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 525 nodes · 1460 edges · 17 communities
+- 626 nodes · 1554 edges · 23 communities
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 21 edges (avg confidence: 0.59)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `eb551d71`
+- Built from commit: `02739e78`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- Public Controllers & Academic Views
-- Admin CMS Controller & Actions
-- Admissions & Course Flows
-- Router & HTTP Middleware
-- Database Schema & Domain Entities
+- AdminUser
+- admin/controller.tsx
+- public/controller.tsx
+- database.ts
+- academic-ui.tsx
 - TypeScript Path Aliases & Config
 - Remix 3 & @sdxc Dependencies
-- Admissions & Enquiries Models
-- Blog Models & Sitemap
+- models/courses.ts
+- Requirement: Unified Credential Sign-In and Role Workspace Routing
 - Package Scripts & Vite+ Tooling
 - Admin Session Authentication
 - Architecture & OpenSpec Constraints
 - Browser Hydration & Frame Prefetch
 - PostgreSQL Initial Migration
 - Node Module Path Resolver
+- ADDED Requirements
+- ADDED Requirements
+- ADDED Requirements
+- Decisions
+- Tasks
+- Proposal
 
 ## God Nodes (most connected - your core abstractions)
 1. `AdminUser` - 46 edges
@@ -48,8 +54,8 @@
   openspec/config.yaml → README.md
 - `OpenSpec Verification & Graphify Maintenance Gate` --semantically_similar_to--> `Vite+ (vp) Build & Verification Toolchain`  [INFERRED] [semantically similar]
   openspec/config.yaml → README.md
-- `courseCreate()` --references--> `COURSE_CATEGORIES`  [EXTRACTED]
-  app/http/controllers/admin/controller.tsx → config/courses.ts
+- `AcademicCalloutBandProps` --references--> `SiteSettings`  [EXTRACTED]
+  resources/components/academic-ui.tsx → app/models/settings.ts
 - `AdminLayoutProps` --references--> `AdminUser`  [EXTRACTED]
   resources/layouts/admin.tsx → app/initializers/auth.ts
 - `AdminAdmissionsPageProps` --references--> `AdminUser`  [EXTRACTED]
@@ -64,27 +70,27 @@
 - **PAART Academy Institutional UI & Styling Governance** — readme_wcagsemanticui, openspec_config_academicdesignconstraint, openspec_config_tsxutilitystyling [INFERRED 0.95]
 - **Vite+ Build Verification & Graphify Sync Workflow** — openspec_config_specdrivenschema, openspec_config_validationgate, readme_viteplustoolchain [INFERRED 0.95]
 
-## Communities (17 total, 0 thin omitted)
+## Communities (23 total, 0 thin omitted)
 
-### Community 0 - "Public Controllers & Academic Views"
-Cohesion: 0.10
-Nodes (57): SessionPayload, DEFAULT_SETTINGS, DEPARTMENT_SELECTIONS, IMPACT_METRICS, ImpactMetric, STATE_RANK_HIGHLIGHTS, TRUST_INITIATIVES, TRUST_PILLARS (+49 more)
+### Community 0 - "AdminUser"
+Cohesion: 0.09
+Nodes (60): AdminUser, SessionPayload, BlogItem, CourseItem, GalleryItem, DEFAULT_SETTINGS, SiteSettings, acadCard() (+52 more)
 
-### Community 1 - "Admin CMS Controller & Actions"
-Cohesion: 0.07
-Nodes (54): admissions(), admissionStatus(), blogCreate(), blogDelete(), blogs(), blogToggle(), courseCreate(), courseDelete() (+46 more)
-
-### Community 2 - "Admissions & Course Flows"
-Cohesion: 0.07
-Nodes (48): apply(), submit(), success(), show(), index(), show(), about(), contact() (+40 more)
-
-### Community 3 - "Router & HTTP Middleware"
+### Community 1 - "admin/controller.tsx"
 Cohesion: 0.06
-Nodes (39): LEGACY_WP_PAGE_MAP, legacyRedirectsMiddleware(), rateLimitMiddleware(), DEFAULT_CSP_DIRECTIVES, securityHeadersMiddleware(), closeDatabase(), databaseContext, databaseMiddleware() (+31 more)
+Nodes (64): admissions(), admissionStatus(), blogCreate(), blogDelete(), blogs(), blogToggle(), courseCreate(), courseDelete() (+56 more)
 
-### Community 4 - "Database Schema & Domain Entities"
-Cohesion: 0.08
-Nodes (40): AdminUser, BlogItem, EnquiryItem, GalleryItem, MaterialItem, SiteSettings, AcademicCalloutBandProps, ThemeToggle (+32 more)
+### Community 2 - "public/controller.tsx"
+Cohesion: 0.07
+Nodes (50): apply(), submit(), success(), index(), show(), index(), show(), about() (+42 more)
+
+### Community 3 - "database.ts"
+Cohesion: 0.07
+Nodes (32): LEGACY_WP_PAGE_MAP, legacyRedirectsMiddleware(), rateLimitMiddleware(), DEFAULT_CSP_DIRECTIVES, securityHeadersMiddleware(), closeDatabase(), databaseContext, databaseMiddleware() (+24 more)
+
+### Community 4 - "academic-ui.tsx"
+Cohesion: 0.16
+Nodes (31): DEPARTMENT_SELECTIONS, IMPACT_METRICS, ImpactMetric, STATE_RANK_HIGHLIGHTS, TRUST_INITIATIVES, TRUST_PILLARS, TRUST_PROFILE, TRUST_VISION_MISSION (+23 more)
 
 ### Community 5 - "TypeScript Path Aliases & Config"
 Cohesion: 0.06
@@ -94,13 +100,13 @@ Nodes (37): ./app/*, bootstrap/**/*, ./config/*, ./database/*, dist, DOM, DOM.It
 Cohesion: 0.05
 Nodes (37): dependencies, pg, @pitlane/assets, @pitlane/vite-plugin-remix, remix, @sdxc/assets-middleware, @sdxc/catch-response-middleware, @sdxc/health (+29 more)
 
-### Community 7 - "Admissions & Enquiries Models"
-Cohesion: 0.12
-Nodes (23): AdmissionItem, mapAdmissionRow(), mapEnquiryRow(), AdmissionRow, admissions, AdmissionStatus, NewAdmissionRow, NewBlogRow (+15 more)
+### Community 7 - "models/courses.ts"
+Cohesion: 0.07
+Nodes (50): AdmissionItem, mapAdmissionRow(), findBlogBySlug(), mapBlogRow(), mapSeedBlog(), findCourseBySlug(), listAllCourses(), mapCourseRow() (+42 more)
 
-### Community 8 - "Blog Models & Sitemap"
-Cohesion: 0.13
-Nodes (26): index(), sitemapAction(), AppContext, findBlogBySlug(), listAllBlogs(), listPublishedBlogs(), mapBlogRow(), mapSeedBlog() (+18 more)
+### Community 8 - "Requirement: Unified Credential Sign-In and Role Workspace Routing"
+Cohesion: 0.10
+Nodes (20): ADDED Requirements, Multi-Role Authentication Specification, Purpose, Requirement: Mandatory First-Login Password Change, Requirement: Revocable Server-Managed Sessions and Sign-Out, Requirement: Role-Based Workspace and Action Isolation, Requirement: Unified Credential Sign-In and Role Workspace Routing, Scenario: Administrator signs in and reaches admin console (+12 more)
 
 ### Community 9 - "Package Scripts & Vite+ Tooling"
 Cohesion: 0.06
@@ -126,24 +132,48 @@ Nodes (7): "admissions", "blogs", "courses", "enquiries", "gallery_items", "mate
 Cohesion: 0.67
 Nodes (3): resolve(), resolveCandidate(), rootDir
 
+### Community 17 - "ADDED Requirements"
+Cohesion: 0.12
+Nodes (16): Account Provisioning Specification, ADDED Requirements, Purpose, Requirement: Account Suspension and Reactivation, Requirement: Closed Administrator-Only Account Creation, Requirement: One-Click Aspirant Provisioning from Admissions, Requirement: SMTP Welcome Email and Credential Re-Issuance, Scenario: Administrator prevented from self-suspension (+8 more)
+
+### Community 18 - "ADDED Requirements"
+Cohesion: 0.12
+Nodes (16): ADDED Requirements, Aspirant Portal Specification, Purpose, Requirement: Aspirant Progress and Performance Overview, Requirement: Enrolled and Public Study Materials Access, Requirement: Published Test Marks and Scorecard History, Requirement: Targeted Notifications Feed, Requirement: Upcoming Exam Schedule View (+8 more)
+
+### Community 19 - "ADDED Requirements"
+Cohesion: 0.12
+Nodes (16): ADDED Requirements, Faculty Workspace Specification, Purpose, Requirement: Aspirant Exam Marks Entry, CSV Import, and Result Publication, Requirement: Batch Syllabus Progress Tracking, Requirement: Mock and OMR Exam Scheduling, Requirement: Targeted Academic Notifications, Requirement: Visibility-Scoped Study Material Publishing (+8 more)
+
+### Community 20 - "Decisions"
+Cohesion: 0.17
+Nodes (11): 1. Server-Managed Hashed Sessions + `@sdxc/crypto` `scrypt` Passwords, 2. Authorization Architecture with `@sdxc/authz` + Mandatory Password-Change Gate, 3. SMTP Email Delivery via `@sdxc/mail` + Thin Node `nodemailer` SMTP Transport, 4. Relational LMS Data Model (`0002_multi_role_lms`), 5. Pure SSR UI Architecture (`@sdxc/u` + `@sdxc/ui`), Context, Decisions, Design: Multi-Role Identity, SMTP Provisioning & LMS Portals (+3 more)
+
+### Community 21 - "Tasks"
+Cohesion: 0.22
+Nodes (8): 1. Dependencies, Configuration & Database Schema, 2. Multi-Role Authentication, Sessions & RBAC (`identity/multi-role-auth`), 3. Admin Account Provisioning & SMTP Delivery (`identity/account-provisioning`), 4. Faculty Workspace (`lms/faculty-workspace`), 5. Aspirant Portal (`lms/aspirant-portal`), 6. End-to-End Integration Verification & Knowledge Graph Sync, Tasks, Workflow follow-up
+
+### Community 22 - "Proposal"
+Cohesion: 0.25
+Nodes (7): Capabilities, Impact, Modified Capabilities, New Capabilities, Proposal, What Changes, Why
+
 ## Knowledge Gaps
-- **118 isolated node(s):** `sessionUserContext`, `LEGACY_WP_PAGE_MAP`, `DEFAULT_CSP_DIRECTIVES`, `phoneSchema`, `SessionPayload` (+113 more)
+- **181 isolated node(s):** `sessionUserContext`, `LEGACY_WP_PAGE_MAP`, `DEFAULT_CSP_DIRECTIVES`, `phoneSchema`, `SessionPayload` (+176 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `AdminUser` connect `Database Schema & Domain Entities` to `Public Controllers & Academic Views`, `Blog Models & Sitemap`, `Admin Session Authentication`, `Admissions & Enquiries Models`?**
-  _High betweenness centrality (0.028) - this node is a cross-community bridge._
-- **Why does `Routes` connect `Public Controllers & Academic Views` to `Admin CMS Controller & Actions`, `Admissions & Course Flows`, `Router & HTTP Middleware`, `Database Schema & Domain Entities`, `Admissions & Enquiries Models`, `Blog Models & Sitemap`, `Admin Session Authentication`?**
-  _High betweenness centrality (0.027) - this node is a cross-community bridge._
-- **Why does `getSiteSettings()` connect `Admissions & Course Flows` to `Public Controllers & Academic Views`, `Admin CMS Controller & Actions`, `Admin Session Authentication`, `Blog Models & Sitemap`?**
+- **Why does `AdminUser` connect `AdminUser` to `admin/controller.tsx`, `Admin Session Authentication`, `academic-ui.tsx`, `models/courses.ts`?**
   _High betweenness centrality (0.019) - this node is a cross-community bridge._
+- **Why does `Routes` connect `AdminUser` to `admin/controller.tsx`, `public/controller.tsx`, `database.ts`, `academic-ui.tsx`, `models/courses.ts`, `Admin Session Authentication`?**
+  _High betweenness centrality (0.019) - this node is a cross-community bridge._
+- **Why does `getSiteSettings()` connect `public/controller.tsx` to `AdminUser`, `admin/controller.tsx`, `Admin Session Authentication`?**
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **What connects `sessionUserContext`, `LEGACY_WP_PAGE_MAP`, `DEFAULT_CSP_DIRECTIVES` to the rest of the system?**
-  _118 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Public Controllers & Academic Views` be split into smaller, more focused modules?**
-  _Cohesion score 0.10327022375215146 - nodes in this community are weakly interconnected._
-- **Should `Admin CMS Controller & Actions` be split into smaller, more focused modules?**
-  _Cohesion score 0.07138535995160314 - nodes in this community are weakly interconnected._
-- **Should `Admissions & Course Flows` be split into smaller, more focused modules?**
-  _Cohesion score 0.06829573934837092 - nodes in this community are weakly interconnected._
+  _181 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `AdminUser` be split into smaller, more focused modules?**
+  _Cohesion score 0.08861082737487232 - nodes in this community are weakly interconnected._
+- **Should `admin/controller.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.057971014492753624 - nodes in this community are weakly interconnected._
+- **Should `public/controller.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.07049180327868852 - nodes in this community are weakly interconnected._

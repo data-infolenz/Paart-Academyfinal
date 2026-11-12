@@ -40,4 +40,3 @@
 
 - Archive `multi-role-lms-portals` via `/openspec-archive-change` once implementation and review are complete.
 - Propose Change 2 (`server-driven-pages` — full-site database block publishing engine leveraging real `users.id` authorship and `@sdxc/authz`) via `/openspec-propose`.
-

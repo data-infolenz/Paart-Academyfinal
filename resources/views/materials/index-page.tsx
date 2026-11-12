@@ -96,8 +96,8 @@ export function MaterialsIndexPage(handle: Handle<MaterialsIndexPageProps>) {
                   >
                     <FileTextIcon size={20} />
                   </div>
-                  <div mix={[u.vstack({ gap: 1.5 }), u.minWidth(0)]}>
-                    <Badge color="neutral" variant="outline">
+                  <div mix={[u.vstack({ gap: 1.5, align: "start" }), u.minWidth(0)]}>
+                    <Badge color="neutral" variant="outline" mix={[u.self("start")]}>
                       {mat.category}
                     </Badge>
                     <h2 mix={[acadSerif(), u.fontSize("base"), u.weight("bold"), u.m(0)]}>
