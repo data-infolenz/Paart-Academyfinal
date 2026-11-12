@@ -9,7 +9,6 @@ import { render } from "remix/middleware/render"
 import { createRouter, type RouterContext } from "remix/router"
 import publicController from "~/app/http/controllers/public/controller"
 import { enforcePasswordChange, loadSessionUser, requireRole } from "~/app/http/middleware/auth"
-import { legacyRedirectsMiddleware } from "~/app/http/middleware/legacy-redirects"
 import { rateLimitMiddleware } from "~/app/http/middleware/rate-limit"
 import { securityHeadersMiddleware } from "~/app/http/middleware/security-headers"
 import { routes } from "~/routes"
@@ -29,7 +28,6 @@ export const router = createRouter({
   middleware: [
     asyncContext(),
     log(paartLogger),
-    legacyRedirectsMiddleware(),
     databaseMiddleware(),
     compression(),
     securityHeadersMiddleware(),
