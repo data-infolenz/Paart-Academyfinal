@@ -1,43 +1,20 @@
 import * as s from "remix/data-schema"
 import { redirect } from "remix/response/redirect"
 import { createController } from "remix/router"
+import { renderStaticCmsSlug } from "~/app/http/controllers/public/cms-responder"
 import { admissionSchema, formDataToObject } from "~/app/http/validators"
-import { honeypot, issueHoneypotFields } from "~/app/initializers/honeypot"
+import { honeypot } from "~/app/initializers/honeypot"
 import { saveUploadedFile } from "~/app/initializers/storage"
 import { createAdmission } from "~/app/models/admissions"
-import { listActiveCourses } from "~/app/models/courses"
-import { getSiteSettings } from "~/app/models/settings"
+import { chromeToSiteSettings, getSiteChrome } from "~/app/models/cms"
 import { Document } from "~/resources/layouts/document"
-import { AdmissionApplyPage } from "~/resources/views/admissions/apply-page"
 import { AdmissionSuccessPage } from "~/resources/views/admissions/success-page"
 import { routes } from "~/routes"
 
 export default createController(routes.admissions, {
   actions: {
     async apply(ctx) {
-      const url = new URL(ctx.request.url)
-      const selectedCourse = url.searchParams.get("course") || ""
-      const [settings, courses, honeypotFields] = await Promise.all([
-        getSiteSettings(),
-        listActiveCourses(),
-        issueHoneypotFields()
-      ])
-
-      return ctx.render(
-        <Document
-          title="Online Student Admission Application | PAART Academy Puliyangudi"
-          description="Apply online for TNPSC, TNUSRB Police, TET/TRB, SSC, Banking, Railways, NMMS, and Skill certification coaching batches at PAART Academy."
-          assets={ctx.assets}
-        >
-          <AdmissionApplyPage
-            user={ctx.user}
-            settings={settings}
-            courses={courses}
-            selectedCourse={selectedCourse}
-            honeypotFields={honeypotFields}
-          />
-        </Document>
-      )
+      return renderStaticCmsSlug(ctx, "/admissions", { includeOrgSchema: false })
     },
 
     async submit(ctx) {
@@ -52,28 +29,12 @@ export default createController(routes.admissions, {
       const parsed = s.parseSafe(admissionSchema, raw)
 
       if (!parsed.success) {
-        const [settings, courses, honeypotFields] = await Promise.all([
-          getSiteSettings(),
-          listActiveCourses(),
-          issueHoneypotFields()
-        ])
-
-        return ctx.render(
-          <Document
-            title="Online Student Admission Application | PAART Academy"
-            assets={ctx.assets}
-          >
-            <AdmissionApplyPage
-              user={ctx.user}
-              settings={settings}
-              courses={courses}
-              honeypotFields={honeypotFields}
-              error={parsed.issues[0]?.message || "Please review the highlighted fields."}
-              values={raw}
-            />
-          </Document>,
-          { status: 422 }
-        )
+        return renderStaticCmsSlug(ctx, "/admissions", {
+          includeOrgSchema: false,
+          formError: parsed.issues[0]?.message || "Please review the highlighted fields.",
+          formValues: raw,
+          statusCode: 422
+        })
       }
 
       let photoUrl: string | null = null
@@ -83,28 +44,12 @@ export default createController(routes.admissions, {
         photoUrl = await saveUploadedFile(form.get("studentPhoto"), "photos")
         documentUrl = await saveUploadedFile(form.get("supportingDocument"), "documents")
       } catch (err) {
-        const [settings, courses, honeypotFields] = await Promise.all([
-          getSiteSettings(),
-          listActiveCourses(),
-          issueHoneypotFields()
-        ])
-
-        return ctx.render(
-          <Document
-            title="Online Student Admission Application | PAART Academy"
-            assets={ctx.assets}
-          >
-            <AdmissionApplyPage
-              user={ctx.user}
-              settings={settings}
-              courses={courses}
-              honeypotFields={honeypotFields}
-              error={err instanceof Error ? err.message : "File upload failed."}
-              values={raw}
-            />
-          </Document>,
-          { status: 422 }
-        )
+        return renderStaticCmsSlug(ctx, "/admissions", {
+          includeOrgSchema: false,
+          formError: err instanceof Error ? err.message : "File upload failed.",
+          formValues: raw,
+          statusCode: 422
+        })
       }
 
       try {
@@ -115,35 +60,21 @@ export default createController(routes.admissions, {
         })
         return redirect(`/admissions/success?ref=${encodeURIComponent(applicationId)}`, 303)
       } catch {
-        const [settings, courses, honeypotFields] = await Promise.all([
-          getSiteSettings(),
-          listActiveCourses(),
-          issueHoneypotFields()
-        ])
-
-        return ctx.render(
-          <Document
-            title="Online Student Admission Application | PAART Academy"
-            assets={ctx.assets}
-          >
-            <AdmissionApplyPage
-              user={ctx.user}
-              settings={settings}
-              courses={courses}
-              honeypotFields={honeypotFields}
-              error="Database connection is currently unavailable. Please call or WhatsApp +91 6382450070 directly to register."
-              values={raw}
-            />
-          </Document>,
-          { status: 503 }
-        )
+        return renderStaticCmsSlug(ctx, "/admissions", {
+          includeOrgSchema: false,
+          formError:
+            "Database connection is currently unavailable. Please call or WhatsApp +91 6382450070 directly to register.",
+          formValues: raw,
+          statusCode: 503
+        })
       }
     },
 
     async success(ctx) {
       const url = new URL(ctx.request.url)
       const applicationId = url.searchParams.get("ref") || "PAART-PENDING"
-      const settings = await getSiteSettings()
+      const { chrome } = await getSiteChrome()
+      const settings = chromeToSiteSettings(chrome)
 
       return ctx.render(
         <Document
@@ -151,7 +82,12 @@ export default createController(routes.admissions, {
           robots="noindex, nofollow"
           assets={ctx.assets}
         >
-          <AdmissionSuccessPage user={ctx.user} settings={settings} applicationId={applicationId} />
+          <AdmissionSuccessPage
+            user={ctx.user}
+            settings={settings}
+            chrome={chrome}
+            applicationId={applicationId}
+          />
         </Document>
       )
     }

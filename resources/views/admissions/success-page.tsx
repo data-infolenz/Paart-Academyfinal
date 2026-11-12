@@ -3,6 +3,7 @@ import { ArrowRightIcon, CircleCheckIcon, PhoneIcon } from "@sdxc/icons"
 import * as u from "@sdxc/u"
 import { Badge, LinkButton, Text } from "@sdxc/ui"
 import type { AdminUser } from "~/app/initializers/auth"
+import type { SiteChromeConfig } from "~/app/models/cms-schemas"
 import type { SiteSettings } from "~/app/models/settings"
 import {
   acadCard,
@@ -16,15 +17,16 @@ import { routes } from "~/routes"
 export interface AdmissionSuccessPageProps {
   user?: AdminUser | null
   settings: SiteSettings
+  chrome?: SiteChromeConfig
   applicationId: string
 }
 
 export function AdmissionSuccessPage(handle: Handle<AdmissionSuccessPageProps>) {
   return () => {
-    const { user, settings, applicationId } = handle.props
+    const { user, settings, chrome, applicationId } = handle.props
 
     return (
-      <LandingLayout user={user} settings={settings}>
+      <LandingLayout user={user} settings={settings} chrome={chrome}>
         <AcademicPageBanner
           rubric="Admissions Confirmation"
           title="Admission Application Recorded"

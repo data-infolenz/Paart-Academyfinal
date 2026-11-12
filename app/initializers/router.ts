@@ -78,5 +78,9 @@ router.map(
   routes.portal,
   lazy(() => import("~/app/http/controllers/portal/controller"), [requireRole(["aspirant"])])
 )
+router.map(
+  routes.campaign,
+  lazy(() => import("~/app/http/controllers/campaign/controller"))
+)
 
 export default router

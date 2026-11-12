@@ -7,6 +7,7 @@ import { isSuccess, unwrap } from "@sdxc/result"
 import { closeDatabase, getDatabase, type PaartDb } from "~/app/initializers/database"
 import { appConfig } from "~/config/app"
 import { SEED_BLOGS, SEED_COURSES, SEED_GALLERY, SEED_MATERIALS } from "~/config/courses"
+import { DEFAULT_PAGES, DEFAULT_SITE_CHROME } from "~/config/default-pages"
 import { TRUST_PROFILE } from "~/config/trust"
 import {
   batches,
@@ -18,6 +19,9 @@ import {
   galleryItems,
   materials,
   notifications,
+  pageRevisions,
+  pages,
+  siteChrome,
   siteSettings,
   syllabusTopics,
   type UserRole,
@@ -206,6 +210,59 @@ export async function seedDatabase(targetDb?: PaartDb): Promise<void> {
     },
     now
   )
+
+  // Seed global site_chrome singleton idempotently
+  const existingChrome = await db.find(siteChrome, "default")
+  if (!existingChrome) {
+    await db.create(siteChrome, {
+      id: "default",
+      utility_bar: DEFAULT_SITE_CHROME.utilityBar,
+      header_nav: DEFAULT_SITE_CHROME.headerNav,
+      header_ctas: DEFAULT_SITE_CHROME.headerCtas,
+      footer_columns: DEFAULT_SITE_CHROME.footerColumns,
+      trust_profile: DEFAULT_SITE_CHROME.trustProfile,
+      version: 1,
+      updated_by: adminId,
+      updated_at: now
+    })
+  }
+
+  // Seed default server-driven pages & collection templates idempotently
+  for (const pageSeed of DEFAULT_PAGES) {
+    const existingPage = await db.findOne(pages, { where: { slug: pageSeed.slug } })
+    if (!existingPage) {
+      await db.create(pages, {
+        id: pageSeed.id,
+        slug: pageSeed.slug,
+        title: pageSeed.title,
+        kind: pageSeed.pageKind,
+        status: "published",
+        is_system: pageSeed.isSystem,
+        draft_blocks: pageSeed.blocks,
+        published_blocks: pageSeed.blocks,
+        seo: pageSeed.seo,
+        version: 1,
+        published_version: 1,
+        updated_by: adminId,
+        published_by: adminId,
+        published_at: now,
+        created_at: now,
+        updated_at: now
+      })
+
+      await db.create(pageRevisions, {
+        id: `${pageSeed.id}-rev-1`,
+        page_id: pageSeed.id,
+        version: 1,
+        blocks: pageSeed.blocks,
+        seo: pageSeed.seo,
+        diff_patch: [],
+        note: "Initial institutional seed revision",
+        created_by: adminId,
+        created_at: now
+      })
+    }
+  }
 
   if (appConfig.NODE_ENV !== "production") {
     const facultyId = await upsertSeedUser(

@@ -1,30 +1,37 @@
 import type { Handle, RemixNode } from "remix/component"
-import { ClockIcon, MailIcon, MapPinIcon, MenuIcon, PhoneIcon, ShieldCheckIcon } from "@sdxc/icons"
+import {
+  ClockIcon,
+  EyeIcon,
+  MailIcon,
+  MapPinIcon,
+  MenuIcon,
+  PhoneIcon,
+  ShieldCheckIcon
+} from "@sdxc/icons"
 import * as u from "@sdxc/u"
-import { LinkButton, Text } from "@sdxc/ui"
+import { Badge, LinkButton, Text } from "@sdxc/ui"
 import type { AdminUser } from "~/app/initializers/auth"
+import type { SiteChromeConfig } from "~/app/models/cms-schemas"
 import type { SiteSettings } from "~/app/models/settings"
-import { TRUST_PROFILE } from "~/config/trust"
+import { DEFAULT_SITE_CHROME } from "~/config/default-pages"
 import { acadContainer, acadSerif } from "~/resources/components/academic-ui"
 import { ThemeToggle } from "~/resources/components/theme-toggle"
 import { routes } from "~/routes"
 
+export interface DraftPreviewBannerInfo {
+  pageId: string
+  slug: string
+  version: number
+  status: string
+}
+
 export interface LandingLayoutProps {
   user?: AdminUser | null
   settings?: SiteSettings
+  chrome?: SiteChromeConfig
+  previewBanner?: DraftPreviewBannerInfo | null
   children?: RemixNode
 }
-
-const NAV_ITEMS = [
-  { label: "Home", href: routes.home.href() },
-  { label: "Courses", href: routes.courses.index.href() },
-  { label: "Study Materials", href: routes.materials.href() },
-  { label: "About & Results", href: routes.about.href() },
-  { label: "Gallery", href: routes.gallery.href() },
-  { label: "Exam Blog", href: routes.blogs.index.href() },
-  { label: "FAQ", href: routes.faq.href() },
-  { label: "Contact", href: routes.contact.href() }
-] as const
 
 function navLinkMix() {
   return u.combine([
@@ -124,18 +131,79 @@ function workspaceMetaForUser(user: AdminUser) {
 
 export function LandingLayout(handle: Handle<LandingLayoutProps>) {
   return () => {
-    const { user, settings, children } = handle.props
+    const { user, settings, chrome = DEFAULT_SITE_CHROME, previewBanner, children } = handle.props
     const workspace = user ? workspaceMetaForUser(user) : null
-    const phone = settings?.phone ?? TRUST_PROFILE.phone
+
+    const trust = chrome.trustProfile
+    const shortName = settings?.siteName ?? trust.shortName
+    const phone = settings?.phone ?? trust.phone
     const phoneHref = `tel:${phone.replace(/\s+/g, "")}`
-    const email = settings?.email ?? TRUST_PROFILE.email
-    const addressPrimary = settings?.addressPrimary ?? TRUST_PROFILE.addressPrimary
-    const addressSecondary = settings?.addressSecondary ?? TRUST_PROFILE.addressSecondary
-    const hours = settings?.hours ?? TRUST_PROFILE.hours
+    const email = settings?.email ?? trust.email
+    const addressPrimary = settings?.addressPrimary ?? trust.addressPrimary
+    const addressSecondary = settings?.addressSecondary ?? trust.addressSecondary
+    const hours = settings?.hours ?? trust.hours
+
+    const utilityBadge =
+      chrome.utilityBar.badgeText || `${trust.legalName} · Est. ${trust.establishedLabel}`
+    const navItems = chrome.headerNav.length > 0 ? chrome.headerNav : DEFAULT_SITE_CHROME.headerNav
+    const footerCols =
+      chrome.footerColumns.length > 0 ? chrome.footerColumns : DEFAULT_SITE_CHROME.footerColumns
+    const loginLabel = chrome.headerCtas.loginLabel || "Portal Login"
+    const primaryCtaLabel = chrome.headerCtas.primaryLabel || "Admission Form"
+    const primaryCtaHref = chrome.headerCtas.primaryHref || routes.admissions.apply.href()
 
     return (
       <div mix={[u.minHeight("100vh"), u.vstack()]}>
         <SkipToContentLink />
+
+        {/* Admin Draft Preview Banner (only when ?preview=draft for an authenticated Admin) */}
+        {previewBanner && (
+          <div
+            role="status"
+            aria-label="Draft Preview Mode"
+            mix={[
+              u.bg("warning.tint"),
+              u.borderEdge("bottom", { width: 2, color: "warning" }),
+              u.pbs(2),
+              u.pbe(2),
+              u.fontSize("xs")
+            ]}
+          >
+            <div
+              mix={[
+                acadContainer(),
+                u.hstack({ gap: 3, align: "center", justify: "between" }),
+                u.flexWrap("wrap")
+              ]}
+            >
+              <div mix={[u.hstack({ gap: 2, align: "center" }), u.flexWrap("wrap")]}>
+                <EyeIcon size={15} mix={[u.fg("warning"), u.shrink(0)]} />
+                <Badge color="warning" variant="default">
+                  Draft Preview (v{previewBanner.version})
+                </Badge>
+                <span mix={[u.weight("semibold"), u.fg("var(--acad-ink)")]}>
+                  Viewing unpublished draft for <code>{previewBanner.slug}</code> (
+                  {previewBanner.status})
+                </span>
+              </div>
+              <div mix={[u.hstack({ gap: 2, align: "center" })]}>
+                <LinkButton
+                  href={`/admin/pages/${encodeURIComponent(previewBanner.pageId)}`}
+                  size="sm"
+                  color="brand"
+                  variant="solid"
+                >
+                  Open in Page Studio
+                </LinkButton>
+                {previewBanner.slug.startsWith("/") && (
+                  <LinkButton href={previewBanner.slug} size="sm" color="neutral" variant="outline">
+                    Exit Preview
+                  </LinkButton>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* 1. Official Institutional Top Utility Bar */}
         <div
@@ -159,37 +227,28 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
           >
             <div mix={[u.hstack({ gap: 2, align: "center" })]}>
               <ShieldCheckIcon size={14} aria-hidden="true" mix={[u.fg("#f5c669"), u.shrink(0)]} />
-              <span>
-                <strong>{TRUST_PROFILE.legalName}</strong> · Est. {TRUST_PROFILE.establishedLabel}
-              </span>
+              <span>{utilityBadge}</span>
             </div>
 
             <div mix={[u.hstack({ gap: 4, align: "center" }), u.flexWrap("wrap")]}>
-              <span
-                mix={[
-                  u.hidden(),
-                  u.media("(min-width: 56rem)", u.hstack({ gap: 1.5, align: "center" }))
-                ]}
-              >
-                <ClockIcon size={13} aria-hidden="true" mix={[u.fg("#f5c669")]} />
-                <span>{hours}</span>
-              </span>
+              {chrome.utilityBar.showHours && (
+                <span
+                  mix={[
+                    u.hidden(),
+                    u.media("(min-width: 56rem)", u.hstack({ gap: 1.5, align: "center" }))
+                  ]}
+                >
+                  <ClockIcon size={13} aria-hidden="true" mix={[u.fg("#f5c669")]} />
+                  <span>{hours}</span>
+                </span>
+              )}
 
-              <a href={phoneHref} mix={[u.hstack({ gap: 1.5, align: "center" })]}>
-                <PhoneIcon size={13} aria-hidden="true" mix={[u.fg("#f5c669")]} />
-                <span>{phone}</span>
-              </a>
-
-              <a
-                href={routes.materials.href()}
-                mix={[u.hidden(), u.media("(min-width: 56rem)", u.inlineFlex())]}
-              >
-                Free PDF Notes
-              </a>
-
-              <a href={workspace ? workspace.href : routes.auth.loginPage.href()}>
-                {workspace ? workspace.label : "Portal Login"}
-              </a>
+              {chrome.utilityBar.showPhone && (
+                <a href={phoneHref} mix={[u.hstack({ gap: 1.5, align: "center" })]}>
+                  <PhoneIcon size={13} aria-hidden="true" mix={[u.fg("#f5c669")]} />
+                  <span>{phone}</span>
+                </a>
+              )}
             </div>
           </div>
         </div>
@@ -216,7 +275,7 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
           >
             <a
               href={routes.home.href()}
-              aria-label="PAART Academy Home"
+              aria-label={`${shortName} Home`}
               mix={[
                 u.hstack({ gap: 3.5, align: "center" }),
                 u.textDecoration("none"),
@@ -226,7 +285,7 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
             >
               <img
                 src="/images/paart-logo.png"
-                alt="PAART Academy Official Crest"
+                alt={`${shortName} Official Crest`}
                 width={48}
                 height={54}
                 decoding="async"
@@ -244,7 +303,7 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
                     u.m(0)
                   ]}
                 >
-                  PAART Academy
+                  {shortName}
                 </p>
                 <p
                   mix={[
@@ -267,8 +326,8 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
                 u.media("(min-width: 70rem)", u.hstack({ gap: 1, align: "center" }))
               ]}
             >
-              {NAV_ITEMS.map((item) => (
-                <a key={item.href} href={item.href} mix={[navLinkMix()]}>
+              {navItems.map((item) => (
+                <a key={`${item.label}-${item.href}`} href={item.href} mix={[navLinkMix()]}>
                   {item.label}
                 </a>
               ))}
@@ -292,16 +351,11 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
                   variant="outline"
                   size="sm"
                 >
-                  Portal Login
+                  {loginLabel}
                 </LinkButton>
               )}
-              <LinkButton
-                href={routes.admissions.apply.href()}
-                color="brand"
-                variant="solid"
-                size="sm"
-              >
-                Admission Form
+              <LinkButton href={primaryCtaHref} color="brand" variant="solid" size="sm">
+                {primaryCtaLabel}
               </LinkButton>
             </div>
 
@@ -353,8 +407,8 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
                     u.z(60)
                   ]}
                 >
-                  {NAV_ITEMS.map((item) => (
-                    <a key={item.href} href={item.href} mix={[navLinkMix()]}>
+                  {navItems.map((item) => (
+                    <a key={`mob-${item.label}-${item.href}`} href={item.href} mix={[navLinkMix()]}>
                       {item.label}
                     </a>
                   ))}
@@ -377,16 +431,11 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
                         variant="outline"
                         size="sm"
                       >
-                        Portal Login
+                        {loginLabel}
                       </LinkButton>
                     )}
-                    <LinkButton
-                      href={routes.admissions.apply.href()}
-                      color="brand"
-                      variant="solid"
-                      size="sm"
-                    >
-                      Online Admission Form
+                    <LinkButton href={primaryCtaHref} color="brand" variant="solid" size="sm">
+                      {primaryCtaLabel}
                     </LinkButton>
                   </div>
                 </div>
@@ -426,7 +475,10 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
                 u.gap(8),
                 u.media(
                   "(min-width: 56rem)",
-                  u.raw({ gridTemplateColumns: "1.45fr 1fr 1fr 1fr", gap: "2.25rem" })
+                  u.raw({
+                    gridTemplateColumns: `1.45fr repeat(${Math.max(1, footerCols.length)}, minmax(0, 1fr))`,
+                    gap: "2.25rem"
+                  })
                 )
               ]}
             >
@@ -452,18 +504,17 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
                         u.m(0)
                       ]}
                     >
-                      PAART Academy
+                      {shortName}
                     </p>
                     <p mix={[u.fontSize("xs"), u.fg("#f5c669"), u.m(0), u.mbs(0.5)]}>
-                      {TRUST_PROFILE.legalName}
+                      {trust.legalName}
                     </p>
                   </div>
                 </div>
 
                 <p mix={[u.fontSize("sm"), u.leading("relaxed"), u.fg("#cfe0d6"), u.m(0)]}>
-                  Public educational &amp; welfare trust established on{" "}
-                  {TRUST_PROFILE.establishedLabel} in Puliyangudi, dedicated to government service
-                  coaching, bilingual mentoring, scholarships, and career skills.
+                  {trust.summary ||
+                    `Public educational & welfare trust established on ${trust.establishedLabel} in Puliyangudi, dedicated to government service coaching, bilingual mentoring, scholarships, and career skills.`}
                 </p>
 
                 <div mix={[u.vstack({ gap: 2 }), u.fontSize("xs"), u.fg("#dce9e1")]}>
@@ -495,79 +546,19 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
                 </div>
               </div>
 
-              {/* Column 2: Coaching Programmes */}
-              <div>
-                <h2 mix={[footerHeadingMix()]}>Exam Programmes</h2>
-                <ul mix={[footerListMix()]}>
-                  <li>
-                    <a href={routes.courses.show.href({ slug: "tnpsc-group-1" })}>
-                      TNPSC Group I, II &amp; IIA
-                    </a>
-                  </li>
-                  <li>
-                    <a href={routes.courses.show.href({ slug: "tnpsc-group-4" })}>
-                      TNPSC Group IV &amp; VAO
-                    </a>
-                  </li>
-                  <li>
-                    <a href={routes.courses.show.href({ slug: "tnusrb-si" })}>
-                      TNUSRB Sub-Inspector &amp; PC
-                    </a>
-                  </li>
-                  <li>
-                    <a href={routes.courses.index.href()}>TET, SSC, Banking &amp; Railway</a>
-                  </li>
-                  <li>
-                    <a href={routes.admissions.apply.href()}>
-                      NMMS, Typewriting &amp; Computer Skills
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Column 3: Student Resource Desk */}
-              <div>
-                <h2 mix={[footerHeadingMix()]}>Student Help Desk</h2>
-                <ul mix={[footerListMix()]}>
-                  <li>
-                    <a href={routes.admissions.apply.href()}>Online Admission Form</a>
-                  </li>
-                  <li>
-                    <a href={routes.materials.href()}>Free Study Materials &amp; Notes</a>
-                  </li>
-                  <li>
-                    <a href={routes.blogs.index.href()}>Exam Preparation Articles</a>
-                  </li>
-                  <li>
-                    <a href={routes.faq.href()}>Frequently Asked Questions</a>
-                  </li>
-                  <li>
-                    <a href={routes.contact.href()}>Batch Timings &amp; Counselling</a>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Column 4: About Trust & Governance */}
-              <div>
-                <h2 mix={[footerHeadingMix()]}>Trust &amp; Campus</h2>
-                <ul mix={[footerListMix()]}>
-                  <li>
-                    <a href={routes.about.href()}>About PAART Trust &amp; Vision</a>
-                  </li>
-                  <li>
-                    <a href={`${routes.about.href()}#results`}>323+ Selection Track Record</a>
-                  </li>
-                  <li>
-                    <a href={routes.gallery.href()}>Classroom &amp; Exam Gallery</a>
-                  </li>
-                  <li>
-                    <a href={routes.contact.href()}>Puliyangudi Campus Map</a>
-                  </li>
-                  <li>
-                    <a href={routes.auth.loginPage.href()}>Aspirant / Faculty / Admin Login</a>
-                  </li>
-                </ul>
-              </div>
+              {/* Dynamic Database-Driven Footer Columns */}
+              {footerCols.map((colItem) => (
+                <div key={colItem.heading}>
+                  <h2 mix={[footerHeadingMix()]}>{colItem.heading}</h2>
+                  <ul mix={[footerListMix()]}>
+                    {colItem.links.map((lnk) => (
+                      <li key={`${colItem.heading}-${lnk.label}-${lnk.href}`}>
+                        <a href={lnk.href}>{lnk.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
 
             <div
@@ -582,7 +573,7 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
               ]}
             >
               <span>
-                © {new Date().getFullYear()} {TRUST_PROFILE.legalName} (PAART). All rights reserved.
+                © {new Date().getFullYear()} {trust.legalName} (PAART). All rights reserved.
               </span>
               <span>Campus Hours: {hours} · Puliyangudi, Tenkasi District – 627855</span>
             </div>

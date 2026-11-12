@@ -10,5 +10,6 @@ export const PACKAGE_MODULES: Record<string, () => Promise<unknown>> = {
   "@sdxc/ui/app/toasts": () => import("@sdxc/ui/app/toasts"),
   "@sdxc/ui/confirm": () => import("@sdxc/ui/confirm"),
   "@sdxc/ui/dialog-dismiss": () => import("@sdxc/ui/dialog-dismiss"),
-  "@sdxc/ui/relative-time": () => import("@sdxc/ui/relative-time")
+  "@sdxc/ui/relative-time": () => import("@sdxc/ui/relative-time"),
+  "@sdxc/lazy-frame/ui": () => import("@sdxc/lazy-frame/ui")
 }

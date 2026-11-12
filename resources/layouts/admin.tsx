@@ -1,6 +1,8 @@
 import type { Handle, RemixNode } from "remix/component"
 import {
+  BlocksIcon,
   BookOpenIcon,
+  CompassIcon,
   ExternalLinkIcon,
   FileTextIcon,
   GraduationCapIcon,
@@ -48,6 +50,8 @@ const NAV_GROUPS = [
   {
     title: "Academic CMS",
     items: [
+      { label: "Page Builder", href: routes.admin.pages.href(), icon: BlocksIcon },
+      { label: "Navigation & Footer", href: routes.admin.chrome.href(), icon: CompassIcon },
       { label: "Courses", href: routes.admin.courses.href(), icon: BookOpenIcon },
       { label: "Study Materials", href: routes.admin.materials.href(), icon: FileTextIcon },
       { label: "Blogs & Updates", href: routes.admin.blogs.href(), icon: NewspaperIcon },

@@ -34,7 +34,8 @@ export default defineConfig({
             normalizedId.includes("@sdxc/ui") ||
             normalizedId.includes("@sdxc/u") ||
             normalizedId.includes("@sdxc/icons") ||
-            normalizedId.includes("@sdxc/seo")
+            normalizedId.includes("@sdxc/seo") ||
+            normalizedId.includes("@sdxc/lazy-frame")
           ) {
             return "paart-ui"
           }
@@ -56,7 +57,16 @@ export default defineConfig({
   },
   ssr: {
     external: ["pg"],
-    noExternal: ["@sdxc/ui", "@sdxc/u", "@sdxc/icons", "@sdxc/seo", "@sdxc/sitemap", "@sdxc/mail"]
+    noExternal: [
+      "@sdxc/ui",
+      "@sdxc/u",
+      "@sdxc/icons",
+      "@sdxc/seo",
+      "@sdxc/sitemap",
+      "@sdxc/mail",
+      "@sdxc/markdown",
+      "@sdxc/lazy-frame"
+    ]
   },
   lint: {
     ignorePatterns: ["dist/**", "graphify-out/**", ".agents/**"],

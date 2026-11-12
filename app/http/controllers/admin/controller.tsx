@@ -2,6 +2,7 @@ import * as s from "remix/data-schema"
 import { redirect } from "remix/response/redirect"
 import { createController } from "remix/router"
 import { requireAdmin } from "~/app/http/middleware/auth"
+import { cmsAdminActions } from "./cms-actions"
 import {
   createBatchSchema,
   createBlogSchema,
@@ -681,6 +682,8 @@ export default createController(routes.admin, {
           303
         )
       }
-    }
+    },
+
+    ...cmsAdminActions
   }
 })

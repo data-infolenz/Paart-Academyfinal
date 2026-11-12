@@ -15,21 +15,30 @@ export const seo = createSeo({
   }
 })
 
-export function buildEducationalOrganizationSchema(): SchemaOrg.Node {
+export function buildEducationalOrganizationSchema(trustOverride?: {
+  shortName: string
+  legalName: string
+  establishedDate: string
+  summary: string
+  phone: string
+  email: string
+  addressPrimary?: string
+}): SchemaOrg.Node {
+  const trust = trustOverride ?? TRUST_PROFILE
   return {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
-    name: TRUST_PROFILE.shortName,
-    legalName: TRUST_PROFILE.legalName,
-    foundingDate: TRUST_PROFILE.establishedDate,
-    description: TRUST_PROFILE.summary,
+    name: trust.shortName,
+    legalName: trust.legalName,
+    foundingDate: trust.establishedDate,
+    description: trust.summary,
     url: SITE_URL,
     logo: `${SITE_URL}/images/paart-logo.png`,
-    telephone: TRUST_PROFILE.phone,
-    email: TRUST_PROFILE.email,
+    telephone: trust.phone,
+    email: trust.email,
     address: {
       "@type": "PostalAddress",
-      streetAddress: "85, Lebbaisaburam Street",
+      streetAddress: trustOverride?.addressPrimary || "85, Lebbaisaburam Street",
       addressLocality: "Puliyangudi",
       addressRegion: "Tamil Nadu",
       postalCode: "627855",

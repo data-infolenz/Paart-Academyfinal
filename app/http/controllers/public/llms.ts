@@ -1,30 +1,32 @@
 import type { AppContext } from "~/app/initializers/router"
+import { getSiteChrome, listPublishedIndexablePages } from "~/app/models/cms"
 import { listActiveCourses } from "~/app/models/courses"
 import { listPublishedMaterials } from "~/app/models/materials"
-import { getSiteSettings } from "~/app/models/settings"
-import { DEPARTMENT_SELECTIONS, TRUST_PROFILE } from "~/config/trust"
+import { DEPARTMENT_SELECTIONS } from "~/config/trust"
 
 export async function llmsAction(ctx: AppContext): Promise<Response> {
   const origin = new URL(ctx.request.url).origin
-  const [settings, courses, materials] = await Promise.all([
-    getSiteSettings(),
+  const [{ chrome }, courses, materials, indexablePages] = await Promise.all([
+    getSiteChrome(),
     listActiveCourses(),
-    listPublishedMaterials()
+    listPublishedMaterials(),
+    listPublishedIndexablePages()
   ])
+  const trust = chrome.trustProfile
 
   const lines: string[] = [
-    `# ${settings.siteName} (${TRUST_PROFILE.legalName})`,
+    `# ${trust.shortName} (${trust.legalName})`,
     "",
-    `> ${TRUST_PROFILE.summary}`,
+    `> ${trust.summary}`,
     "",
     "## Official Contact & Campus",
     `- Website: ${origin}`,
-    `- Established: ${TRUST_PROFILE.establishedDate}`,
-    `- Primary Campus: ${settings.addressPrimary}`,
-    `- Secondary Campus: ${settings.addressSecondary}`,
-    `- Phone: ${settings.phone} (WhatsApp: https://wa.me/${settings.whatsapp})`,
-    `- Email: ${settings.email}`,
-    `- Office Hours: ${settings.hours}`,
+    `- Established: ${trust.establishedDate}`,
+    `- Primary Campus: ${trust.addressPrimary}`,
+    `- Secondary Campus: ${trust.addressSecondary}`,
+    `- Phone: ${trust.phone} (WhatsApp: https://wa.me/${trust.whatsapp})`,
+    `- Email: ${trust.email}`,
+    `- Office Hours: ${trust.hours}`,
     "",
     "## Verified Selection Track Record",
     ...DEPARTMENT_SELECTIONS.map((d) => `- ${d.department}: ${d.count} selections`),
@@ -38,16 +40,11 @@ export async function llmsAction(ctx: AppContext): Promise<Response> {
     "## Free Study Materials",
     ...materials.map((m) => `- ${m.title} (${m.category}): ${m.description}`),
     "",
-    "## Key Pages",
-    `- [Home](${origin}/)`,
-    `- [About PAART Trust](${origin}/about)`,
-    `- [Courses Catalog](${origin}/courses)`,
-    `- [Study Materials](${origin}/materials)`,
-    `- [Campus Gallery](${origin}/gallery)`,
-    `- [Preparation Articles](${origin}/blogs)`,
-    `- [Frequently Asked Questions](${origin}/faq)`,
-    `- [Online Admission Application](${origin}/admissions)`,
-    `- [Contact & Counselling](${origin}/contact)`
+    "## Published Pages",
+    ...indexablePages.map(
+      (p) =>
+        `- [${p.title}](${origin}${p.slug})${p.seo.description ? `: ${p.seo.description}` : ""}`
+    )
   ]
 
   return new Response(lines.join("\n"), {

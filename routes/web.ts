@@ -75,6 +75,17 @@ export const routes = route({
     gallery: "/admin/gallery",
     galleryCreate: post("/admin/gallery"),
     galleryDelete: post("/admin/gallery/:id/delete"),
+    pages: get("/admin/pages"),
+    pageCreate: post("/admin/pages"),
+    pageEdit: get("/admin/pages/:id"),
+    pageDraftSave: post("/admin/pages/:id/draft"),
+    pageBlockAdd: post("/admin/pages/:id/blocks/add"),
+    pageBlockPatch: post("/admin/pages/:id/blocks/patch"),
+    pagePublish: post("/admin/pages/:id/publish"),
+    pageRevisionRestore: post("/admin/pages/:id/revisions/:revisionId/restore"),
+    pageDelete: post("/admin/pages/:id/delete"),
+    chrome: get("/admin/chrome"),
+    chromeUpdate: post("/admin/chrome"),
     settings: get("/admin/settings"),
     settingsUpdate: post("/admin/settings")
   }),
@@ -107,6 +118,11 @@ export const routes = route({
     marks: get("/portal/marks"),
     materials: get("/portal/materials"),
     notifications: get("/portal/notifications")
+  }),
+
+  // Custom Server-Driven Campaign Pages (mapped last in router.ts so explicit routes always win)
+  campaign: route({
+    show: get("/:slug")
   })
 })
 

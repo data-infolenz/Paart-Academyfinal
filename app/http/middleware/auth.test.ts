@@ -12,8 +12,9 @@ import {
   requireRole
 } from "~/app/http/middleware/auth"
 import { createSession, hashUserPassword, PAART_SESSION_COOKIE } from "~/app/initializers/auth"
-import { canRoleAccessWorkspace } from "~/app/initializers/authz"
+import { canManageCms, canRoleAccessWorkspace } from "~/app/initializers/authz"
 import { db } from "~/app/initializers/database"
+import appRouter from "~/app/initializers/router"
 import { type UserRole, users } from "~/database/schema"
 
 const createdUserIds: string[] = []
@@ -201,5 +202,102 @@ describe("authz policies & auth middleware (RBAC + must_change_password)", () =>
     )
     expect(allowedChangePage.status).toBe(200)
     expect(await allowedChangePage.text()).toBe("change-password-form")
+  })
+
+  it("restricts cms.manage (/admin/pages*, /admin/chrome*, and ?preview=draft) strictly to admin", async () => {
+    const [admin, faculty, aspirant] = await Promise.all([
+      createTestUser("admin"),
+      createTestUser("faculty"),
+      createTestUser("aspirant")
+    ])
+
+    expect(await canManageCms(null)).toBe(false)
+    expect(
+      await canManageCms({
+        id: admin.id,
+        name: "Admin",
+        fullName: "Admin",
+        email: "admin@paart.in",
+        phone: "",
+        department: "",
+        role: "admin",
+        status: "active",
+        mustChangePassword: false
+      })
+    ).toBe(true)
+    expect(
+      await canManageCms({
+        id: faculty.id,
+        name: "Faculty",
+        fullName: "Faculty",
+        email: "faculty@paart.in",
+        phone: "",
+        department: "",
+        role: "faculty",
+        status: "active",
+        mustChangePassword: false
+      })
+    ).toBe(false)
+    expect(
+      await canManageCms({
+        id: aspirant.id,
+        name: "Aspirant",
+        fullName: "Aspirant",
+        email: "aspirant@paart.in",
+        phone: "",
+        department: "",
+        role: "aspirant",
+        status: "active",
+        mustChangePassword: false
+      })
+    ).toBe(false)
+
+    // Faculty and aspirant receive 403 Forbidden on /admin/pages and /admin/chrome
+    for (const actor of [faculty, aspirant]) {
+      for (const req of [
+        new Request("http://localhost:5173/admin/pages", { headers: { Cookie: actor.cookie } }),
+        new Request("http://localhost:5173/admin/pages", {
+          method: "POST",
+          headers: { Cookie: actor.cookie }
+        }),
+        new Request("http://localhost:5173/admin/chrome", { headers: { Cookie: actor.cookie } }),
+        new Request("http://localhost:5173/admin/chrome", {
+          method: "POST",
+          headers: { Cookie: actor.cookie }
+        })
+      ]) {
+        const res = await appRouter.fetch(req)
+        expect(res.status).toBe(403)
+      }
+    }
+
+    // Non-admins cannot activate ?preview=draft on public routes
+    const guestPreview = await appRouter.fetch(
+      new Request("http://localhost:5173/about?preview=draft")
+    )
+    expect(guestPreview.status).toBe(200)
+    expect(guestPreview.headers.get("Cache-Control")).not.toBe("private, no-store")
+    expect(await guestPreview.text()).not.toContain("Draft Preview Mode")
+
+    const facultyPreview = await appRouter.fetch(
+      new Request("http://localhost:5173/about?preview=draft", {
+        headers: { Cookie: faculty.cookie }
+      })
+    )
+    expect(facultyPreview.status).toBe(200)
+    expect(facultyPreview.headers.get("Cache-Control")).not.toBe("private, no-store")
+    expect(await facultyPreview.text()).not.toContain("Draft Preview Mode")
+
+    // Admin activates ?preview=draft with noindex, nofollow + private, no-store + banner
+    const adminPreview = await appRouter.fetch(
+      new Request("http://localhost:5173/about?preview=draft", {
+        headers: { Cookie: admin.cookie }
+      })
+    )
+    expect(adminPreview.status).toBe(200)
+    expect(adminPreview.headers.get("Cache-Control")).toBe("private, no-store")
+    const adminPreviewHtml = await adminPreview.text()
+    expect(adminPreviewHtml).toContain("noindex, nofollow")
+    expect(adminPreviewHtml).toContain("Draft Preview Mode")
   })
 })

@@ -9,6 +9,11 @@ export const paartAbilities = abilities({
     manageUsers: ability({ description: "Provision, suspend, and reset user accounts" }),
     manageBatches: ability({ description: "Create and assign coaching batches" })
   },
+  cms: {
+    manage: ability({
+      description: "Author, preview, publish, and roll back server-driven pages and site chrome"
+    })
+  },
   lms: {
     teach: ability({
       description:
@@ -68,4 +73,11 @@ export async function canRoleAccessWorkspace(
     case "portal":
       return access.can(paartAbilities.lms.portal) && user.role === "aspirant"
   }
+}
+
+export async function canManageCms(user: SessionUser | null): Promise<boolean> {
+  if (!user || user.status !== "active") return false
+  const access = bindUserAccess(user)
+  await access.load(paartAbilities)
+  return access.can(paartAbilities.cms.manage)
 }

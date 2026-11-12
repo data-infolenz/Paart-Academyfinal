@@ -9,7 +9,7 @@ import {
   resolveSession,
   type SessionUser
 } from "~/app/initializers/auth"
-import { bindUserAccess, paartAbilities } from "~/app/initializers/authz"
+import { bindUserAccess, canManageCms, paartAbilities } from "~/app/initializers/authz"
 import type { PaartDb } from "~/app/initializers/database"
 import type { UserRole } from "~/database/schema"
 
@@ -116,6 +116,12 @@ export function requireRole(allowedRoles: readonly UserRole[]): Middleware {
       return forbiddenResponse()
     }
     if (
+      (pathname.startsWith("/admin/pages") || pathname.startsWith("/admin/chrome")) &&
+      !access.can(paartAbilities.cms.manage)
+    ) {
+      return forbiddenResponse()
+    }
+    if (
       allowedRoles.includes("faculty") &&
       !allowedRoles.includes("aspirant") &&
       !access.can(paartAbilities.lms.teach)
@@ -158,6 +164,14 @@ export function requireAuthenticatedUser(
 
 export function requireAdmin(request: Request): AdminUser {
   return requireAuthenticatedUser(request, { roles: ["admin"] })
+}
+
+export async function requireCmsAdmin(request: Request): Promise<AdminUser> {
+  const user = requireAdmin(request)
+  if (!(await canManageCms(user))) {
+    throw forbiddenResponse()
+  }
+  return user
 }
 
 export function requireFacultyOrAdmin(request: Request): SessionUser {
