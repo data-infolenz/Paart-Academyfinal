@@ -41,6 +41,20 @@ describe("parseAppConfig", () => {
     expect(cfg.PAART_SESSION_TTL_HOURS).toBe(24)
   })
 
+  it("normalizes PAART_PUBLIC_URL and auto-prefixes https:// when missing protocol", () => {
+    const cfg = parseAppConfig({
+      NODE_ENV: "development",
+      PAART_PUBLIC_URL: "paart-academyfinal-theta.vercel.app"
+    })
+    expect(cfg.PAART_PUBLIC_URL).toBe("https://paart-academyfinal-theta.vercel.app")
+
+    const cfgVercel = parseAppConfig({
+      NODE_ENV: "development",
+      VERCEL_URL: "paart-preview.vercel.app"
+    })
+    expect(cfgVercel.PAART_PUBLIC_URL).toBe("https://paart-preview.vercel.app")
+  })
+
   it("rejects insecure default secrets in production mode", () => {
     let caught: unknown
     try {

@@ -29,7 +29,14 @@ export const appConfigSchema = s
   .object({
     NODE_ENV: s.defaulted(s.string(), "development"),
     PORT: s.defaulted(positiveInt, 4100),
-    PAART_PUBLIC_URL: s.defaulted(s.string(), "https://paart.in"),
+    PAART_PUBLIC_URL: s.defaulted(s.string(), "https://paart.in").transform((val) => {
+      const trimmed = val.trim()
+      if (!trimmed) return "https://paart.in"
+      if (/^https?:\/\//i.test(trimmed)) {
+        return trimmed.replace(/\/+$/, "")
+      }
+      return `https://${trimmed}`.replace(/\/+$/, "")
+    }),
     DATABASE_URL: s.defaulted(
       s.string(),
       "postgresql://postgres:postgres@127.0.0.1:5432/paart_academy"
@@ -63,6 +70,9 @@ export function parseAppConfig(env: Record<string, unknown>) {
   const normalized: Record<string, unknown> = { ...env }
   if (!normalized.DATABASE_URL && normalized.PAART_DATABASE_URL) {
     normalized.DATABASE_URL = normalized.PAART_DATABASE_URL
+  }
+  if (!normalized.PAART_PUBLIC_URL && typeof normalized.VERCEL_URL === "string") {
+    normalized.PAART_PUBLIC_URL = normalized.VERCEL_URL
   }
   for (const key of ["PORT", "SMTP_PORT", "PAART_SESSION_TTL_HOURS"]) {
     if (normalized[key] === "") {

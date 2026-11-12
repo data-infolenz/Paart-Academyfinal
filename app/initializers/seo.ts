@@ -2,7 +2,14 @@ import { createSeo, type SchemaOrg } from "@sdxc/seo"
 import { appConfig } from "~/config/app"
 import { TRUST_PROFILE } from "~/config/trust"
 
-export const SITE_URL = appConfig.PAART_PUBLIC_URL.replace(/\/+$/, "")
+function ensureAbsoluteUrl(rawUrl: string): string {
+  const trimmed = (rawUrl || "").trim()
+  if (!trimmed) return "https://paart.in"
+  if (/^https?:\/\//i.test(trimmed)) return trimmed.replace(/\/+$/, "")
+  return `https://${trimmed}`.replace(/\/+$/, "")
+}
+
+export const SITE_URL = ensureAbsoluteUrl(appConfig.PAART_PUBLIC_URL)
 export const SITE_NAME = "PAART Academy"
 export const DEFAULT_DESCRIPTION = TRUST_PROFILE.summary
 
