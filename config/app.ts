@@ -69,7 +69,18 @@ export function parseAppConfig(env: Record<string, unknown>) {
       delete normalized[key]
     }
   }
-  return s.parse(appConfigSchema, normalized)
+  try {
+    return s.parse(appConfigSchema, normalized)
+  } catch (err: unknown) {
+    const errorWithIssues = err as { issues?: Array<{ message?: string }> }
+    if (errorWithIssues?.issues?.length) {
+      console.error(
+        "[AppConfig] Validation failed:\n" +
+          errorWithIssues.issues.map((i) => `  - ${i.message}`).join("\n")
+      )
+    }
+    throw err
+  }
 }
 
 export type AppConfig = ReturnType<typeof parseAppConfig>
