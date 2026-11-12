@@ -107,19 +107,6 @@ export const DEFAULT_PAGES: DefaultPageSeed[] = [
     },
     blocks: [
       {
-        id: "home-notice-bar",
-        type: "notice_bar",
-        enabled: true,
-        visibilityRule: "",
-        data: {
-          badge: "Admissions Notice",
-          message:
-            "Registrations open for Regular Weekday, Weekend & Morning Track batches in Puliyangudi (Tamil & English Medium).",
-          ctaLabel: "Submit Application",
-          ctaHref: "/admissions"
-        }
-      },
-      {
         id: "home-hero",
         type: "academic_hero",
         enabled: true,
@@ -148,6 +135,19 @@ export const DEFAULT_PAGES: DefaultPageSeed[] = [
           campusLabel: "PAART Coaching Centre · Puliyangudi Campus",
           campusBadge: "Est. Dec 2018",
           campusSubtext: "Lebbaisaburam Street & Jamaliya Masjid Complex (Jinnah Nagar 3rd St)"
+        }
+      },
+      {
+        id: "home-notice-bar",
+        type: "notice_bar",
+        enabled: true,
+        visibilityRule: "",
+        data: {
+          badge: "Notice",
+          message:
+            "Registrations open for Regular Weekday, Weekend & Morning Track batches in Puliyangudi (Tamil & English Medium).",
+          ctaLabel: "Submit",
+          ctaHref: "/admissions"
         }
       },
       {

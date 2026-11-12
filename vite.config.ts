@@ -1,13 +1,23 @@
+import process from "node:process"
 import { remix } from "@pitlane/vite-plugin-remix"
+import { nitro } from "nitro/vite"
 import { defineConfig } from "vite-plus"
+
+const isVercel = process.env.VERCEL === "1"
 
 export default defineConfig({
   plugins: [
     remix({
       clientEntry: "bootstrap/browser.ts",
-      serverEntry: "app/initializers/router.ts"
-    })
-  ],
+      serverEntry: "app/initializers/router.ts",
+      ...(isVercel ? { serverHandler: false } : {})
+    }),
+    isVercel
+      ? nitro({
+          compatibilityDate: "2026-11-12"
+        })
+      : null
+  ].filter(Boolean),
   resolve: {
     tsconfigPaths: true
   },

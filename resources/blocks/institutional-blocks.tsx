@@ -12,6 +12,7 @@ import {
 } from "@sdxc/icons"
 import * as u from "@sdxc/u"
 import { Badge, LinkButton, Text } from "@sdxc/ui"
+import { Marquee } from "@sdxc/ui/landing"
 import { renderSafeMarkdown } from "~/app/initializers/cms-render"
 import type { PageBlock } from "~/app/models/cms-schemas"
 import type { SiteSettings } from "~/app/models/settings"
@@ -47,55 +48,76 @@ export function NoticeBarBlock(handle: Handle<{ block: BlockOf<"notice_bar"> }>)
         mix={[
           u.bg("var(--acad-gold-soft)"),
           u.borderEdge("bottom", { width: 1, color: "var(--acad-gold-border)" }),
-          u.pbs(2.5),
-          u.pbe(2.5)
+          u.borderEdge("top", { width: 1, color: "var(--acad-gold-border)" }),
+          u.pbs(2),
+          u.pbe(2),
+          u.overflow("hidden")
         ]}
       >
-        <div
-          mix={[
-            acadContainer(),
-            u.hstack({ gap: 3, align: "center", justify: "between" }),
-            u.flexWrap("wrap"),
-            u.fontSize("sm")
-          ]}
-        >
-          <div mix={[u.hstack({ gap: 2.5, align: "center" }), u.flexWrap("wrap")]}>
-            <span
-              mix={[
-                u.inlineFlex(),
-                u.items("center"),
-                u.pbs(0.5),
-                u.pbe(0.5),
-                u.pi(2),
-                u.rounded("sm"),
-                u.bg("var(--acad-gold-bright)"),
-                u.fg("#ffffff"),
-                u.fontSize("xs"),
-                u.weight("bold"),
-                u.textTransform("uppercase"),
-                u.raw({ letterSpacing: "0.05em" }),
-                u.shrink(0)
-              ]}
+        <div mix={[acadContainer(), u.hstack({ gap: 3, align: "center" }), u.fontSize("sm")]}>
+          <span
+            mix={[
+              u.inlineFlex(),
+              u.items("center"),
+              u.pbs(0.75),
+              u.pbe(0.75),
+              u.pi(2.5),
+              u.rounded("sm"),
+              u.bg("var(--acad-gold-bright)"),
+              u.fg("#ffffff"),
+              u.fontSize("xs"),
+              u.weight("bold"),
+              u.textTransform("uppercase"),
+              u.raw({ letterSpacing: "0.06em" }),
+              u.shrink(0),
+              u.raw({ zIndex: 2 })
+            ]}
+          >
+            {data.badge}
+          </span>
+
+          <div mix={[u.grow(), u.overflow("hidden")]}>
+            <Marquee
+              duration={28}
+              gap="2.5rem"
+              pauseLabel="Pause announcements ticker"
+              aria-label="Academic announcement ticker"
             >
-              {data.badge}
-            </span>
-            <span mix={[u.fg("var(--acad-ink)"), u.weight("medium")]}>{data.message}</span>
+              <div mix={[u.hstack({ gap: 2.5, align: "center" })]}>
+                <span
+                  mix={[
+                    u.fg("var(--acad-ink)"),
+                    u.weight("medium"),
+                    u.raw({ whiteSpace: "nowrap" })
+                  ]}
+                >
+                  {data.message}
+                </span>
+                {data.ctaLabel && data.ctaHref && (
+                  <a
+                    href={data.ctaHref}
+                    mix={[
+                      u.hstack({ gap: 1, align: "center" }),
+                      u.weight("bold"),
+                      u.fontSize("xs"),
+                      u.fg("var(--acad-primary)"),
+                      u.textDecoration("none"),
+                      u.raw({ whiteSpace: "nowrap" })
+                    ]}
+                  >
+                    <span>{data.ctaLabel}</span>
+                    <ArrowRightIcon size={14} aria-hidden="true" />
+                  </a>
+                )}
+              </div>
+              <span
+                aria-hidden="true"
+                mix={[u.fg("var(--acad-gold)"), u.fontSize("xs"), u.raw({ userSelect: "none" })]}
+              >
+                ✦
+              </span>
+            </Marquee>
           </div>
-          {data.ctaLabel && data.ctaHref && (
-            <a
-              href={data.ctaHref}
-              mix={[
-                u.hstack({ gap: 1, align: "center" }),
-                u.weight("bold"),
-                u.fontSize("xs"),
-                u.fg("var(--acad-primary)"),
-                u.textDecoration("none")
-              ]}
-            >
-              <span>{data.ctaLabel}</span>
-              <ArrowRightIcon size={14} aria-hidden="true" />
-            </a>
-          )}
         </div>
       </div>
     )

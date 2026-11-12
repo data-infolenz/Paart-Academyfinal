@@ -1,3 +1,4 @@
+import process from "node:process"
 import type { Database, TransactionOptions } from "remix/data-table"
 import { createPostgresDatabase } from "remix/data-table/postgres"
 import { createContextKey, type Middleware } from "remix/router"
@@ -9,14 +10,38 @@ const globalForPaartDb = globalThis as unknown as {
   paartDbInstance?: PaartDb
 }
 
-export function getDatabase(): PaartDb {
-  if (globalForPaartDb.paartDbInstance) return globalForPaartDb.paartDbInstance
+export function getDatabasePoolConfig(): {
+  max: number
+  connectionTimeoutMillis: number
+  idleTimeoutMillis: number
+} {
+  const isServerless = process.env.VERCEL === "1" || Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME)
 
-  globalForPaartDb.paartDbInstance = createPostgresDatabase({
-    connectionString: appConfig.DATABASE_URL,
+  if (isServerless) {
+    return {
+      max: 3,
+      connectionTimeoutMillis: 3000,
+      idleTimeoutMillis: 10_000
+    }
+  }
+
+  return {
     max: appConfig.NODE_ENV === "production" ? 20 : 10,
     connectionTimeoutMillis: 2500,
     idleTimeoutMillis: 30_000
+  }
+}
+
+export function getDatabase(): PaartDb {
+  if (globalForPaartDb.paartDbInstance) return globalForPaartDb.paartDbInstance
+
+  const poolConfig = getDatabasePoolConfig()
+
+  globalForPaartDb.paartDbInstance = createPostgresDatabase({
+    connectionString: appConfig.DATABASE_URL,
+    max: poolConfig.max,
+    connectionTimeoutMillis: poolConfig.connectionTimeoutMillis,
+    idleTimeoutMillis: poolConfig.idleTimeoutMillis
   })
   return globalForPaartDb.paartDbInstance
 }
