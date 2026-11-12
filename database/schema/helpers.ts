@@ -7,6 +7,9 @@ export const col = {
   integer(): ColumnBuilder<number> {
     return c.integer()
   },
+  decimal(precision = 6, scale = 2): ColumnBuilder<number> {
+    return c.decimal(precision, scale)
+  },
   boolean(): ColumnBuilder<boolean> {
     return c.boolean()
   },

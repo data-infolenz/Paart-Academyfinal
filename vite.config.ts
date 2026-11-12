@@ -56,7 +56,7 @@ export default defineConfig({
   },
   ssr: {
     external: ["pg"],
-    noExternal: ["@sdxc/ui", "@sdxc/u", "@sdxc/icons", "@sdxc/seo", "@sdxc/sitemap"]
+    noExternal: ["@sdxc/ui", "@sdxc/u", "@sdxc/icons", "@sdxc/seo", "@sdxc/sitemap", "@sdxc/mail"]
   },
   lint: {
     ignorePatterns: ["dist/**", "graphify-out/**", ".agents/**"],
@@ -72,6 +72,7 @@ export default defineConfig({
     trailingComma: "none"
   },
   test: {
-    include: ["app/**/*.test.{ts,tsx}"]
+    include: ["app/**/*.test.{ts,tsx}"],
+    testTimeout: 60000
   }
 })

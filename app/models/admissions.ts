@@ -26,6 +26,7 @@ export interface AdmissionItem {
   message: string
   photoUrl: string | null
   documentUrl: string | null
+  provisionedUserId: string | null
   status: AdmissionStatus
   createdAt: string
 }
@@ -55,6 +56,7 @@ function mapAdmissionRow(row: AdmissionRow): AdmissionItem {
     message: row.message,
     photoUrl: row.photo_url ?? null,
     documentUrl: row.document_url ?? null,
+    provisionedUserId: row.provisioned_user_id ?? null,
     status: row.status,
     createdAt:
       row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at)

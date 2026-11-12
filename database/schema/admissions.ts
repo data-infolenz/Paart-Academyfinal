@@ -7,7 +7,8 @@ export const ADMISSION_STATUSES = [
   "Pending",
   "Approved",
   "Rejected",
-  "Joined"
+  "Joined",
+  "enrolled"
 ] as const
 
 export type AdmissionStatus = (typeof ADMISSION_STATUSES)[number]
@@ -38,6 +39,7 @@ export const admissions = table({
     message: col.text().notNull().default(""),
     photo_url: col.text().nullable(),
     document_url: col.text().nullable(),
+    provisioned_user_id: col.text().nullable(),
     status: col.text<AdmissionStatus>().notNull().default("New"),
     created_at: col.timestamp().notNull().defaultNow(),
     updated_at: col.timestamp().notNull().defaultNow()

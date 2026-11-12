@@ -39,14 +39,14 @@ PAART Academy is a pure server-rendered Remix 3 (`remix` v3.0.0-alpha.4) + Postg
   2. `requireRole(roles)` + `enforcePasswordChange()`: redirects unauthenticated requests to `/login`, redirects any user with `must_change_password = true` to `/account/change-password` (allowing only `/account/change-password` and `/logout`), and returns HTTP `403` when an authenticated user lacks the ability for `/admin/*`, `/faculty/*`, or `/portal/*`.
 - **Rationale**: Keeps controller handlers thin and declarative while guaranteeing no route under `/faculty/*` or `/portal/*` can accidentally bypass `must_change_password` or cross-role checks.
 
-### 3. SMTP Email Delivery via `@sdxc/mail` + Thin Node `nodemailer` SMTP Transport
+### 3. SMTP Email Delivery via `@sdxc/mail` + Zero-Dependency Node `node:net` / `node:tls` Transport
 
-- **Decision**: Author welcome and credential-reset emails as typed JSX templates using `@sdxc/mail` (`<Email.Layout>`, `<Email.Heading>`, `<Email.CodeInline>`, `<Email.Button>`, `<Email.Footer>`), which automatically produces normalized HTML + plain-text (`htmlToText`) and RFC 5322 MIME output (`buildMimeMessage`). Implement `SmtpTransport` in `app/initializers/mail.ts` conforming to `@sdxc/mail`'s `Transport` interface (`send(message): Promise<Result<SentMessage, MailError>>`) backed by `nodemailer` (`createTransport({ host, port, secure, auth })` sending the raw MIME or normalized message).
-  - When `SMTP_HOST` is configured, `Mailer` uses `SmtpTransport`.
-  - When `SMTP_HOST` is empty in development/test (`NODE_ENV !== "production"`), `Mailer` falls back to `@sdxc/mail/memory` (`MemoryTransport`) plus structured dev console logging so local development and Vitest integration tests inspect sent credentials deterministically without external network calls.
+- **Decision**: Author welcome and credential-reset emails in a typed `@sdxc/mail` registry (`emails`, `createEmail`, `createMail`, `<Email.Layout>`, `<Email.Heading>`, `<Email.CodeInline>`, `<Email.Button>`, `<Email.Footer>`), which automatically produces normalized HTML + plain-text (`htmlToText`) and complete RFC 5322 / RFC 2047 MIME output via `buildMimeMessage(message)`. Implement a Node-specific `NodeSmtpTransport` in `app/initializers/mail.ts` conforming to `@sdxc/mail`'s `Transport` interface (`send(message): Promise<Result<SentMessage, MailError>>`) using Node's built-in `node:net` and `node:tls` sockets (`EHLO`, `STARTTLS` upgrade or implicit TLS, `AUTH PLAIN`/`AUTH LOGIN` via `@sdxc/crypto` `Base64.encode`, `MAIL FROM`, `RCPT TO`, RFC 5321 dot-stuffed `DATA` payload from `buildMimeMessage(message)`, and `QUIT`) with no third-party `nodemailer` dependency.
+  - When `SMTP_HOST` is configured, `Mailer` uses `NodeSmtpTransport`.
+  - When `SMTP_HOST` is empty in development/test (`NODE_ENV !== "production"`), `Mailer` uses `@sdxc/mail/memory` (`MemoryTransport`) paired with `@sdxc/mail/print` (`PrintTransport`) in local dev so Vitest suites and developers inspect sent credentials deterministically without external dependencies.
   - Temporary passwords are generated with CSPRNG (`@sdxc/crypto` random bytes mapped to an unambiguous alphanumeric + symbol alphabet of 14 characters) and are **never** stored in plaintext—only passed once into the outgoing email template.
-- **Rationale**: `@sdxc/mail` gives brand-consistent JSX emails, automatic plain-text alternatives, header-injection protection, and `Result`-typed error handling (`@sdxc/result`) so SMTP timeouts never crash an Admin HTTP mutation; `nodemailer` provides battle-tested STARTTLS/SMTPS connection pooling and authentication across Gmail Workspace, SES, Zoho, Postmark, and custom SMTP relays.
-- **Alternatives considered**: Raw `node:tls` socket SMTP state machine—rejected due to brittle STARTTLS/AUTH LOGIN/CRAM-MD5 edge cases across real-world SMTP providers.
+- **Rationale**: `@sdxc/mail`'s `buildMimeMessage()` already handles all MIME multipart boundaries, header folding, RFC 2047 encoding, and transfer encoding, leaving only the compact RFC 5321 wire conversation (`node:net` / `node:tls`), keeping the stack 100% aligned on `@sdxc/*` + Node built-ins.
+- **Alternatives considered**: Third-party `nodemailer` package—rejected to avoid extra CommonJS mail dependencies when `@sdxc/mail` + `node:net`/`node:tls` already cover MIME generation, transports, dev printing, and memory testing end-to-end.
 
 ### 4. Relational LMS Data Model (`0002_multi_role_lms`)
 
@@ -78,7 +78,7 @@ PAART Academy is a pure server-rendered Remix 3 (`remix` v3.0.0-alpha.4) + Postg
 
 ## Migration Plan
 
-1. Install `@sdxc/authz`, `@sdxc/crypto`, `@sdxc/password-policy`, `@sdxc/email-address`, `@sdxc/mail`, `@sdxc/result`, `@sdxc/uuid`, `@sdxc/csv`, and `nodemailer` (`+ @types/nodemailer`).
+1. Install `@sdxc/authz`, `@sdxc/crypto`, `@sdxc/password-policy`, `@sdxc/email-address`, `@sdxc/mail`, `@sdxc/result`, `@sdxc/uuid`, and `@sdxc/csv`.
 2. Add `database/migrations/0002_multi_role_lms/up.sql` and `down.sql` creating `users`, `sessions`, `batches`, `enrollments`, `syllabus_topics`, `exams`, `exam_results`, `notifications`, and extending `materials` and `admissions` backwards-compatibly (`visibility` defaults to `'public'`).
 3. Update `database/seed.ts` to seed the bootstrap `admin` account from `PAART_ADMIN_EMAIL` / `PAART_ADMIN_PASSWORD`, demo `faculty` and `aspirant` accounts (in dev), sample batches, syllabus topics, scheduled/published exams, marks, and notifications.
 4. Rollback strategy: `npm run db:migrate down` executes `0002_multi_role_lms/down.sql`, dropping the new LMS/auth tables and reverting added columns on `materials` and `admissions` cleanly.

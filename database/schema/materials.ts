@@ -1,6 +1,9 @@
 import { table } from "remix/data-table"
 import { col, type InferInsert, type InferSelect } from "./helpers"
 
+export const MATERIAL_VISIBILITIES = ["public", "enrolled"] as const
+export type MaterialVisibility = (typeof MATERIAL_VISIBILITIES)[number]
+
 export const materials = table({
   name: "materials",
   columns: {
@@ -10,6 +13,9 @@ export const materials = table({
     description: col.text().notNull().default(""),
     file_url: col.text().notNull().default(""),
     external_url: col.text().notNull().default(""),
+    course_id: col.text().nullable(),
+    visibility: col.text<MaterialVisibility>().notNull().default("public"),
+    uploaded_by: col.text().nullable(),
     published: col.boolean().notNull().default(true),
     display_order: col.integer().notNull().default(0),
     created_at: col.timestamp().notNull().defaultNow(),

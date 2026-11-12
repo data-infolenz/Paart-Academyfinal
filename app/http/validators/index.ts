@@ -13,7 +13,17 @@ const phoneSchema = trimmedString(10, "Enter a valid 10-digit phone number").ref
 
 export const signInSchema = s.object({
   email: trimmedString(3, "Email is required"),
-  password: s.defaulted(s.string(), "").refine((v) => v.length >= 4, "Password is required")
+  password: s.defaulted(s.string(), "").refine((v) => v.length >= 1, "Password is required")
+})
+
+export const changePasswordSchema = s.object({
+  currentPassword: s
+    .defaulted(s.string(), "")
+    .refine((v) => v.length >= 1, "Current password is required"),
+  newPassword: s.defaulted(s.string(), "").refine((v) => v.length >= 1, "New password is required"),
+  confirmPassword: s
+    .defaulted(s.string(), "")
+    .refine((v) => v.length >= 1, "Please confirm your new password")
 })
 
 export const enquirySchema = s.object({
@@ -63,7 +73,34 @@ export const createMaterialSchema = s.object({
   category: trimmedString(2, "Category is required"),
   description: trimmedString(4, "Description is required"),
   fileUrl: trimmedString(0),
-  externalUrl: trimmedString(0)
+  externalUrl: trimmedString(0),
+  courseId: trimmedString(0),
+  visibility: trimmedString(0)
+})
+
+export const provisionUserSchema = s.object({
+  role: trimmedString(3, "Select a valid role"),
+  email: trimmedString(3, "Recipient email address is required"),
+  fullName: trimmedString(2, "Full name is required"),
+  phone: trimmedString(0),
+  department: trimmedString(0),
+  batchId: trimmedString(0)
+})
+
+export const createBatchSchema = s.object({
+  courseId: trimmedString(2, "Select a coaching course"),
+  facultyId: trimmedString(0),
+  name: trimmedString(3, "Batch name is required"),
+  code: trimmedString(3, "Batch code is required"),
+  scheduleLabel: trimmedString(0),
+  startsOn: trimmedString(0),
+  endsOn: trimmedString(0)
+})
+
+export const provisionAdmissionSchema = s.object({
+  email: trimmedString(3, "Valid email address is required"),
+  batchId: trimmedString(2, "Select a target batch"),
+  linkExisting: trimmedString(0)
 })
 
 export const createBlogSchema = s.object({

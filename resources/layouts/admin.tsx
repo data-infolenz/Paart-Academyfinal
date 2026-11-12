@@ -6,10 +6,12 @@ import {
   GraduationCapIcon,
   ImageIcon,
   InboxIcon,
+  LayersIcon,
   LayoutDashboardIcon,
   LogOutIcon,
   NewspaperIcon,
-  SettingsIcon
+  SettingsIcon,
+  UsersIcon
 } from "@sdxc/icons"
 import * as u from "@sdxc/u"
 import { Avatar, Badge, Button, Link, Text } from "@sdxc/ui"
@@ -34,9 +36,11 @@ const ADMIN_SHELL_LABELS: AppShell.Labels = {
 
 const NAV_GROUPS = [
   {
-    title: "Admissions & Leads",
+    title: "Admissions & Access",
     items: [
       { label: "Overview", href: routes.admin.index.href(), icon: LayoutDashboardIcon },
+      { label: "Users & Access", href: routes.admin.users.href(), icon: UsersIcon },
+      { label: "Batches", href: routes.admin.batches.href(), icon: LayersIcon },
       { label: "Admissions", href: routes.admin.admissions.href(), icon: GraduationCapIcon },
       { label: "Enquiries", href: routes.admin.enquiries.href(), icon: InboxIcon }
     ]
@@ -49,6 +53,12 @@ const NAV_GROUPS = [
       { label: "Blogs & Updates", href: routes.admin.blogs.href(), icon: NewspaperIcon },
       { label: "Gallery", href: routes.admin.gallery.href(), icon: ImageIcon },
       { label: "Site Settings", href: routes.admin.settings.href(), icon: SettingsIcon }
+    ]
+  },
+  {
+    title: "LMS Workspaces",
+    items: [
+      { label: "Faculty Workspace", href: routes.faculty.index.href(), icon: GraduationCapIcon }
     ]
   }
 ]

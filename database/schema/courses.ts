@@ -21,7 +21,13 @@ export const courses = table({
     created_at: col.timestamp().notNull().defaultNow(),
     updated_at: col.timestamp().notNull().defaultNow()
   },
-  timestamps: { createdAt: "created_at", updatedAt: "updated_at" }
+  timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
+  beforeWrite({ value }) {
+    const next: Record<string, unknown> = { ...value }
+    if (Array.isArray(next.features)) next.features = JSON.stringify(next.features)
+    if (Array.isArray(next.exam_stages)) next.exam_stages = JSON.stringify(next.exam_stages)
+    return { value: next as typeof value }
+  }
 })
 
 export type CourseRow = InferSelect<typeof courses>

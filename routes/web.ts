@@ -35,18 +35,30 @@ export const routes = route({
     success: get("/admissions/success")
   }),
 
-  // Admin Authentication
+  // Unified Multi-Role Authentication & Account Security
   auth: route({
+    loginPage: get("/login"),
+    login: post("/login"),
+    logout: post("/logout"),
+    changePasswordPage: get("/account/change-password"),
+    changePassword: post("/account/change-password"),
     signIn: get("/admin/sign-in"),
-    login: post("/admin/sign-in"),
-    logout: post("/admin/logout")
+    legacyLogout: post("/admin/logout")
   }),
 
   // Admin Console (SSR AppShell)
   admin: route({
     index: "/admin",
+    users: get("/admin/users"),
+    userCreate: post("/admin/users"),
+    userResendCredentials: post("/admin/users/:id/resend-credentials"),
+    userStatus: post("/admin/users/:id/status"),
+    batches: get("/admin/batches"),
+    batchCreate: post("/admin/batches"),
+    batchToggle: post("/admin/batches/:id/toggle"),
     admissions: "/admin/admissions",
     admissionStatus: post("/admin/admissions/:id/status"),
+    admissionProvision: post("/admin/admissions/:id/provision"),
     enquiries: "/admin/enquiries",
     enquiryStatus: post("/admin/enquiries/:id/status"),
     courses: "/admin/courses",
@@ -65,6 +77,36 @@ export const routes = route({
     galleryDelete: post("/admin/gallery/:id/delete"),
     settings: get("/admin/settings"),
     settingsUpdate: post("/admin/settings")
+  }),
+
+  // Faculty Workspace (SSR AppShell)
+  faculty: route({
+    index: "/faculty",
+    batchSyllabus: get("/faculty/batches/:id/syllabus"),
+    batchSyllabusCreate: post("/faculty/batches/:id/syllabus"),
+    batchSyllabusStatus: post("/faculty/batches/:id/syllabus/:topicId/status"),
+    exams: get("/faculty/exams"),
+    examCreate: post("/faculty/exams"),
+    examMarks: get("/faculty/exams/:id/marks"),
+    examMarksSave: post("/faculty/exams/:id/marks"),
+    examMarksTemplate: get("/faculty/exams/:id/marks/template.csv"),
+    examMarksImport: post("/faculty/exams/:id/marks/import"),
+    examPublish: post("/faculty/exams/:id/publish"),
+    materials: get("/faculty/materials"),
+    materialCreate: post("/faculty/materials"),
+    materialDelete: post("/faculty/materials/:id/delete"),
+    notifications: get("/faculty/notifications"),
+    notificationCreate: post("/faculty/notifications")
+  }),
+
+  // Aspirant Portal (SSR AppShell)
+  portal: route({
+    index: "/portal",
+    progress: get("/portal/progress"),
+    exams: get("/portal/exams"),
+    marks: get("/portal/marks"),
+    materials: get("/portal/materials"),
+    notifications: get("/portal/notifications")
   })
 })
 

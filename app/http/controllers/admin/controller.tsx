@@ -3,11 +3,14 @@ import { redirect } from "remix/response/redirect"
 import { createController } from "remix/router"
 import { requireAdmin } from "~/app/http/middleware/auth"
 import {
+  createBatchSchema,
   createBlogSchema,
   createCourseSchema,
   createGallerySchema,
   createMaterialSchema,
   formDataToObject,
+  provisionAdmissionSchema,
+  provisionUserSchema,
   slugify,
   updateSettingsSchema
 } from "~/app/http/validators"
@@ -21,17 +24,31 @@ import {
 } from "~/app/models/courses"
 import { listEnquiries, updateEnquiryStatus } from "~/app/models/enquiries"
 import { createGalleryItem, deleteGalleryItem, listGalleryItems } from "~/app/models/gallery"
+import { createBatch, LmsValidationError, listBatches, toggleBatchActive } from "~/app/models/lms"
 import { createMaterial, deleteMaterial, listAllMaterials } from "~/app/models/materials"
 import { getSiteSettings, upsertSiteSettings } from "~/app/models/settings"
+import {
+  listActiveFacultyUsers,
+  listManagedUsers,
+  ProvisioningValidationError,
+  provisionAdmissionApplicant,
+  provisionUserAccount,
+  resendUserCredentials,
+  updateUserAccountStatus
+} from "~/app/models/users"
 import { COURSE_CATEGORIES, type CourseCategory } from "~/config/courses"
 import {
   ADMISSION_STATUSES,
   type AdmissionStatus,
   ENQUIRY_STATUSES,
-  type EnquiryStatus
+  type EnquiryStatus,
+  type MaterialVisibility,
+  USER_STATUSES,
+  type UserStatus
 } from "~/database/schema"
 import { Document } from "~/resources/layouts/document"
 import { AdminAdmissionsPage } from "~/resources/views/admin/admissions-page"
+import { AdminBatchesPage } from "~/resources/views/admin/batches-page"
 import { AdminBlogsPage } from "~/resources/views/admin/blogs-page"
 import { AdminCoursesPage } from "~/resources/views/admin/courses-page"
 import { AdminEnquiriesPage } from "~/resources/views/admin/enquiries-page"
@@ -39,6 +56,7 @@ import { AdminGalleryPage } from "~/resources/views/admin/gallery-page"
 import { AdminMaterialsPage } from "~/resources/views/admin/materials-page"
 import { AdminOverviewPage } from "~/resources/views/admin/overview-page"
 import { AdminSettingsPage } from "~/resources/views/admin/settings-page"
+import { AdminUsersPage } from "~/resources/views/admin/users-page"
 import { routes } from "~/routes"
 
 export default createController(routes.admin, {
@@ -73,13 +91,227 @@ export default createController(routes.admin, {
       )
     },
 
+    async users(ctx) {
+      const user = requireAdmin(ctx.request)
+      const url = new URL(ctx.request.url)
+      const notice = url.searchParams.get("notice")
+      const warning = url.searchParams.get("warning")
+      const error = url.searchParams.get("error")
+      const [managedUsers, batches] = await Promise.all([listManagedUsers(), listBatches()])
+
+      return ctx.render(
+        <Document title="Users & Access — PAART Admin Console" assets={ctx.assets}>
+          <AdminUsersPage
+            user={user}
+            users={managedUsers}
+            batches={batches}
+            notice={notice}
+            warning={warning}
+            error={error}
+          />
+        </Document>
+      )
+    },
+
+    async userCreate(ctx) {
+      const admin = requireAdmin(ctx.request)
+      const form = ctx.formData ?? (await ctx.request.formData())
+      const parsed = s.parseSafe(provisionUserSchema, formDataToObject(form))
+
+      const renderError = async (message: string, statusCode = 422) => {
+        const [managedUsers, batches] = await Promise.all([listManagedUsers(), listBatches()])
+        return ctx.render(
+          <Document title="Users & Access — PAART Admin Console" assets={ctx.assets}>
+            <AdminUsersPage user={admin} users={managedUsers} batches={batches} error={message} />
+          </Document>,
+          { status: statusCode }
+        )
+      }
+
+      if (!parsed.success) {
+        return renderError(parsed.issues[0]?.message || "Invalid account provisioning fields.", 422)
+      }
+
+      if (parsed.value.role !== "faculty" && parsed.value.role !== "aspirant") {
+        return renderError("Role must be either faculty or aspirant.", 422)
+      }
+
+      const origin = new URL(ctx.request.url).origin
+
+      try {
+        const created = await provisionUserAccount({
+          role: parsed.value.role,
+          email: parsed.value.email,
+          fullName: parsed.value.fullName,
+          phone: parsed.value.phone,
+          department: parsed.value.department,
+          batchId: parsed.value.batchId,
+          origin
+        })
+
+        if (!created.emailDelivered && created.emailError) {
+          const warn = encodeURIComponent(
+            `Account created for ${created.user.email}, but SMTP email delivery failed. Use 'Reset & Resend Credentials' to retry.`
+          )
+          return redirect(`${routes.admin.users.href()}?warning=${warn}`, 303)
+        }
+
+        const msg = encodeURIComponent(
+          `Provisioned ${created.user.role} account for ${created.user.email} and dispatched welcome credentials.`
+        )
+        return redirect(`${routes.admin.users.href()}?notice=${msg}`, 303)
+      } catch (err) {
+        if (err instanceof ProvisioningValidationError) {
+          return renderError(err.message, err.statusCode)
+        }
+        return renderError("Unable to provision user account right now.", 500)
+      }
+    },
+
+    async userResendCredentials(ctx) {
+      requireAdmin(ctx.request)
+      const origin = new URL(ctx.request.url).origin
+
+      try {
+        const res = await resendUserCredentials({
+          userId: ctx.params.id,
+          origin
+        })
+
+        if (!res.emailDelivered && res.emailError) {
+          const warn = encodeURIComponent(
+            `Temporary password rotated for ${res.user.email}, but SMTP delivery failed.`
+          )
+          return redirect(`${routes.admin.users.href()}?warning=${warn}`, 303)
+        }
+
+        const msg = encodeURIComponent(
+          `Rotated temporary password, revoked active sessions, and sent credentials to ${res.user.email}.`
+        )
+        return redirect(`${routes.admin.users.href()}?notice=${msg}`, 303)
+      } catch (err) {
+        const msg = encodeURIComponent(
+          err instanceof ProvisioningValidationError
+            ? err.message
+            : "Failed to reset user credentials."
+        )
+        return redirect(`${routes.admin.users.href()}?error=${msg}`, 303)
+      }
+    },
+
+    async userStatus(ctx) {
+      const admin = requireAdmin(ctx.request)
+      const form = ctx.formData ?? (await ctx.request.formData())
+      const rawStatus = form.get("status")
+      const nextStatus = typeof rawStatus === "string" ? rawStatus.trim() : ""
+
+      if (!USER_STATUSES.includes(nextStatus as UserStatus)) {
+        return new Response("Invalid user status.", { status: 422 })
+      }
+
+      try {
+        const updated = await updateUserAccountStatus({
+          actorAdminId: admin.id,
+          targetUserId: ctx.params.id,
+          nextStatus: nextStatus as UserStatus
+        })
+        const msg = encodeURIComponent(
+          `Updated ${updated.email} account status to ${updated.status}.`
+        )
+        return redirect(`${routes.admin.users.href()}?notice=${msg}`, 303)
+      } catch (err) {
+        if (err instanceof ProvisioningValidationError) {
+          const [managedUsers, batches] = await Promise.all([listManagedUsers(), listBatches()])
+          return ctx.render(
+            <Document title="Users & Access — PAART Admin Console" assets={ctx.assets}>
+              <AdminUsersPage
+                user={admin}
+                users={managedUsers}
+                batches={batches}
+                error={err.message}
+              />
+            </Document>,
+            { status: err.statusCode }
+          )
+        }
+        return new Response("Unable to update user status.", { status: 500 })
+      }
+    },
+
+    async batches(ctx) {
+      const user = requireAdmin(ctx.request)
+      const url = new URL(ctx.request.url)
+      const notice = url.searchParams.get("notice")
+      const error = url.searchParams.get("error")
+      const [batches, courses, facultyList] = await Promise.all([
+        listBatches(),
+        listAllCourses(),
+        listActiveFacultyUsers()
+      ])
+
+      return ctx.render(
+        <Document title="Academic Batches — PAART Admin Console" assets={ctx.assets}>
+          <AdminBatchesPage
+            user={user}
+            batches={batches}
+            courses={courses}
+            facultyList={facultyList}
+            notice={notice}
+            error={error}
+          />
+        </Document>
+      )
+    },
+
+    async batchCreate(ctx) {
+      requireAdmin(ctx.request)
+      const form = ctx.formData ?? (await ctx.request.formData())
+      const parsed = s.parseSafe(createBatchSchema, formDataToObject(form))
+      if (!parsed.success) {
+        const msg = encodeURIComponent(parsed.issues[0]?.message || "Invalid batch details.")
+        return redirect(`${routes.admin.batches.href()}?error=${msg}`, 303)
+      }
+
+      try {
+        const batch = await createBatch(parsed.value)
+        const notice = encodeURIComponent(`Created batch ${batch.name} (${batch.code}).`)
+        return redirect(`${routes.admin.batches.href()}?notice=${notice}`, 303)
+      } catch (err) {
+        const msg = encodeURIComponent(
+          err instanceof LmsValidationError ? err.message : "Failed to create batch."
+        )
+        return redirect(`${routes.admin.batches.href()}?error=${msg}`, 303)
+      }
+    },
+
+    async batchToggle(ctx) {
+      requireAdmin(ctx.request)
+      try {
+        await toggleBatchActive(ctx.params.id)
+      } catch {
+        // ignore if missing
+      }
+      return redirect(routes.admin.batches.href(), 303)
+    },
+
     async admissions(ctx) {
       const user = requireAdmin(ctx.request)
-      const admissions = await listAdmissions()
+      const url = new URL(ctx.request.url)
+      const notice = url.searchParams.get("notice")
+      const warning = url.searchParams.get("warning")
+      const error = url.searchParams.get("error")
+      const [admissions, batches] = await Promise.all([listAdmissions(), listBatches()])
 
       return ctx.render(
         <Document title="Student Admissions — PAART Admin Console" assets={ctx.assets}>
-          <AdminAdmissionsPage user={user} admissions={admissions} />
+          <AdminAdmissionsPage
+            user={user}
+            admissions={admissions}
+            batches={batches}
+            notice={notice}
+            warning={warning}
+            error={error}
+          />
         </Document>
       )
     },
@@ -97,6 +329,65 @@ export default createController(routes.admin, {
         }
       }
       return redirect(routes.admin.admissions.href(), 303)
+    },
+
+    async admissionProvision(ctx) {
+      const admin = requireAdmin(ctx.request)
+      const form = ctx.formData ?? (await ctx.request.formData())
+      const parsed = s.parseSafe(provisionAdmissionSchema, formDataToObject(form))
+
+      const renderError = async (message: string, statusCode = 422) => {
+        const [admissions, batches] = await Promise.all([listAdmissions(), listBatches()])
+        return ctx.render(
+          <Document title="Student Admissions — PAART Admin Console" assets={ctx.assets}>
+            <AdminAdmissionsPage
+              user={admin}
+              admissions={admissions}
+              batches={batches}
+              error={message}
+            />
+          </Document>,
+          { status: statusCode }
+        )
+      }
+
+      if (!parsed.success) {
+        return renderError(
+          parsed.issues[0]?.message || "Invalid admission provisioning details.",
+          422
+        )
+      }
+
+      const origin = new URL(ctx.request.url).origin
+
+      try {
+        const result = await provisionAdmissionApplicant({
+          admissionId: ctx.params.id,
+          email: parsed.value.email,
+          batchId: parsed.value.batchId,
+          linkExisting: parsed.value.linkExisting === "1" || parsed.value.linkExisting === "true",
+          origin
+        })
+
+        if (!result.emailDelivered && result.emailError) {
+          const warn = encodeURIComponent(
+            "Aspirant account and batch enrollment created, but SMTP welcome email failed. Retry from Users & Access."
+          )
+          return redirect(`${routes.admin.admissions.href()}?warning=${warn}`, 303)
+        }
+
+        const msg = encodeURIComponent(
+          result.linkedExisting
+            ? "Linked existing aspirant account, enrolled in batch, and marked admission as enrolled."
+            : "Provisioned aspirant portal account, enrolled in batch, and sent welcome credentials."
+        )
+        return redirect(`${routes.admin.admissions.href()}?notice=${msg}`, 303)
+      } catch (err) {
+        if (err instanceof ProvisioningValidationError) {
+          return renderError(err.message, err.statusCode)
+        }
+        return renderError("Unable to provision aspirant from admission application.", 500)
+      }
     },
 
     async enquiries(ctx) {
@@ -208,17 +499,17 @@ export default createController(routes.admin, {
       const user = requireAdmin(ctx.request)
       const url = new URL(ctx.request.url)
       const error = url.searchParams.get("error")
-      const materials = await listAllMaterials()
+      const [materials, courses] = await Promise.all([listAllMaterials(), listAllCourses()])
 
       return ctx.render(
         <Document title="Study Materials — PAART Admin Console" assets={ctx.assets}>
-          <AdminMaterialsPage user={user} materials={materials} error={error} />
+          <AdminMaterialsPage user={user} materials={materials} courses={courses} error={error} />
         </Document>
       )
     },
 
     async materialCreate(ctx) {
-      requireAdmin(ctx.request)
+      const admin = requireAdmin(ctx.request)
       const form = ctx.formData ?? (await ctx.request.formData())
       const parsed = s.parseSafe(createMaterialSchema, formDataToObject(form))
       if (!parsed.success) {
@@ -226,8 +517,20 @@ export default createController(routes.admin, {
         return redirect(`${routes.admin.materials.href()}?error=${msg}`, 303)
       }
 
+      const visibility: MaterialVisibility =
+        parsed.value.visibility === "enrolled" ? "enrolled" : "public"
+
       try {
-        await createMaterial(parsed.value)
+        await createMaterial({
+          title: parsed.value.title,
+          category: parsed.value.category,
+          description: parsed.value.description,
+          fileUrl: parsed.value.fileUrl,
+          externalUrl: parsed.value.externalUrl,
+          courseId: parsed.value.courseId || null,
+          visibility,
+          uploadedBy: admin.id
+        })
         return redirect(routes.admin.materials.href(), 303)
       } catch {
         return redirect(

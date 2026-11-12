@@ -40,7 +40,9 @@ export async function sitemapAction(ctx: AppContext): Promise<Response> {
       success: false
     },
     auth: false,
-    admin: false
+    admin: false,
+    faculty: false,
+    portal: false
   }
 
   const sitemap = fromRoutes(routes, origin, decisions)

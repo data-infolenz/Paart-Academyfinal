@@ -111,9 +111,21 @@ function SkipToContentLink(_handle: Handle) {
   )
 }
 
+function workspaceMetaForUser(user: AdminUser) {
+  switch (user.role) {
+    case "admin":
+      return { label: "Admin Console", href: routes.admin.index.href() }
+    case "faculty":
+      return { label: "Faculty Workspace", href: routes.faculty.index.href() }
+    case "aspirant":
+      return { label: "Aspirant Portal", href: routes.portal.index.href() }
+  }
+}
+
 export function LandingLayout(handle: Handle<LandingLayoutProps>) {
   return () => {
     const { user, settings, children } = handle.props
+    const workspace = user ? workspaceMetaForUser(user) : null
     const phone = settings?.phone ?? TRUST_PROFILE.phone
     const phoneHref = `tel:${phone.replace(/\s+/g, "")}`
     const email = settings?.email ?? TRUST_PROFILE.email
@@ -173,6 +185,10 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
                 mix={[u.hidden(), u.media("(min-width: 56rem)", u.inlineFlex())]}
               >
                 Free PDF Notes
+              </a>
+
+              <a href={workspace ? workspace.href : routes.auth.loginPage.href()}>
+                {workspace ? workspace.label : "Portal Login"}
               </a>
             </div>
           </div>
@@ -239,7 +255,7 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
                     u.mbs(0.5)
                   ]}
                 >
-                  Puliyangudi, Tenkasi Dist. · Competitive Exam &amp; Skill Coaching
+                  Competitive Exam &amp; Skill Coaching
                 </p>
               </div>
             </a>
@@ -265,23 +281,18 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
               ]}
             >
               <ThemeToggle />
-              {user ? (
-                <LinkButton
-                  href={routes.admin.index.href()}
-                  color="neutral"
-                  variant="outline"
-                  size="sm"
-                >
-                  Admin Console
+              {workspace ? (
+                <LinkButton href={workspace.href} color="neutral" variant="outline" size="sm">
+                  {workspace.label}
                 </LinkButton>
               ) : (
                 <LinkButton
-                  href={routes.contact.href()}
+                  href={routes.auth.loginPage.href()}
                   color="neutral"
                   variant="outline"
                   size="sm"
                 >
-                  Enquire
+                  Portal Login
                 </LinkButton>
               )}
               <LinkButton
@@ -355,23 +366,18 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
                       u.borderEdge("top", { width: 1, color: "var(--acad-border)" })
                     ]}
                   >
-                    {user ? (
-                      <LinkButton
-                        href={routes.admin.index.href()}
-                        color="neutral"
-                        variant="outline"
-                        size="sm"
-                      >
-                        Admin Console
+                    {workspace ? (
+                      <LinkButton href={workspace.href} color="neutral" variant="outline" size="sm">
+                        {workspace.label}
                       </LinkButton>
                     ) : (
                       <LinkButton
-                        href={routes.contact.href()}
+                        href={routes.auth.loginPage.href()}
                         color="neutral"
                         variant="outline"
                         size="sm"
                       >
-                        Campus Enquiry
+                        Portal Login
                       </LinkButton>
                     )}
                     <LinkButton
@@ -558,7 +564,7 @@ export function LandingLayout(handle: Handle<LandingLayoutProps>) {
                     <a href={routes.contact.href()}>Puliyangudi Campus Map</a>
                   </li>
                   <li>
-                    <a href={routes.auth.signIn.href()}>Staff / Admin Login</a>
+                    <a href={routes.auth.loginPage.href()}>Aspirant / Faculty / Admin Login</a>
                   </li>
                 </ul>
               </div>

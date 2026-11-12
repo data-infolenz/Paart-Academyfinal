@@ -13,25 +13,33 @@
     "lint": "vp lint",
     "format": "vp fmt",
     "typecheck": "tsc --noEmit",
-    "test": "vp test"
+    "test": "vp test run"
   },
   "dependencies": {
     "@pitlane/assets": "^0.2.1",
     "@pitlane/vite-plugin-remix": "^0.9.1",
     "@sdxc/assets-middleware": "^2026.11.10",
+    "@sdxc/authz": "^2026.11.10",
     "@sdxc/catch-response-middleware": "^2026.11.10",
+    "@sdxc/crypto": "^2026.11.10",
+    "@sdxc/csv": "^2026.10.13",
+    "@sdxc/email-address": "^2026.11.10",
     "@sdxc/health": "^2026.11.10",
     "@sdxc/honeypot": "^2026.11.10",
     "@sdxc/icons": "^2026.11.10",
     "@sdxc/lazy-route": "^2026.11.10",
     "@sdxc/logger": "^2026.11.10",
+    "@sdxc/mail": "^2026.11.11",
+    "@sdxc/password-policy": "^2026.11.10",
     "@sdxc/rate-limit": "^2026.11.10",
     "@sdxc/response": "^2026.10.13",
+    "@sdxc/result": "^2026.10.13",
     "@sdxc/security-headers": "^2026.11.10",
     "@sdxc/seo": "^2026.11.10",
     "@sdxc/sitemap": "^2026.11.10",
     "@sdxc/u": "^2026.11.10",
     "@sdxc/ui": "^2026.11.11",
+    "@sdxc/uuid": "^2026.11.10",
     "pg": "^8.23.1",
     "remix": "^3.2.0"
   },
@@ -43,7 +51,8 @@
     "vite-plus": "1.6.0"
   },
   "overrides": {
-    "vite": "npm:@voidzero-dev/vite-plus-core@1.6.0"
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.6.0",
+    "vitest": "5.1.0"
   },
   "engines": {
     "node": ">=24.11.0"

@@ -3,6 +3,7 @@ import * as u from "@sdxc/u"
 import { Badge, Button, Heading, Input, Select, Text, TextArea } from "@sdxc/ui"
 import { PageHeader } from "@sdxc/ui/app"
 import type { AdminUser } from "~/app/initializers/auth"
+import type { CourseItem } from "~/app/models/courses"
 import type { MaterialItem } from "~/app/models/materials"
 import { AdminLayout } from "~/resources/layouts/admin"
 import { routes } from "~/routes"
@@ -10,6 +11,7 @@ import { routes } from "~/routes"
 export interface AdminMaterialsPageProps {
   user: AdminUser
   materials: MaterialItem[]
+  courses: CourseItem[]
   error?: string | null
 }
 
@@ -17,7 +19,7 @@ const MATERIAL_CATEGORIES = ["Study Material", "Notes", "Current Affairs", "Ques
 
 export function AdminMaterialsPage(handle: Handle<AdminMaterialsPageProps>) {
   return () => {
-    const { user, materials, error } = handle.props
+    const { user, materials, courses, error } = handle.props
 
     return (
       <AdminLayout user={user} currentPath={routes.admin.materials.href()}>
@@ -27,7 +29,7 @@ export function AdminMaterialsPage(handle: Handle<AdminMaterialsPageProps>) {
             { label: "Study Materials" }
           ]}
           title="Study Materials & Downloads"
-          description="Publish free PDF notes, syllabus guides, and OMR question banks for students."
+          description="Publish public PDF notes or course-restricted study materials for enrolled aspirants."
           status={<Badge color="brand">{materials.length} Items</Badge>}
         />
 
@@ -98,6 +100,43 @@ export function AdminMaterialsPage(handle: Handle<AdminMaterialsPageProps>) {
           >
             <label mix={[u.vstack({ gap: 1.5 })]}>
               <Text mix={[u.fontSize("xs"), u.weight("semibold"), u.m(0)]}>
+                Access Visibility *
+              </Text>
+              <Select name="visibility" required>
+                <Select.Option value="public">Public (Website + Aspirant Portal)</Select.Option>
+                <Select.Option value="enrolled">
+                  Enrolled Aspirants Only (Restricted to Course)
+                </Select.Option>
+              </Select>
+            </label>
+
+            <label mix={[u.vstack({ gap: 1.5 })]}>
+              <Text mix={[u.fontSize("xs"), u.weight("semibold"), u.m(0)]}>
+                Target Course (for Enrolled Visibility)
+              </Text>
+              <Select name="courseId">
+                <Select.Option value="">All Courses / General</Select.Option>
+                {courses.map((c) => (
+                  <Select.Option key={c.id} value={c.id}>
+                    {c.title}
+                  </Select.Option>
+                ))}
+              </Select>
+            </label>
+          </div>
+
+          <div
+            mix={[
+              u.grid(),
+              u.gap(3.5),
+              u.media(
+                "(min-width: 48rem)",
+                u.raw({ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" })
+              )
+            ]}
+          >
+            <label mix={[u.vstack({ gap: 1.5 })]}>
+              <Text mix={[u.fontSize("xs"), u.weight("semibold"), u.m(0)]}>
                 Local File Path (inside /public)
               </Text>
               <Input name="fileUrl" placeholder="/study-materials/tnpsc-notes.pdf" />
@@ -142,11 +181,22 @@ export function AdminMaterialsPage(handle: Handle<AdminMaterialsPageProps>) {
               ]}
             >
               <div mix={[u.vstack({ gap: 1 }), u.minWidth(0)]}>
-                <div mix={[u.hstack({ gap: 2, align: "center" })]}>
+                <div mix={[u.hstack({ gap: 2, align: "center" }), u.flexWrap("wrap")]}>
                   <Text mix={[u.fontSize("sm"), u.weight("bold"), u.m(0)]}>{mat.title}</Text>
                   <Badge color="brand" variant="outline">
                     {mat.category}
                   </Badge>
+                  <Badge
+                    color={mat.visibility === "enrolled" ? "warning" : "success"}
+                    variant="secondary"
+                  >
+                    {mat.visibility === "enrolled" ? "Enrolled Only" : "Public"}
+                  </Badge>
+                  {mat.courseTitle && (
+                    <Badge color="neutral" variant="outline">
+                      {mat.courseTitle}
+                    </Badge>
+                  )}
                 </div>
                 <Text mix={[u.fontSize("xs"), u.fg("neutral.muted"), u.m(0)]}>
                   {mat.description}
