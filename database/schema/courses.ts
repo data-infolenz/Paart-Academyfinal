@@ -1,5 +1,5 @@
 import { table } from "remix/data-table"
-import type { CourseCategory, CourseDetailSpec } from "~/config/courses"
+import type { CourseCategory, CourseDetailSpec } from "../../config/courses"
 import { col, type InferInsert, type InferSelect } from "./helpers"
 
 export const courses = table({

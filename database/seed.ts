@@ -4,11 +4,11 @@ import { fileURLToPath } from "node:url"
 import { password as cryptoPassword } from "@sdxc/crypto"
 import { parseEmailAddress } from "@sdxc/email-address"
 import { isSuccess, unwrap } from "@sdxc/result"
-import { closeDatabase, getDatabase, type PaartDb } from "~/app/initializers/database"
-import { appConfig } from "~/config/app"
-import { SEED_BLOGS, SEED_COURSES, SEED_GALLERY, SEED_MATERIALS } from "~/config/courses"
-import { DEFAULT_PAGES, DEFAULT_SITE_CHROME } from "~/config/default-pages"
-import { TRUST_PROFILE } from "~/config/trust"
+import { closeDatabase, getDatabase, type PaartDb } from "../app/initializers/database"
+import { appConfig } from "../config/app"
+import { SEED_BLOGS, SEED_COURSES, SEED_GALLERY, SEED_MATERIALS } from "../config/courses"
+import { DEFAULT_PAGES, DEFAULT_SITE_CHROME } from "../config/default-pages"
+import { TRUST_PROFILE } from "../config/trust"
 import {
   batches,
   blogs,

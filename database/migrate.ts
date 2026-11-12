@@ -4,8 +4,8 @@ import process from "node:process"
 import { fileURLToPath } from "node:url"
 import type { DatabaseMigrateOptions, MigrateResult } from "remix/data-table"
 import { loadMigrations } from "remix/data-table/migrations/node"
-import { closeDatabase, getDatabase, type PaartDb } from "~/app/initializers/database"
-import { appConfig } from "~/config/app"
+import { closeDatabase, getDatabase, type PaartDb } from "../app/initializers/database"
+import { appConfig } from "../config/app"
 import { seedDatabase } from "./seed"
 
 export async function runMigrations(
