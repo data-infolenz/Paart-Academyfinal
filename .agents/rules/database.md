@@ -1,38 +1,41 @@
 ---
 trigger: always_on
-description: Drizzle database schema definitions, migrations, and querying patterns.
+description: PostgreSQL database schema definitions, migrations, and querying patterns for PAART Academy.
 ---
 
 ## Database & Schema Guidelines
 
 ### 1. Schema Locations & ORM Layers
-- **Remix 3 Apps (`@sdxc/data-model`)**:
-  - `apps/chat-remix/app/data/db/schema.ts`: Chat PostgreSQL table definitions (`createTable`) and relations.
-  - `apps/store/database/schema/`: Store PostgreSQL table definitions (`createTable`) and `apps/store/database/relations.ts`.
-  - Query via `getDatabase()` from `@sdxc/database-middleware` (`db.query(table)...`, `db.create(...)`, `db.update(...)`, `db.deleteMany(...)`) or `ctx.models` from `@sdxc/data-model/router`.
-- **Shared Drizzle Package (`packages/db/src/schema/`)**:
-  - Used by `apps/chat` and shared utilities. Every table schema must export inferred types:
-    ```ts
-    export type User = typeof users.$inferSelect
-    export type NewUser = typeof users.$inferInsert
-    ```
+- **PostgreSQL Schemas (`database/schema/`)**:
+  - `database/schema/users.ts`: Users, authentication, roles (`admin`, `faculty`, `aspirant`), sessions.
+  - `database/schema/courses.ts`: Courses, departments, curricula, prerequisites.
+  - `database/schema/lms.ts`: Batches, enrollments, attendance, fees, marks, student notices.
+  - `database/schema/admissions.ts`: Online applications, application numbers, statuses (`submitted`, `under_review`, `approved`, `rejected`).
+  - `database/schema/cms.ts`: Server-driven block pages, sections, blocks, Page Builder Studio revisions.
+  - `database/schema/blogs.ts`, `enquiries.ts`, `gallery.ts`, `materials.ts`, `settings.ts`.
+  - `database/schema/index.ts`: Central re-export of all schema tables, enums, and inferred types.
+- **Connection & Query Layer (`app/initializers/database.ts`)**:
+  - Pool connection via `pg` `Pool` initialized with `DATABASE_URL` from `config/app.ts`.
+  - Query via `@remix-run/data-table` / `remix/data-table/postgres` or parameterized SQL queries using `db.query(table)...`.
 
 ### 2. Migrations Workflow
 Whenever modifying or adding any table schema:
-1. **In `apps/chat-remix` or `apps/store`**:
-   - Update `apps/chat-remix/app/data/db/schema.ts` (or `apps/store/database/schema/`) and corresponding migration scripts in `apps/chat-remix/app/data/db/migrate.ts` (or `apps/store/database/migrate.ts` & `apps/store/database/migrations/`).
-   - Run `bun run --cwd apps/chat-remix db:migrate` or `bun run --cwd apps/store db:migrate`.
-2. **In `packages/db`**:
-   - Update or create table definitions in `packages/db/src/schema/`.
-   - Generate migration SQL: `bun db:generate`. *(Never commit schema changes without the generated migration SQL. If `bun db:generate` prompts for column renames/conflicts requiring a TTY, delegate the command to the user to run directly)*.
-   - Apply migration to local DB: `bun db:migrate`.
-   - Commit both the updated schema TypeScript files and the generated migration folder (`packages/db/migrations/`).
+1. **Schema Updates (`database/schema/`)**:
+   - Update or create the schema files in `database/schema/*.ts`.
+   - Re-export the table definitions and types in `database/schema/index.ts`.
+2. **Migration SQL Files (`database/migrations/`)**:
+   - Create the next sequentially numbered migration directory under `database/migrations/` (e.g. `0004_your_migration_name/`).
+   - Write idempotent forward migration SQL in `up.sql`.
+   - Write safe rollback SQL in `down.sql`.
+3. **Execute Migration**:
+   - Apply migrations to the local database: `npm run db:migrate` (or `node --env-file=.env database/migrate.ts`).
+4. **Seeding (`database/seed.ts`)**:
+   - If initial seed data or bootstrap users are required, update `database/seed.ts` and apply with `npm run db:seed`.
 
 ### 3. Data Conventions
 - **Naming Conventions (`snake_case`)**:
-  - **SQL Tables**: Always lowercase `snake_case` (e.g. `users`, `site_settings`, `messages`, `store_orders`). **Never** use `PascalCase` or uppercase letters for database table names.
-  - **SQL Columns**: Always lowercase `snake_case` in PostgreSQL (e.g. `created_at`, `is_owner`, `sender_id`, `site_id`). In TypeScript, expose standard `camelCase` properties (`isOwner`, `createdAt`, `senderId`). **Never** define SQL column names using `camelCase` or un-underscored capitals.
-- **Primary Keys**: Always `Bun.randomUUIDv7()`.
-- **Soft Deletes**: Tables with `deletedAt` must be queried with `.where(isNull(table.deletedAt))` or equivalent soft-delete helper.
-- **Rich Text**: Store rich text as Slate JSON structures, never raw HTML strings.
-- **Multi-Site Isolation**: All site-scoped data queries must filter by `siteId`.
+  - **SQL Tables**: Always lowercase `snake_case` (e.g. `users`, `admissions`, `courses`, `batches`, `enrollments`, `cms_pages`). **Never** use `PascalCase` or uppercase letters for database table names.
+  - **SQL Columns**: Always lowercase `snake_case` in PostgreSQL (e.g. `created_at`, `full_name`, `user_id`, `batch_id`, `admission_number`). In TypeScript, expose standard `camelCase` properties (`createdAt`, `fullName`, `userId`, `batchId`, `admissionNumber`). **Never** define SQL column names using `camelCase`.
+- **Primary Keys**: Always UUIDv7 generated via `@sdxc/uuid/v7` (`generateUUID()`). **Never** use UUID v4 or auto-incrementing integer IDs.
+- **Soft Deletes**: Tables with `deleted_at` must be queried with `WHERE deleted_at IS NULL` or equivalent soft-delete helper.
+- **Rich Text & Block Content**: Store CMS blocks, syllabus outlines, and structured payloads as `JSONB`, never raw unchecked HTML strings.
