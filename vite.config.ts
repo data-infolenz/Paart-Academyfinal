@@ -1,9 +1,26 @@
+import fs from "node:fs"
+import path from "node:path"
 import process from "node:process"
 import { remix } from "@pitlane/vite-plugin-remix"
 import { nitro } from "nitro/vite"
 import { defineConfig } from "vite-plus"
 
 const isVercel = process.env.VERCEL === "1"
+
+function copyDirectorySync(src: string, dest: string) {
+  if (!fs.existsSync(src)) return
+  fs.mkdirSync(dest, { recursive: true })
+  const entries = fs.readdirSync(src, { withFileTypes: true })
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name)
+    const destPath = path.join(dest, entry.name)
+    if (entry.isDirectory()) {
+      copyDirectorySync(srcPath, destPath)
+    } else {
+      fs.copyFileSync(srcPath, destPath)
+    }
+  }
+}
 
 export default defineConfig({
   plugins: [
@@ -14,7 +31,35 @@ export default defineConfig({
     }),
     isVercel
       ? nitro({
-          compatibilityDate: "2026-11-12"
+          compatibilityDate: "2026-11-12",
+          hooks: {
+            compiled(nitroInstance) {
+              const serverFuncDir = path.resolve(
+                nitroInstance.options.output.dir,
+                "functions/__server.func"
+              )
+              const targetNodeModules = path.join(serverFuncDir, "node_modules")
+
+              const pgPackages = [
+                "pg",
+                "pg-connection-string",
+                "pg-pool",
+                "pg-protocol",
+                "pg-types",
+                "pgpass",
+                "postgres-array",
+                "postgres-bytea",
+                "postgres-date",
+                "postgres-interval"
+              ]
+
+              for (const pkg of pgPackages) {
+                const src = path.resolve("node_modules", pkg)
+                const dest = path.join(targetNodeModules, pkg)
+                copyDirectorySync(src, dest)
+              }
+            }
+          }
         })
       : null
   ].filter(Boolean),
