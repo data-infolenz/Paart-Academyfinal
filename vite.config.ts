@@ -12,17 +12,7 @@ export default defineConfig({
       serverEntry: "app/initializers/router.ts",
       ...(isVercel ? { serverHandler: false } : {})
     }),
-    isVercel
-      ? nitro({
-          compatibilityDate: "2026-11-12",
-          publicAssets: [
-            {
-              dir: "dist/client",
-              baseURL: "/"
-            }
-          ]
-        })
-      : null
+    isVercel ? nitro() : null
   ].filter(Boolean),
   resolve: {
     tsconfigPaths: true

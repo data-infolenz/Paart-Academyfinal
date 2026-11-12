@@ -9,3 +9,6 @@ tsconfig.tsbuildinfo
 graphify-out/*
 !graphify-out/GRAPH_REPORT.md
 !graphify-out/graph.json
+
+.vercel
+.env*
