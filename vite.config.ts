@@ -46,11 +46,14 @@ export default defineConfig({
                 "pg-pool",
                 "pg-protocol",
                 "pg-types",
+                "pg-int8",
                 "pgpass",
+                "split2",
                 "postgres-array",
                 "postgres-bytea",
                 "postgres-date",
-                "postgres-interval"
+                "postgres-interval",
+                "xtend"
               ]
 
               for (const pkg of pgPackages) {

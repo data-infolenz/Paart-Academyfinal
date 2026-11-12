@@ -1,83 +1,84 @@
 # Graph Report - Paart-Academyfinal  (2026-11-12)
 
 ## Corpus Check
-- 160 files · ~99,116 words
+- 160 files · ~99,230 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1404 nodes · 3342 edges · 91 communities (66 shown, 25 thin omitted)
+- 1406 nodes · 3345 edges · 102 communities (69 shown, 33 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 21 edges (avg confidence: 0.59)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d574ded6`
+- Built from commit: `8211931c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - index.tsx
-- routes/index.ts
+- initializers/auth.ts
 - cms-responder.tsx
-- config/courses.ts
-- database.ts
+- models/courses.ts
+- router.ts
 - TypeScript Path Aliases & Config
 - ADDED Requirements
 - schema/users.ts
 - cms-schemas.ts
-- devDependencies
-- initializers/auth.ts
+- scripts
+- requireAdmin
 - Architecture & OpenSpec Constraints
 - Browser Hydration & Frame Prefetch
 - PostgreSQL Initial Migration
 - Node Module Path Resolver
+- vite.config.ts
 - models/cms.ts
 - Requirements
-- models/lms.ts
+- faculty/controller.tsx
 - admin/controller.tsx
 - Requirement: Unified Credential Sign-In and Role Workspace Routing
 - ADDED Requirements
-- faculty/controller.tsx
+- models/lms.ts
 - 0002_multi_role_lms/up.sql
 - Requirements
 - 0002_multi_role_lms/down.sql
 - @pitlane/vite-plugin-remix
-- remix
+- schema/index.ts
 - @sdxc/assets-middleware
 - schema/cms.ts
-- scripts
-- default-pages.ts
+- mail.tsx
+- ADDED Requirements
 - @sdxc/csv
 - @sdxc/email-address
 - @sdxc/health
 - @sdxc/honeypot
-- ADDED Requirements
+- Requirements
 - @sdxc/lazy-route
 - @sdxc/logger
 - @sdxc/mail
 - @sdxc/password-policy
-- package.json
+- admissions/controller.tsx
 - @sdxc/response
 - @sdxc/result
 - dependencies
-- Requirements
-- cms-schemas.test.ts
+- PaartDb
+- listAllCourses
 - @sdxc/ui
 - @sdxc/uuid
-- models/users.ts
-- faculty.tsx
+- courseCreate
+- server.ts
 - Requirement: Unified Credential Sign-In and Role Workspace Routing
-- models/materials.ts
-- schema/index.ts
-- portal/controller.test.ts
-- Design
-- db
-- Proposal
-- Tasks
+- database.ts
+- auth/controller.tsx
+- provisioning.test.ts
+- public/controller.tsx
+- lms-e2e.test.ts
+- models/users.ts
+- models/admissions.ts
 - models/enquiries.ts
-- SessionUser
+- portal/controller.tsx
 - vercel.json
-- router.ts
-- models/blogs.ts
+- @sdxc/authz
+- @sdxc/cache
 - ADDED Requirements
 - authMiddleware
 - SmtpTransport
@@ -86,23 +87,34 @@
 - Requirements
 - Requirements
 - Requirements
-- pg
-- @sdxc/lazy-frame
-- cms-actions.tsx
+- @sdxc/catch-response-middleware
+- @sdxc/crypto
+- models/blogs.ts
 - Design
-- auth/controller.test.ts
+- @sdxc/expression
 - Proposal
 - Decisions
 - Tasks
 - page-editor-page.tsx
+- Design
 - Tasks
 - Proposal
-- @sdxc/strings
+- @sdxc/icons
+- Proposal
 - 0003_server_driven_pages/up.sql
+- Tasks
+- cms-actions.tsx
 - @sdxc/bracket-params
-- @sdxc/expression
+- @sdxc/markdown
+- @sdxc/rate-limit
 - @sdxc/json-patch
 - @sdxc/security-headers
+- cms-hydrator.ts
+- @pitlane/assets
+- @sdxc/sitemap
+- db
+- @sdxc/u
+- remix
 
 ## God Nodes (most connected - your core abstractions)
 1. `Routes` - 51 edges
@@ -117,48 +129,43 @@
 10. `hashUserPassword()` - 22 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Academic Institution UI Design Constraint` --semantically_similar_to--> `WCAG AA Semantic UI (@sdxc/ui + @sdxc/u)`  [INFERRED] [semantically similar]
-  openspec/config.yaml → README.md
-- `OpenSpec Verification & Graphify Maintenance Gate` --semantically_similar_to--> `Vite+ (vp) Build & Verification Toolchain`  [INFERRED] [semantically similar]
-  openspec/config.yaml → README.md
-- `FacultyLayoutProps` --references--> `SessionUser`  [EXTRACTED]
-  resources/layouts/faculty.tsx → app/initializers/auth.ts
-- `SessionUser` --references--> `UserRole`  [EXTRACTED]
-  app/initializers/auth.ts → database/schema/users.ts
-- `SessionUser` --references--> `UserStatus`  [EXTRACTED]
-  app/initializers/auth.ts → database/schema/users.ts
+- `WCAG AA Semantic UI (@sdxc/ui + @sdxc/u)` --semantically_similar_to--> `Academic Institution UI Design Constraint`  [INFERRED] [semantically similar]
+  README.md → openspec/config.yaml
+- `Vite+ (vp) Build & Verification Toolchain` --semantically_similar_to--> `OpenSpec Verification & Graphify Maintenance Gate`  [INFERRED] [semantically similar]
+  README.md → openspec/config.yaml
+- `CourseCardProps` --references--> `CourseItem`  [EXTRACTED]
+  resources/components/course-card.tsx → app/models/courses.ts
+- `EnquiryFormCardProps` --references--> `CourseItem`  [EXTRACTED]
+  resources/components/enquiry-form.tsx → app/models/courses.ts
+- `userStatus()` --references--> `USER_STATUSES`  [EXTRACTED]
+  app/http/controllers/admin/controller.tsx → database/schema/users.ts
 
 ## Import Cycles
-- 3-file cycle: `app/http/controllers/public/cms-responder.tsx -> app/initializers/router.ts -> app/http/controllers/public/controller.tsx -> app/http/controllers/public/cms-responder.tsx`
 - 3-file cycle: `app/http/controllers/public/controller.tsx -> app/http/controllers/public/sitemap.ts -> app/initializers/router.ts -> app/http/controllers/public/controller.tsx`
 - 3-file cycle: `app/http/controllers/public/controller.tsx -> app/http/controllers/public/llms.ts -> app/initializers/router.ts -> app/http/controllers/public/controller.tsx`
+- 3-file cycle: `app/http/controllers/public/cms-responder.tsx -> app/initializers/router.ts -> app/http/controllers/public/controller.tsx -> app/http/controllers/public/cms-responder.tsx`
 
-## Hyperedges (group relationships)
-- **PAART Academy Remix 3 SSR Platform Architecture** — readme_paartacademy, readme_remix3ssr, readme_middlewarepipeline, readme_postgresdatalayer, readme_seolegacyredirects [EXTRACTED 1.00]
-- **PAART Academy Institutional UI & Styling Governance** — readme_wcagsemanticui, openspec_config_academicdesignconstraint, openspec_config_tsxutilitystyling [INFERRED 0.95]
-- **Vite+ Build Verification & Graphify Sync Workflow** — openspec_config_specdrivenschema, openspec_config_validationgate, readme_viteplustoolchain [INFERRED 0.95]
-
-## Communities (91 total, 25 thin omitted)
+## Communities (102 total, 33 thin omitted)
 
 ### Community 0 - "index.tsx"
 Cohesion: 0.06
-Nodes (82): evaluateBlockVisibility(), renderSafeMarkdown(), aspirantUser, BlogItem, HydrateBlocksOptions, HydratedCollections, HydratedPageResult, HydratorLoaders (+74 more)
+Nodes (86): renderSafeMarkdown(), VisibilityEvalContext, HydratedPageResult, SiteChromeConfig, DEFAULT_SETTINGS, SiteSettings, FaqCategory, FaqItem (+78 more)
 
-### Community 1 - "routes/index.ts"
-Cohesion: 0.07
-Nodes (44): AdminUser, AdmissionItem, SiteChromeConfig, EnquiryItem, ManagedUserItem, AdmissionRow, admissions, AdmissionStatus (+36 more)
+### Community 1 - "initializers/auth.ts"
+Cohesion: 0.06
+Nodes (67): AdminUser, SessionUser, aspirantUser, AdmissionItem, BlogItem, HydrateBlocksOptions, HydratedCollections, HydratorLoaders (+59 more)
 
 ### Community 2 - "cms-responder.tsx"
-Cohesion: 0.06
-Nodes (61): resolveSampleEntitySlugs(), apply(), submit(), success(), index(), show(), show(), index() (+53 more)
+Cohesion: 0.19
+Nodes (20): success(), index(), show(), index(), show(), isAdminPreviewRequest(), renderCmsPageResponse(), renderEntityTemplatePage() (+12 more)
 
-### Community 3 - "config/courses.ts"
-Cohesion: 0.13
-Nodes (17): gallery(), listGalleryItems(), mapGalleryRow(), mapSeedGallery(), CourseCategory, CourseDetailSpec, SEED_GALLERY, SEED_MATERIALS (+9 more)
+### Community 3 - "models/courses.ts"
+Cohesion: 0.33
+Nodes (9): findCourseBySlug(), mapCourseRow(), mapSeedCourse(), CourseCategory, CourseDetailSpec, SEED_COURSES, SeedCourseItem, SeedMaterialItem (+1 more)
 
-### Community 4 - "database.ts"
-Cohesion: 0.09
-Nodes (28): closeDatabase(), databaseContext, getDatabase(), getDatabasePoolConfig(), globalForPaartDb, transaction(), clientDir, rootDir (+20 more)
+### Community 4 - "router.ts"
+Cohesion: 0.12
+Nodes (14): rateLimitMiddleware(), DEFAULT_CSP_DIRECTIVES, securityHeadersMiddleware(), databaseMiddleware(), paartLogger, remix/router, RouterTypes, AppConfig (+6 more)
 
 ### Community 5 - "TypeScript Path Aliases & Config"
 Cohesion: 0.06
@@ -169,20 +176,20 @@ Cohesion: 0.09
 Nodes (22): ADDED Requirements, Block Page Rendering Specification, Purpose, Requirement: Database-Backed Site Chrome Rendering, Requirement: Database-Driven Public Page and Campaign Slug Resolution, Requirement: Entity Detail Template Rendering, Requirement: Live Collection Hydration and Interactive Form Blocks, Requirement: Per-Block Schema Validation and Fault Isolation (+14 more)
 
 ### Community 7 - "schema/users.ts"
-Cohesion: 0.17
-Nodes (15): NewAdmissionRow, NewBlogRow, NewEnquiryRow, NewGalleryRow, col, InferInsert, InferSelect, MATERIAL_VISIBILITIES (+7 more)
+Cohesion: 0.12
+Nodes (21): NewBlogRow, NewCourseRow, NewEnquiryRow, NewGalleryRow, col, InferInsert, InferSelect, MATERIAL_VISIBILITIES (+13 more)
 
 ### Community 8 - "cms-schemas.ts"
 Cohesion: 0.06
-Nodes (34): academicHeroBlockSchema, admissionFormBlockSchema, asRecord(), baseEnvelope, BlockValidationSummary, blogFeedBlockSchema, boolField(), calloutBandBlockSchema (+26 more)
+Nodes (37): academicHeroBlockSchema, admissionFormBlockSchema, baseEnvelope, BLOCK_TYPES, BlockValidationSummary, blogFeedBlockSchema, boolField(), calloutBandBlockSchema (+29 more)
 
-### Community 9 - "devDependencies"
-Cohesion: 0.15
-Nodes (13): nitro, devDependencies, nitro, @types/node, @types/pg, typescript, vite, vite-plus (+5 more)
+### Community 9 - "scripts"
+Cohesion: 0.06
+Nodes (33): nitro, devDependencies, nitro, @types/node, @types/pg, typescript, vite, vite-plus (+25 more)
 
-### Community 10 - "initializers/auth.ts"
-Cohesion: 0.17
-Nodes (24): changePassword(), changePasswordPage(), formatPasswordPolicyIssue(), getClientMeta(), legacyLogout(), login(), loginPage(), logout() (+16 more)
+### Community 10 - "requireAdmin"
+Cohesion: 0.19
+Nodes (15): batchCreate(), batchToggle(), courses(), galleryCreate(), materialCreate(), materialDelete(), settingsUpdate(), userCreate() (+7 more)
 
 ### Community 11 - "Architecture & OpenSpec Constraints"
 Cohesion: 0.26
@@ -201,20 +208,20 @@ Cohesion: 0.67
 Nodes (3): resolve(), resolveCandidate(), rootDir
 
 ### Community 17 - "models/cms.ts"
-Cohesion: 0.25
-Nodes (20): cmsPageKey(), getCmsCache(), purgePageCache(), deleteCampaignPage(), findPageById(), hasDraftDiff(), listAllPagesForAdmin(), listPageRevisions() (+12 more)
+Cohesion: 0.21
+Nodes (20): cmsPageKey(), getCmsCache(), purgeChromeCache(), purgePageCache(), deleteCampaignPage(), findPageById(), hasDraftDiff(), listAllPagesForAdmin() (+12 more)
 
 ### Community 18 - "Requirements"
 Cohesion: 0.09
 Nodes (22): Block Page Rendering Specification, Purpose, Requirement: Database-Backed Site Chrome Rendering, Requirement: Database-Driven Public Page and Campaign Slug Resolution, Requirement: Entity Detail Template Rendering, Requirement: Live Collection Hydration and Interactive Form Blocks, Requirement: Per-Block Schema Validation and Fault Isolation, Requirement: Safe Rich Text and Conditional Block Visibility (+14 more)
 
-### Community 19 - "models/lms.ts"
-Cohesion: 0.09
-Nodes (33): AspirantBatchProgress, AspirantPublishedScorecard, createNotification(), LmsValidationError, MarksEntryInputRow, updateSyllabusTopicStatus(), AttendanceStatus, BatchRow (+25 more)
+### Community 19 - "faculty/controller.tsx"
+Cohesion: 0.14
+Nodes (28): batchSyllabusCreate(), batchSyllabusStatus(), examMarks(), examMarksImport(), examMarksSave(), examMarksTemplate(), examPublish(), exams() (+20 more)
 
 ### Community 20 - "admin/controller.tsx"
-Cohesion: 0.08
-Nodes (49): cmsAdminActions, admissionProvision(), admissions(), admissionStatus(), batchCreate(), batchToggle(), blogCreate(), courseCreate() (+41 more)
+Cohesion: 0.09
+Nodes (29): blogDelete(), blogToggle(), courseDelete(), courseToggle(), galleryDelete(), createBatchSchema, createBlogSchema, createCourseSchema (+21 more)
 
 ### Community 21 - "Requirement: Unified Credential Sign-In and Role Workspace Routing"
 Cohesion: 0.10
@@ -224,9 +231,9 @@ Nodes (20): ADDED Requirements, Multi-Role Authentication Specification, Purpose
 Cohesion: 0.10
 Nodes (20): ADDED Requirements, Page Publishing Specification, Purpose, Requirement: Administrator-Only Page and Chrome Studio Access, Requirement: Atomic Publication, Authorship Audit, and Cache Invalidation, Requirement: Campaign Page Creation and Reserved Route Guard, Requirement: Draft Block Composition, Reordering, and Optimistic Concurrency, Requirement: Live Draft Preview with Search Indexing Protection (+12 more)
 
-### Community 23 - "faculty/controller.tsx"
-Cohesion: 0.14
-Nodes (40): batches(), batchSyllabus(), batchSyllabusCreate(), batchSyllabusStatus(), examCreate(), examMarks(), examMarksImport(), examMarksSave() (+32 more)
+### Community 23 - "models/lms.ts"
+Cohesion: 0.09
+Nodes (31): AspirantBatchProgress, LmsValidationError, MarksEntryInputRow, MarksSheetEntry, SyllabusTopicItem, AttendanceStatus, BatchRow, ENROLLMENT_STATUSES (+23 more)
 
 ### Community 24 - "0002_multi_role_lms/up.sql"
 Cohesion: 0.42
@@ -236,97 +243,93 @@ Nodes (10): "admissions", "batches", "enrollments", "exam_results", "exams", "ma
 Cohesion: 0.10
 Nodes (20): Page Publishing Specification, Purpose, Requirement: Administrator-Only Page and Chrome Studio Access, Requirement: Atomic Publication, Authorship Audit, and Cache Invalidation, Requirement: Campaign Page Creation and Reserved Route Guard, Requirement: Draft Block Composition, Reordering, and Optimistic Concurrency, Requirement: Live Draft Preview with Search Indexing Protection, Requirement: Revision History and One-Click Rollback (+12 more)
 
+### Community 28 - "schema/index.ts"
+Cohesion: 0.16
+Nodes (17): createdBatchIds, createdMaterialIds, createdNotificationIds, createdUserIds, createdBatchIds, createdMaterialIds, createdNotificationIds, createdUserIds (+9 more)
+
 ### Community 30 - "schema/cms.ts"
-Cohesion: 0.13
-Nodes (16): AdminPageSummary, ResolvedCmsPage, PageSeo, DefaultPageSeed, NewPageRevisionRow, NewPageRow, NewSiteChromeRow, PAGE_KINDS (+8 more)
+Cohesion: 0.14
+Nodes (15): AdminPageSummary, ResolvedCmsPage, PageSeo, NewPageRevisionRow, NewPageRow, NewSiteChromeRow, PAGE_KINDS, PAGE_STATUSES (+7 more)
 
-### Community 31 - "scripts"
-Cohesion: 0.18
-Nodes (11): scripts, build, check, db:migrate, db:seed, dev, format, lint (+3 more)
+### Community 31 - "mail.tsx"
+Cohesion: 0.08
+Nodes (20): connectSocket(), createPaartMailer(), CredentialEmailProps, credentialEmailSchema, dotStuffMime(), formatRoleLabel(), getMailer(), LocalDevFallbackTransport (+12 more)
 
-### Community 32 - "default-pages.ts"
-Cohesion: 0.23
-Nodes (11): FaqCategory, FLAT_FAQS, PAART_FAQ_CATEGORIES, DEPARTMENT_SELECTIONS, IMPACT_METRICS, ImpactMetric, STATE_RANK_HIGHLIGHTS, TRUST_INITIATIVES (+3 more)
-
-### Community 37 - "ADDED Requirements"
+### Community 32 - "ADDED Requirements"
 Cohesion: 0.14
 Nodes (13): ADDED Requirements, Purpose, Requirement: Edge CDN Static Asset Delivery, Requirement: Nitro-Driven Vercel Build Output Generation, Requirement: Serverless Environment Variable and Secret Integration, Requirement: Serverless PostgreSQL Pool Configuration, Scenario: Connection pool limit respected in serverless runtime, Scenario: Local production build preserves standard output (+5 more)
 
-### Community 42 - "package.json"
-Cohesion: 0.20
-Nodes (9): engines, node, name, overrides, vite, vitest, private, type (+1 more)
-
-### Community 45 - "dependencies"
-Cohesion: 0.09
-Nodes (23): dependencies, @pitlane/assets, @sdxc/authz, @sdxc/cache, @sdxc/catch-response-middleware, @sdxc/crypto, @sdxc/icons, @sdxc/markdown (+15 more)
-
-### Community 46 - "Requirements"
+### Community 37 - "Requirements"
 Cohesion: 0.14
 Nodes (13): Purpose, Requirement: Edge CDN Static Asset Delivery, Requirement: Nitro-Driven Vercel Build Output Generation, Requirement: Serverless Environment Variable and Secret Integration, Requirement: Serverless PostgreSQL Pool Configuration, Requirements, Scenario: Connection pool limit respected in serverless runtime, Scenario: Local production build preserves standard output (+5 more)
 
-### Community 47 - "cms-schemas.test.ts"
-Cohesion: 0.21
-Nodes (11): createCampaignPage(), BLOCK_TYPES, createDefaultBlock(), normalizeCampaignSlug(), pageBlockSchema, pageSeoSchema, siteChromeSchema, validateCampaignSlug() (+3 more)
+### Community 42 - "admissions/controller.tsx"
+Cohesion: 0.20
+Nodes (12): apply(), submit(), admissionSchema, seo, ALLOWED_EXTENSIONS, saveUploadedFile(), createAdmission(), readThemeCookie() (+4 more)
 
-### Community 50 - "models/users.ts"
-Cohesion: 0.06
-Nodes (35): generateTemporaryPassword(), normalizeUserEmail(), connectSocket(), createPaartMailer(), CredentialEmailProps, credentialEmailSchema, dotStuffMime(), formatRoleLabel() (+27 more)
+### Community 45 - "dependencies"
+Cohesion: 0.22
+Nodes (9): dependencies, pg, @sdxc/lazy-frame, @sdxc/seo, @sdxc/strings, pg, @sdxc/lazy-frame, @sdxc/seo (+1 more)
 
-### Community 51 - "faculty.tsx"
-Cohesion: 0.11
-Nodes (23): BatchSummaryItem, ExamItem, MarksSheetEntry, SyllabusTopicItem, ThemeToggle, ThemeToggleProps, FACULTY_NAV_ITEMS, FACULTY_SHELL_LABELS (+15 more)
+### Community 46 - "PaartDb"
+Cohesion: 0.24
+Nodes (13): batches(), batchSyllabus(), examCreate(), PaartDb, computeSyllabusProgressPct(), createBatch(), createExam(), getBatchSyllabusView() (+5 more)
+
+### Community 47 - "listAllCourses"
+Cohesion: 0.23
+Nodes (12): materials(), index(), materialCreate(), materials(), notificationCreate(), notifications(), listAllCourses(), createNotification() (+4 more)
+
+### Community 50 - "courseCreate"
+Cohesion: 0.33
+Nodes (6): blogCreate(), courseCreate(), slugify(), createBlog(), createCourse(), COURSE_CATEGORIES
+
+### Community 51 - "server.ts"
+Cohesion: 0.18
+Nodes (9): closeDatabase(), clientDir, rootDir, RouterLike, server, shutdown(), ssrEntryPath, ssrModule (+1 more)
 
 ### Community 52 - "Requirement: Unified Credential Sign-In and Role Workspace Routing"
 Cohesion: 0.10
 Nodes (20): Multi-Role Authentication Specification, Purpose, Requirement: Mandatory First-Login Password Change, Requirement: Revocable Server-Managed Sessions and Sign-Out, Requirement: Role-Based Workspace and Action Isolation, Requirement: Unified Credential Sign-In and Role Workspace Routing, Requirements, Scenario: Administrator signs in and reaches admin console (+12 more)
 
-### Community 53 - "models/materials.ts"
-Cohesion: 0.21
-Nodes (13): index(), materials(), createMaterial(), listAllMaterials(), listMaterialsForAspirant(), listPublishedMaterials(), mapMaterialRow(), mapSeedMaterial() (+5 more)
+### Community 53 - "database.ts"
+Cohesion: 0.33
+Nodes (8): databaseContext, getDatabase(), getDatabasePoolConfig(), globalForPaartDb, transaction(), resolveMigrationsDir(), runMigrations(), seedDatabase()
 
-### Community 54 - "schema/index.ts"
-Cohesion: 0.17
-Nodes (22): authSessionContext, enforcePasswordChange(), forbiddenResponse(), isPasswordChangeExempt(), loadSessionUser(), PASSWORD_CHANGE_EXEMPT_PATHS, redirectToLogin(), requestSessionMap (+14 more)
-
-### Community 55 - "portal/controller.test.ts"
+### Community 54 - "auth/controller.tsx"
 Cohesion: 0.08
-Nodes (28): createAdminSession(), createdAdmissionIds, createdBatchIds, createdUserIds, memoryOutbox, seedAdminSession(), createdBatchIds, createdMaterialIds (+20 more)
+Nodes (45): settings(), changePassword(), changePasswordPage(), formatPasswordPolicyIssue(), getClientMeta(), legacyLogout(), login(), loginPage() (+37 more)
 
-### Community 56 - "Design"
+### Community 55 - "provisioning.test.ts"
+Cohesion: 0.12
+Nodes (19): createAdminSession(), createdAdmissionIds, createdBatchIds, createdUserIds, memoryOutbox, seedAdminSession(), createdUserIds, seedRoleUser() (+11 more)
+
+### Community 56 - "public/controller.tsx"
 Cohesion: 0.20
-Nodes (9): 1. Integrate `nitro/vite` with Conditional Output, 2. Database Pooling Tolerances for Serverless Functions, 3. Edge Static Routing Configuration, Context, Decisions, Design, Goals / Non-Goals, Migration Plan (+1 more)
+Nodes (15): show(), renderStaticCmsSlug(), about(), contact(), enquirySubmit(), faq(), gallery(), healthz() (+7 more)
 
-### Community 57 - "db"
-Cohesion: 0.24
-Nodes (11): createdPageIds, createdUserIds, createdPageIds, createdUserIds, activeCache, resetCmsCache(), db, router (+3 more)
-
-### Community 58 - "Proposal"
+### Community 57 - "lms-e2e.test.ts"
 Cohesion: 0.25
-Nodes (7): Capabilities, Impact, Modified Capabilities, New Capabilities, Proposal, What Changes, Why
+Nodes (5): createdBatchIds, createdUserIds, outbox, paartEmails, setMailerOverrideForTests()
 
-### Community 59 - "Tasks"
-Cohesion: 0.29
-Nodes (6): 1. Dependencies & Environment Configuration, 2. Nitro & Pitlane Vite Integration, 3. Serverless Database Resilience, 4. Verification & Build Validation, Tasks, Workflow follow-up
+### Community 58 - "models/users.ts"
+Cohesion: 0.23
+Nodes (15): generateTemporaryPassword(), normalizeUserEmail(), revokeUserSessions(), sendAccountCredentialsEmail(), generateRollNumber(), mapUserRow(), provisionAdmissionApplicant(), ProvisioningValidationError (+7 more)
+
+### Community 59 - "models/admissions.ts"
+Cohesion: 0.21
+Nodes (11): admissionProvision(), admissions(), admissionStatus(), listAdmissions(), mapAdmissionRow(), updateAdmissionStatus(), ADMISSION_STATUSES, AdmissionRow (+3 more)
 
 ### Community 60 - "models/enquiries.ts"
-Cohesion: 0.22
-Nodes (8): enquiries(), enquiryStatus(), listEnquiries(), mapEnquiryRow(), updateEnquiryStatus(), enquiries, ENQUIRY_STATUSES, EnquiryRow
+Cohesion: 0.18
+Nodes (10): enquiries(), enquiryStatus(), index(), listEnquiries(), mapEnquiryRow(), updateEnquiryStatus(), enquiries, ENQUIRY_STATUSES (+2 more)
 
-### Community 61 - "SessionUser"
-Cohesion: 0.12
-Nodes (30): exams(), index(), marks(), materials(), notifications(), progress(), requireAspirant(), SessionUser (+22 more)
+### Community 61 - "portal/controller.tsx"
+Cohesion: 0.21
+Nodes (16): exams(), index(), marks(), materials(), notifications(), progress(), requireAspirant(), getAspirantPortalSnapshot() (+8 more)
 
 ### Community 62 - "vercel.json"
 Cohesion: 0.40
 Nodes (4): cleanUrls, headers, $schema, trailingSlash
-
-### Community 63 - "router.ts"
-Cohesion: 0.19
-Nodes (7): rateLimitMiddleware(), DEFAULT_CSP_DIRECTIVES, securityHeadersMiddleware(), databaseMiddleware(), paartLogger, remix/router, RouterTypes
-
-### Community 64 - "models/blogs.ts"
-Cohesion: 0.22
-Nodes (12): blogDelete(), blogs(), blogToggle(), deleteBlog(), findBlogBySlug(), listAllBlogs(), mapBlogRow(), mapSeedBlog() (+4 more)
 
 ### Community 65 - "ADDED Requirements"
 Cohesion: 0.12
@@ -352,17 +355,13 @@ Nodes (16): Aspirant Portal Specification, Purpose, Requirement: Aspirant Progre
 Cohesion: 0.12
 Nodes (16): Faculty Workspace Specification, Purpose, Requirement: Aspirant Exam Marks Entry, CSV Import, and Result Publication, Requirement: Batch Syllabus Progress Tracking, Requirement: Mock and OMR Exam Scheduling, Requirement: Targeted Academic Notifications, Requirement: Visibility-Scoped Study Material Publishing, Requirements (+8 more)
 
-### Community 75 - "cms-actions.tsx"
-Cohesion: 0.18
-Nodes (12): computePreviewHref(), IdRouteContext, pageDraftBracketSchema, readFormInt(), readFormString(), renderEditorState(), RevisionRouteContext, siteChromeBracketSchema (+4 more)
+### Community 75 - "models/blogs.ts"
+Cohesion: 0.19
+Nodes (17): computePreviewHref(), resolveSampleEntitySlugs(), blogs(), llmsAction(), sitemapAction(), findBlogBySlug(), listAllBlogs(), listPublishedBlogs() (+9 more)
 
 ### Community 76 - "Design"
 Cohesion: 0.18
 Nodes (10): 1. Tier-2 Typed Block Registry over Relational Per-Block Tables or Raw AST JSON, 2. Two Page Contracts (`static_page` and `collection_template`) + `site_chrome` Singleton, 3. Curated Institutional Block Catalog + Selective Parallel Hydration, 4. Leveraging `@sdxc/*` Primitives for Publishing, Caching, and Preview, Context, Decisions, Design, Goals / Non-Goals (+2 more)
-
-### Community 77 - "auth/controller.test.ts"
-Cohesion: 0.40
-Nodes (3): createdUserIds, seedRoleUser(), UserRole
 
 ### Community 78 - "Proposal"
 Cohesion: 0.25
@@ -377,8 +376,12 @@ Cohesion: 0.25
 Nodes (7): 1. Dependencies, Database Schema & Seed Manifests, 2. CMS Data Layer, Caching, Markdown & Visibility Engine (`cms/block-page-rendering`), 3. Institutional Block Catalog & Public SSR Routing (`cms/block-page-rendering`), 4. Admin Page Builder & Site Chrome Studio (`cms/page-publishing`), 5. End-to-End Publishing Verification & Knowledge Graph Sync, Tasks, Workflow follow-up
 
 ### Community 81 - "page-editor-page.tsx"
-Cohesion: 0.24
-Nodes (9): AdminPageDetail, PageRevisionSummary, BLOCK_TYPE_LABELS, BlockType, AdminPageEditorPage(), AdminPageEditorPageProps, renderBlockFields(), renderThreeColGrid() (+1 more)
+Cohesion: 0.22
+Nodes (11): AdminPageDetail, PageRevisionSummary, BLOCK_TYPE_LABELS, BlockType, PageBlock, DefaultPageSeed, AdminPageEditorPage(), AdminPageEditorPageProps (+3 more)
+
+### Community 82 - "Design"
+Cohesion: 0.20
+Nodes (9): 1. Integrate `nitro/vite` with Conditional Output, 2. Database Pooling Tolerances for Serverless Functions, 3. Edge Static Routing Configuration, Context, Decisions, Design, Goals / Non-Goals, Migration Plan (+1 more)
 
 ### Community 83 - "Tasks"
 Cohesion: 0.22
@@ -388,29 +391,49 @@ Nodes (8): 1. Dependencies, Configuration & Database Schema, 2. Multi-Role Authe
 Cohesion: 0.25
 Nodes (7): Capabilities, Impact, Modified Capabilities, New Capabilities, Proposal, What Changes, Why
 
+### Community 86 - "Proposal"
+Cohesion: 0.25
+Nodes (7): Capabilities, Impact, Modified Capabilities, New Capabilities, Proposal, What Changes, Why
+
 ### Community 87 - "0003_server_driven_pages/up.sql"
 Cohesion: 0.67
 Nodes (3): "page_revisions", "pages", "site_chrome"
 
+### Community 88 - "Tasks"
+Cohesion: 0.29
+Nodes (6): 1. Dependencies & Environment Configuration, 2. Nitro & Pitlane Vite Integration, 3. Serverless Database Resilience, 4. Verification & Build Validation, Tasks, Workflow follow-up
+
+### Community 89 - "cms-actions.tsx"
+Cohesion: 0.15
+Nodes (15): cmsAdminActions, IdRouteContext, pageDraftBracketSchema, readFormInt(), readFormString(), renderEditorState(), RevisionRouteContext, siteChromeBracketSchema (+7 more)
+
+### Community 96 - "cms-hydrator.ts"
+Cohesion: 0.16
+Nodes (15): gallery(), evaluateBlockVisibility(), honeypot, issueHoneypotFields(), hydratePageBlocks(), createGalleryItem(), listGalleryItems(), mapGalleryRow() (+7 more)
+
+### Community 99 - "db"
+Cohesion: 0.19
+Nodes (15): createdPageIds, createdUserIds, createdPageIds, createdUserIds, activeCache, resetCmsCache(), db, createCampaignPage() (+7 more)
+
 ## Knowledge Gaps
 - **445 isolated node(s):** `IdRouteContext`, `RevisionRouteContext`, `pageDraftBracketSchema`, `siteChromeBracketSchema`, `createdUserIds` (+440 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **25 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **33 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Routes` connect `routes/index.ts` to `index.tsx`, `cms-responder.tsx`, `initializers/auth.ts`, `cms-actions.tsx`, `page-editor-page.tsx`, `faculty.tsx`, `admin/controller.tsx`, `faculty/controller.tsx`, `SessionUser`, `router.ts`?**
+- **Why does `Routes` connect `initializers/auth.ts` to `index.tsx`, `cms-responder.tsx`, `router.ts`, `admissions/controller.tsx`, `models/blogs.ts`, `page-editor-page.tsx`, `faculty/controller.tsx`, `admin/controller.tsx`, `auth/controller.tsx`, `public/controller.tsx`, `cms-actions.tsx`, `portal/controller.tsx`?**
   _High betweenness centrality (0.017) - this node is a cross-community bridge._
-- **Why does `PaartDb` connect `faculty/controller.tsx` to `database.ts`, `initializers/auth.ts`, `models/cms.ts`, `models/users.ts`, `models/lms.ts`, `admin/controller.tsx`, `models/materials.ts`, `schema/index.ts`, `portal/controller.test.ts`, `SessionUser`?**
+- **Why does `PaartDb` connect `PaartDb` to `cms-hydrator.ts`, `initializers/auth.ts`, `db`, `requireAdmin`, `listAllCourses`, `models/cms.ts`, `faculty/controller.tsx`, `models/lms.ts`, `database.ts`, `auth/controller.tsx`, `provisioning.test.ts`, `models/users.ts`, `schema/index.ts`, `portal/controller.tsx`?**
   _High betweenness centrality (0.014) - this node is a cross-community bridge._
 - **What connects `IdRouteContext`, `RevisionRouteContext`, `pageDraftBracketSchema` to the rest of the system?**
   _445 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `index.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.06101834673263245 - nodes in this community are weakly interconnected._
-- **Should `routes/index.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.07350608143839238 - nodes in this community are weakly interconnected._
-- **Should `cms-responder.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.06342342342342343 - nodes in this community are weakly interconnected._
-- **Should `config/courses.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.13157894736842105 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05641025641025641 - nodes in this community are weakly interconnected._
+- **Should `initializers/auth.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.06435643564356436 - nodes in this community are weakly interconnected._
+- **Should `router.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.12121212121212122 - nodes in this community are weakly interconnected._
+- **Should `TypeScript Path Aliases & Config` be split into smaller, more focused modules?**
+  _Cohesion score 0.059743954480796585 - nodes in this community are weakly interconnected._
